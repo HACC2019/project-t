@@ -10,7 +10,107 @@ import {MapboxLayer} from '@deck.gl/mapbox';
 
 import GL from '@luma.gl/constants';
 
+// Maximum allowed error deviation from the predicted weekly trend before considering a station faulty
+const STATION_FAULT_THRESHOLD = 30;
+// The Mapbox API token
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibG92ZW1pbGt0ZWEiLCJhIjoiY2swcGFtb3JzMDhoMDNkcGE5NW9ueGh6aSJ9.OryBJxboTqlp_lmrUyTD1g'; // eslint-disable-line
+
+function getWeekNumber(date) {
+    const DAY = 1000 * 60 * 60 * 24;
+    // Unix epoch happens on Thursday, so add three days
+    // And divide by seven days a week
+    //  (new Date('01-05-1970 00:00-0000').getTime() + (DAY * 3)) / (DAY * 7)
+    let adjustedEpoch = new Date('01-04-1970 00:00:00').getTime();
+
+    return Math.floor((date.getTime() - adjustedEpoch) / (DAY * 7));
+    //    (new Date('10-20-19 00:00:00-0000').getTime() + (1000 * 60 * 60 * 24 * 3)) / (1000 * 60 * 60 * 24 * 7)
+}
+
+function processStationRecords() {
+    function sum(accumulator, currentValue) {
+        return accumulator + currentValue;
+    }
+    
+    let stationMap = new Map();
+    for (let record of STATION_RECORDS) {
+        if (!stationMap.has(record['Charge Station Name'])) {
+            stationMap.set(record['Charge Station Name'], []);
+        }
+
+        let weekRecords = stationMap.get(record['Charge Station Name']);
+        let weekIndex = getWeekNumber(new Date(record['Start Time']));
+
+        if (weekRecords[weekIndex] === undefined) {
+            weekRecords[weekIndex] = [];
+        }
+
+        weekRecords[weekIndex].push(record);
+    }
+    
+    for (let [stationName, stationWeeks] of stationMap) {
+        let xyValues = [];
+        let xValues = [];
+        let yValues = [];
+        let weekCount = 0;
+        let weeklyAverage = 0;
+        
+        for (let week = 0; week < stationWeeks.length; week++) {
+            let weekRecords = stationWeeks[week];
+            
+            if (weekRecords === undefined) {
+                continue;
+            }
+            
+            xyValues.push(weekRecords.length * week);
+            xValues.push(week);
+            yValues.push(weekRecords.length);
+            weeklyAverage += weekRecords.length;
+            weekCount++;
+        }
+        
+        // https://classroom.synonym.com/calculate-trendline-2709.html
+        let a = weekCount * xyValues.reduce(sum);
+        let b = xValues.reduce(sum) * yValues.reduce(sum);
+        let c = weekCount * xValues.reduce((accumulator, currentValue) => accumulator + currentValue ** 2, 0);
+        let d = xValues.reduce(sum) ** 2;
+        let m = (a - b) / (c - d);
+        let e = yValues.reduce(sum);
+        let f = m * xValues.reduce(sum);
+        let yint = (e - f) / weekCount;
+        
+//        stationWeeks.a = a;
+//        stationWeeks.b = b;
+//        stationWeeks.c = c;
+//        stationWeeks.d = d;
+//        stationWeeks.m = m;
+//        stationWeeks.e = e;
+//        stationWeeks.f = f;
+//        stationWeeks.yint = yint;
+        stationWeeks.slopeIntercept = (x) => {
+            return m * x + yint;
+        }
+        
+        stationWeeks.average = weeklyAverage / weekCount;
+        
+        for (let week = 0; week < stationWeeks.length; week++) {
+            let weekRecords = stationWeeks[week];
+            
+            if (weekRecords === undefined) {
+                continue;
+            }
+            
+            let percentError = (stationWeeks.slopeIntercept(week) - weekRecords.length) / weekRecords.length * 100;
+            
+            if (percentError > STATION_FAULT_THRESHOLD) {
+                console.log(`POSSIBLE FAULT AT STATION ${stationName} IN WEEK ${week}. Expected ${stationWeeks.slopeIntercept(week)}, but only had ${weekRecords.length}`);
+            }
+        }
+    }
+    
+    return stationMap;
+}
+
+console.log(processStationRecords());
 
 const INITIAL_VIEW_STATE = {
   latitude: 21.479635,
