@@ -117,7 +117,7 @@ const INITIAL_VIEW_STATE = {
   longitude: -157.97240,
   zoom: 10.5,
   minZoom: 10.5,
-  maxZoom: 13,
+  maxZoom: 15,
   pitch: 45,
   bearing: 15
 };
@@ -229,7 +229,7 @@ export class App extends Component {
         getPolygon: d => {
           return d.geometry.coordinates;
         },
-        getElevation: d => 100,
+        getElevation: d => 50,
         getFillColor: d => [33, 33, 33]
       }),
       new TripsLayer({
@@ -237,8 +237,8 @@ export class App extends Component {
         data: this.state.data.trips,
         getPath: d => d.path,
         getTimestamps: d => d.timestamps,
-        getColor: d => this.choose([[253, 128, 93], [23, 184, 190]]),
-        opacity: 0.3,
+        getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
+        opacity: 0.5,
         widthMinPixels: 2,
         rounded: true,
         trailLength: 10,
