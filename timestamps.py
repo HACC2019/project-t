@@ -8,7 +8,7 @@ new_data = []
 with open('json/trips.json.bak') as json_file:
     data = json.load(json_file)
     for row in data:
-        for _ in range(0, 100):
+        for _ in range(0, 25):
             temp = {
                 'path': row['path']
             }
@@ -24,7 +24,7 @@ with open('json/trips.json.bak') as json_file:
             temp['timestamps'] = timestamps
             new_data.append(temp)
     for row in data:
-        for _ in range(0, 100):
+        for _ in range(0, 25):
             temp = {
                 'path': row['path']
             }

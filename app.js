@@ -149,7 +149,7 @@ export class App extends Component {
   }
 
   render() {
-    const {mapStyle = 'mapbox://styles/mapbox/dark-v10'} = this.props;
+    const {mapStyle = 'mapbox://styles/lovemilktea/ck1yqjfgi4wge1co4075zwrnh'} = this.props;
     return (
       <DeckGL
         layers={this._renderLayers()}
