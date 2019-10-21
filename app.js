@@ -11,6 +11,7 @@ import {MapboxLayer} from '@deck.gl/mapbox';
 import GL from '@luma.gl/constants';
 
 // Maximum allowed error deviation from the predicted weekly trend before considering a station faulty
+const INITIAL_STATION_ELEVATION = 3000;
 const STATION_FAULT_THRESHOLD = 30;
 // The Mapbox API token
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibG92ZW1pbGt0ZWEiLCJhIjoiY2swcGFtb3JzMDhoMDNkcGE5NW9ueGh6aSJ9.OryBJxboTqlp_lmrUyTD1g'; // eslint-disable-line
@@ -61,7 +62,7 @@ function processStationRecords() {
                 continue;
             }
             
-            xyValues.push(weekRecords.length * week);
+            xyValues.push(week * weekRecords.length );
             xValues.push(week);
             yValues.push(weekRecords.length);
             weeklyAverage += weekRecords.length;
@@ -78,14 +79,6 @@ function processStationRecords() {
         let f = m * xValues.reduce(sum);
         let yint = (e - f) / weekCount;
         
-//        stationWeeks.a = a;
-//        stationWeeks.b = b;
-//        stationWeeks.c = c;
-//        stationWeeks.d = d;
-//        stationWeeks.m = m;
-//        stationWeeks.e = e;
-//        stationWeeks.f = f;
-//        stationWeeks.yint = yint;
         stationWeeks.slopeIntercept = (x) => {
             return m * x + yint;
         }
@@ -116,7 +109,7 @@ const INITIAL_VIEW_STATE = {
   latitude: 21.479635,
   longitude: -157.97240,
   zoom: 10.5,
-  minZoom: 10.5,
+  minZoom: 8,
   maxZoom: 15,
   pitch: 45,
   bearing: 15
@@ -127,7 +120,7 @@ export class App extends Component {
     super(props);
     this.state = {
       time: 0,
-      stationElevation: 5000,
+      stationElevation: INITIAL_STATION_ELEVATION,
       data: {
         chargeStations: CHARGE_STATIONS,
         trips: ROADS,
@@ -165,8 +158,8 @@ export class App extends Component {
 
   _onViewStateChange(states) {
     const percentage = INITIAL_VIEW_STATE.minZoom / states.viewState.zoom;
-
-    this.setState({stationElevation: 5000 * percentage});
+    
+      this.setState({stationElevation: INITIAL_STATION_ELEVATION * percentage});
 
     // Which Charge Stations are in view?
     const mapBounds = this.mapRef.getMap().getBounds();
@@ -193,32 +186,7 @@ export class App extends Component {
       getWidth = 3
     } = this.props;
 
-    return [
-      new PolygonLayer({
-        id: 'charge-stations',
-        data: this.state.data.chargeStations,
-        pickable: true,
-        stroked: true,
-        filled: true,
-        extruded: true,
-        lineWidthMinPixels: 1,
-        getPolygon: d => d.contour,
-        getElevation: d => this.state.stationElevation,
-        getFillColor: d => [255, 255, 204],
-        getLineColor: [80, 80, 80],
-        getLineWidth: 1,
-        onClick: (info, event) => {
-          // console.log(info);
-
-        },
-        // onDrag: (info, event) => { 
-        //   console.log(info);
-        //   console.log(event); 
-        // },
-        updateTriggers: {
-          getElevation: [this.state.stationElevation]
-        }
-      }),
+    let layers = [
       new PolygonLayer({
         id: 'buildings',
         data: this.state.data.buildings,
@@ -246,6 +214,31 @@ export class App extends Component {
         shadowEnabled: false
       }),
     ];
+      
+    for (let charger of this.state.data.chargeStations) {
+        layers.push(new PolygonLayer({
+            id: `charge-station-${charger.ID}`,
+            data: [charger],
+            pickable: true,
+            stroked: true,
+            filled: true,
+            extruded: true,
+            lineWidthMinPixels: 1,
+            getPolygon: d => d.contour,
+            getElevation: d => this.state.stationElevation,
+            getFillColor: d => [255, 255, 204],
+            getLineColor: [80, 80, 80],
+            getLineWidth: 1,
+            onClick: (info, event) => {
+              // console.log(info);
+            },
+            updateTriggers: {
+              getElevation: [this.state.stationElevation]
+            }
+          }));
+    }
+  
+    return layers;
   }
 
   render() {
@@ -271,8 +264,6 @@ export class App extends Component {
             mapboxApiAccessToken={MAPBOX_TOKEN}
             ref={map => this.mapRef = map}
           />
-
-        {this._renderTooltip}
       </DeckGL>
     );
   }
