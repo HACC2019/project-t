@@ -4,7 +4,7 @@ from random import randrange
 
 DISTANCE_UNIT = 0.00002435159132531553
 TIME_PER_UNIT = 1
-CARS_PER_SEGMENT = 100
+CARS_PER_SEGMENT = 50
 new_data = []
 
 # https://community.esri.com/thread/158038
