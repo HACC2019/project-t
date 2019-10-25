@@ -10,6 +10,7 @@ with open('json/buildings.json.bak') as json_file:
             filtered_buildings.append(feature)
 
 
+
     	
 
     print(json.dumps(filtered_buildings))

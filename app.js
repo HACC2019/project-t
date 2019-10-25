@@ -3,11 +3,10 @@ import {render} from 'react-dom';
 
 import {InteractiveMap} from 'react-map-gl';
 import DeckGL from '@deck.gl/react';
+import FlyToInterpolator from 'deck.gl'
 import {LineLayer, ScatterplotLayer, PolygonLayer} from '@deck.gl/layers';
 import {TripsLayer} from '@deck.gl/geo-layers';
-import {MapboxLayer} from '@deck.gl/mapbox';
-
-
+import {MapboxLayer}  from '@deck.gl/mapbox';
 import GL from '@luma.gl/constants';
 
 // Maximum allowed error deviation from the predicted weekly trend before considering a station faulty
@@ -123,9 +122,18 @@ export class App extends Component {
             stationElevation: INITIAL_STATION_ELEVATION,
             data: {
                 chargeStations: CHARGE_STATIONS,
-                trips: ROADS,
+                // trips: ROADS,
                 buildings: BUILDINGS
             },
+            viewState: {
+                latitude: 21.479635,
+                longitude: -157.97240,
+                zoom: 10.5,
+                minZoom: 8,
+                maxZoom: 15,
+                pitch: 45,
+                bearing: 15
+            }
         };
         this.mapRef = null;
         this._onViewStateChange = this._onViewStateChange.bind(this);
@@ -156,6 +164,18 @@ export class App extends Component {
     }
 
     _onViewStateChange(states) {
+        this.setState({
+            viewState: {
+                //don't know what "...this.state.viewState" does
+                ...this.state.viewState,
+                longitude: states.viewState.longitude,
+                latitude: states.viewState.latitude,
+                zoom: states.viewState.zoom,
+                pitch: states.viewState.pitch,
+                transitionDuration: 0,
+                bearing: states.viewState.bearing,
+            }
+        })
         const percentage = INITIAL_VIEW_STATE.minZoom / states.viewState.zoom;
 
         this.setState({stationElevation: INITIAL_STATION_ELEVATION * percentage});
@@ -199,19 +219,19 @@ export class App extends Component {
                 getElevation: d => 50,
                 getFillColor: d => [33, 33, 33]
             }),
-            new TripsLayer({
-                id: 'trips',
-                data: this.state.data.trips,
-                getPath: d => d.path,
-                getTimestamps: d => d.timestamps,
-                getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
-                opacity: 0.5,
-                widthMinPixels: 2,
-                rounded: true,
-                trailLength: 10,
-                currentTime: this.state.time,
-                shadowEnabled: false
-            }),
+            // new TripsLayer({
+            //     id: 'trips',
+            //     data: this.state.data.trips,
+            //     getPath: d => d.path,
+            //     getTimestamps: d => d.timestamps,
+            //     getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
+            //     opacity: 0.5,
+            //     widthMinPixels: 2,
+            //     rounded: true,
+            //     trailLength: 10,
+            //     currentTime: this.state.time,
+            //     shadowEnabled: false
+            // }),
         ];
 
         for (let charger of this.state.data.chargeStations) {
@@ -229,7 +249,20 @@ export class App extends Component {
                 getLineColor: [80, 80, 80],
                 getLineWidth: 1,
                 onClick: (info, event) => {
-                    // console.log(info);
+                    console.log(info.coordinate);
+                    this.setState({
+                        viewState: {
+                            //don't know what "...this.state.viewState" does
+                            ...this.state.viewState,
+                            longitude: info.coordinate[0],
+                            latitude: info.coordinate[1],
+                            zoom: 14,
+                            //   pitch: 0,
+                            //   bearing: 0,
+                            transitionDuration: 500,
+                            // transitionInterpolator: new FlyToInterpolator()
+                        }
+                    });
                 },
                 updateTriggers: {
                     getElevation: [this.state.stationElevation]
@@ -242,13 +275,16 @@ export class App extends Component {
 
     render() {
         const {mapStyle = 'mapbox://styles/lovemilktea/ck1yqjfgi4wge1co4075zwrnh'} = this.props;
+        // const {viewState} = this.state;
+
         return (
             <DeckGL
                 layers={this._renderLayers()}
                 onViewStateChange={this._onViewStateChange}
-                initialViewState={INITIAL_VIEW_STATE}
+                // initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
-
+                viewState = {this.state.viewState}
+                {}
                 pickingRadius={5}
                 parameters={{
                     blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
