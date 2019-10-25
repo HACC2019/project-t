@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {render} from 'react-dom';
 
 import {InteractiveMap} from 'react-map-gl';
 import DeckGL from '@deck.gl/react';
@@ -17,8 +16,6 @@ import BUILDINGS from './../json/buildings'
 // Maximum allowed error deviation from the predicted weekly trend before considering a station faulty
 const INITIAL_STATION_ELEVATION = 2000;
 const STATION_FAULT_THRESHOLD = 30;
-
-// The Mapbox API token
 
 function getWeekNumber(date) {
     const DAY = 1000 * 60 * 60 * 24;
