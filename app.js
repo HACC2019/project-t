@@ -122,7 +122,7 @@ export class App extends Component {
             stationElevation: INITIAL_STATION_ELEVATION,
             data: {
                 chargeStations: CHARGE_STATIONS,
-                // trips: ROADS,
+                trips: ROADS,
                 buildings: BUILDINGS
             },
             viewState: {
@@ -219,19 +219,19 @@ export class App extends Component {
                 getElevation: d => 50,
                 getFillColor: d => [33, 33, 33]
             }),
-            // new TripsLayer({
-            //     id: 'trips',
-            //     data: this.state.data.trips,
-            //     getPath: d => d.path,
-            //     getTimestamps: d => d.timestamps,
-            //     getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
-            //     opacity: 0.5,
-            //     widthMinPixels: 2,
-            //     rounded: true,
-            //     trailLength: 10,
-            //     currentTime: this.state.time,
-            //     shadowEnabled: false
-            // }),
+            new TripsLayer({
+                id: 'trips',
+                data: this.state.data.trips,
+                getPath: d => d.path,
+                getTimestamps: d => d.timestamps,
+                getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
+                opacity: 0.5,
+                widthMinPixels: 2,
+                rounded: true,
+                trailLength: 10,
+                currentTime: this.state.time,
+                shadowEnabled: false
+            }),
         ];
 
         for (let charger of this.state.data.chargeStations) {
@@ -284,7 +284,7 @@ export class App extends Component {
                 // initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
                 viewState = {this.state.viewState}
-                {}
+                
                 pickingRadius={5}
                 parameters={{
                     blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
