@@ -168,6 +168,18 @@ export class App extends Component {
             }
             return false;
         });
+        
+        let visibleStationsElement = document.getElementById('stations');
+        while (visibleStationsElement.lastChild) {
+            visibleStationsElement.removeChild(visibleStationsElement.lastChild);
+        }
+        
+        for (let station of visibleStations) {
+            let element = document.createElement('div');
+            element.innerText = `${station.City} - ${station.Property}`;
+            visibleStationsElement.appendChild(element);
+        }
+        
         console.log(visibleStations);
     }
 
@@ -243,27 +255,30 @@ export class App extends Component {
     render() {
         const {mapStyle = 'mapbox://styles/lovemilktea/ck1yqjfgi4wge1co4075zwrnh'} = this.props;
         return (
-            <DeckGL
-                layers={this._renderLayers()}
-                onViewStateChange={this._onViewStateChange}
-                initialViewState={INITIAL_VIEW_STATE}
-                controller={true}
+            <div>
+                <DeckGL
+                    layers={this._renderLayers()}
+                    onViewStateChange={this._onViewStateChange}
+                    initialViewState={INITIAL_VIEW_STATE}
+                    controller={true}
 
-                pickingRadius={5}
-                parameters={{
-                    blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
-                    blendEquation: GL.FUNC_ADD
-                }}
-                >
+                    pickingRadius={5}
+                    parameters={{
+                        blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
+                        blendEquation: GL.FUNC_ADD
+                    }}
+                    >
 
-                <InteractiveMap
-                    reuseMaps
-                    mapStyle={mapStyle}
-                    preventStyleDiffing={true}
-                    mapboxApiAccessToken={MAPBOX_TOKEN}
-                    ref={map => this.mapRef = map}
-                />
-            </DeckGL>
+                    <InteractiveMap
+                        reuseMaps
+                        mapStyle={mapStyle}
+                        preventStyleDiffing={true}
+                        mapboxApiAccessToken={MAPBOX_TOKEN}
+                        ref={map => this.mapRef = map}
+                    />
+                </DeckGL>
+                <div id='stations' />
+            </div>
         );
     }
 }
