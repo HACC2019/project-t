@@ -5,10 +5,14 @@ const Dotenv = require('dotenv-webpack');
 module.exports = {
   mode: 'development',
 
-  entry:'./src/index.js',
+  entry: {
+    app: './src/index.js',
+    maptools: './lib/maptools.js'
+  },
 
   output: {
-    filename: './bundle.js'
+    filename: './[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
     contentBase: path.join(__dirname, "dist"),
@@ -46,8 +50,20 @@ module.exports = {
     ]
   },
 
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all',
+        }
+      }
+    }
+  },
+
   plugins: [
-    new Dotenv()
+    new Dotenv(),
   ],
 
   node: {
