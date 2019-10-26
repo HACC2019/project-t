@@ -25,6 +25,20 @@ const CONFIG = {
         options: {
           presets: ['@babel/preset-react']
         }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[name]__[local]--[hash:base64:5]',
+              },
+              importLoaders: 1
+            }
+          }
+        ]
       }
     ]
   },

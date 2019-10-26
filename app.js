@@ -7,8 +7,9 @@ import {LineLayer, ScatterplotLayer, PolygonLayer} from '@deck.gl/layers';
 import {TripsLayer} from '@deck.gl/geo-layers';
 import {MapboxLayer} from '@deck.gl/mapbox';
 
-
 import GL from '@luma.gl/constants';
+
+import sidebarStyles from './styles/sidebar.css';
 
 // Maximum allowed error deviation from the predicted weekly trend before considering a station faulty
 const INITIAL_STATION_ELEVATION = 3000;
@@ -126,6 +127,7 @@ export class App extends Component {
                 trips: ROADS,
                 buildings: BUILDINGS
             },
+            stationList: []
         };
         this.mapRef = null;
         this._onViewStateChange = this._onViewStateChange.bind(this);
@@ -169,16 +171,35 @@ export class App extends Component {
             return false;
         });
         
-        let visibleStationsElement = document.getElementById('stations');
-        while (visibleStationsElement.lastChild) {
-            visibleStationsElement.removeChild(visibleStationsElement.lastChild);
-        }
+//        let visibleStationsElement = document.getElementById('stations');
+//        while (visibleStationsElement.lastChild) {
+//            visibleStationsElement.removeChild(visibleStationsElement.lastChild);
+//        }
+        
+        let stationList = [];
         
         for (let station of visibleStations) {
-            let element = document.createElement('div');
-            element.innerText = `${station.City} - ${station.Property}`;
-            visibleStationsElement.appendChild(element);
+//            let element = document.createElement('div');
+//            let property = document.createElement('div');
+//            let city = document.createElement('div');
+//            let property = document.createElement('div');
+//            let city = document.createElement('div');
+//            property.innerText = `${station.Property}`;
+//            property.style.fontSize = "1.2em"; 
+//            city.innerText = `${station.City}`;
+//            city.style.fontSize = "0.9em";
+//            city.style.paddingBottom = "10px";
+//            element.appendChild(property);
+//            element.appendChild(city);
+//            visibleStationsElement.appendChild(element);
+            let element =  <div key={station.ID} class={sidebarStyles.item} style={{padding: '0.6em 1.2em'}}>
+                <div style={{fontSize: '1.1em'}}>{station.Property}</div>
+                <div style={{fontSize: '0.9em', color: '#959799'}}>{station.City}</div>
+            </div>;
+            stationList.push(element);
         }
+        
+        this.setState({stationList: stationList});
         
         console.log(visibleStations);
     }
@@ -255,29 +276,36 @@ export class App extends Component {
     render() {
         const {mapStyle = 'mapbox://styles/lovemilktea/ck1yqjfgi4wge1co4075zwrnh'} = this.props;
         return (
-            <div>
-                <DeckGL
-                    layers={this._renderLayers()}
-                    onViewStateChange={this._onViewStateChange}
-                    initialViewState={INITIAL_VIEW_STATE}
-                    controller={true}
+            <div style={{display: "flex"}}>
+                <div id='stations'>
+                    {this.state.stationList}
+                </div>
+                <div style={{position: 'relative', flex: 1}}>
+                    <DeckGL
+                        
+                        layers={this._renderLayers()}
+                        onViewStateChange={this._onViewStateChange}
+                        initialViewState={INITIAL_VIEW_STATE}
+                        controller={true}
 
-                    pickingRadius={5}
-                    parameters={{
-                        blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
-                        blendEquation: GL.FUNC_ADD
-                    }}
-                    >
+                        pickingRadius={5}
+                        parameters={{
+                            blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
+                            blendEquation: GL.FUNC_ADD
+                        }}
+                        >
 
-                    <InteractiveMap
-                        reuseMaps
-                        mapStyle={mapStyle}
-                        preventStyleDiffing={true}
-                        mapboxApiAccessToken={MAPBOX_TOKEN}
-                        ref={map => this.mapRef = map}
-                    />
-                </DeckGL>
-                <div id='stations' />
+                        <InteractiveMap
+                            reuseMaps
+                            mapStyle={mapStyle}
+                            preventStyleDiffing={true}
+                            mapboxApiAccessToken={MAPBOX_TOKEN}
+                            ref={map => this.mapRef = map}
+                        />
+                    </DeckGL>
+                </div>
+               
+                
             </div>
         );
     }
