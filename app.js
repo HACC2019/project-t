@@ -12,7 +12,7 @@ import GL from '@luma.gl/constants';
 import sidebarStyles from './styles/sidebar.css';
 
 // Maximum allowed error deviation from the predicted weekly trend before considering a station faulty
-const INITIAL_STATION_ELEVATION = 3000;
+const INITIAL_STATION_ELEVATION = 2000;
 const STATION_FAULT_THRESHOLD = 30;
 // The Mapbox API token
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibG92ZW1pbGt0ZWEiLCJhIjoiY2swcGFtb3JzMDhoMDNkcGE5NW9ueGh6aSJ9.OryBJxboTqlp_lmrUyTD1g'; // eslint-disable-line
