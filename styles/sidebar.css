@@ -1,5 +1,29 @@
+:local(.sidebar) {
+    height: 100vh;
+    width: 20vw;
+    color: #b9bbbe;
+    background: #2c2d31;
+    overflow-y: auto;
+}
+
+:local(.heading) {
+    position: sticky;
+    top: 0;
+    padding: 0.5rem 1.2rem;
+    color: hsla(216, 4%, 42%, 1);
+    background: #1A1B1D;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
 :local(.item) {
-    padding: 0.6em 1.2em;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+}
+
+:local(.item:hover) {
+    background: #494b4f;
 }
 
 :local(.item > .property) {
@@ -7,6 +31,6 @@
 }
 
 :local(.item > .city) {
-    font-size: 0.9em;
+    font-size: 0.8em;
     color: #959799;
 }

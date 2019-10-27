@@ -3,13 +3,13 @@ import {render} from 'react-dom';
 
 import {InteractiveMap} from 'react-map-gl';
 import DeckGL from '@deck.gl/react';
-import {LineLayer, ScatterplotLayer, PolygonLayer} from '@deck.gl/layers';
+import {PolygonLayer, TextLayer} from '@deck.gl/layers';
 import {TripsLayer} from '@deck.gl/geo-layers';
 import {MapboxLayer} from '@deck.gl/mapbox';
 
 import GL from '@luma.gl/constants';
 
-import sidebarStyles from './styles/sidebar.css';
+import sidebarStyle from './styles/sidebar.css';
 
 // Maximum allowed error deviation from the predicted weekly trend before considering a station faulty
 const INITIAL_STATION_ELEVATION = 3000;
@@ -106,6 +106,15 @@ function processStationRecords() {
 
 console.log(processStationRecords());
 
+function getContour(station, scale = 1) {
+    return [
+        [station.Longitude + (.001 * scale), station.Latitude - (.0005 * scale)],
+        [station.Longitude + (.001 * scale), station.Latitude + (.0005 * scale)],
+        [station.Longitude - (.001 * scale), station.Latitude + (.0005 * scale)],
+        [station.Longitude - (.001 * scale), station.Latitude - (.0005 * scale)]
+    ];
+}
+
 const INITIAL_VIEW_STATE = {
     latitude: 21.479635,
     longitude: -157.97240,
@@ -119,15 +128,24 @@ const INITIAL_VIEW_STATE = {
 export class App extends Component {
     constructor(props) {
         super(props);
+        
+        let labels = [];
+        
+        for (let station of CHARGE_STATIONS) {
+            labels.push({label: station.Property, coordinates: [station.Longitude, station.Latitude]});
+        }
+        
         this.state = {
             time: 0,
             stationElevation: INITIAL_STATION_ELEVATION,
             data: {
                 chargeStations: CHARGE_STATIONS,
                 trips: ROADS,
-                buildings: BUILDINGS
+                buildings: BUILDINGS,
+                labels: labels
             },
-            stationList: []
+            stationList: [],
+            selectedStation: undefined
         };
         this.mapRef = null;
         this._onViewStateChange = this._onViewStateChange.bind(this);
@@ -141,6 +159,13 @@ export class App extends Component {
         if (this._animationFrame) {
             window.cancelAnimationFrame(this._animationFrame);
         }
+    }
+    
+    // Class property syntax means no need to .bind() this function
+    componentDidFirstRender = (mapRef) => {
+        this.mapRef = mapRef;
+        
+        this.updateStationSidebar();
     }
 
     _animate() {
@@ -161,7 +186,11 @@ export class App extends Component {
         const percentage = INITIAL_VIEW_STATE.minZoom / states.viewState.zoom;
 
         this.setState({stationElevation: INITIAL_STATION_ELEVATION * percentage});
+        
+        this.updateStationSidebar();
+    }
 
+    updateStationSidebar() {
         // Which Charge Stations are in view?
         const mapBounds = this.mapRef.getMap().getBounds();
         const visibleStations = this.state.data.chargeStations.filter((e) => {
@@ -170,38 +199,62 @@ export class App extends Component {
             }
             return false;
         });
-        
-//        let visibleStationsElement = document.getElementById('stations');
-//        while (visibleStationsElement.lastChild) {
-//            visibleStationsElement.removeChild(visibleStationsElement.lastChild);
-//        }
+        const offScreenStations = this.state.data.chargeStations.filter((e) => {
+            if ((e.Longitude > mapBounds._sw.lng && e.Longitude < mapBounds._ne.lng) && (e.Latitude > mapBounds._sw.lat && e.Latitude < mapBounds._ne.lat)) {
+                return false;
+            }
+            return true;
+        });
         
         let stationList = [];
         
-        for (let station of visibleStations) {
-//            let element = document.createElement('div');
-//            let property = document.createElement('div');
-//            let city = document.createElement('div');
-//            let property = document.createElement('div');
-//            let city = document.createElement('div');
-//            property.innerText = `${station.Property}`;
-//            property.style.fontSize = "1.2em"; 
-//            city.innerText = `${station.City}`;
-//            city.style.fontSize = "0.9em";
-//            city.style.paddingBottom = "10px";
-//            element.appendChild(property);
-//            element.appendChild(city);
-//            visibleStationsElement.appendChild(element);
-            let element =  <div key={station.ID} className={sidebarStyles.item}>
-                <div className={sidebarStyles.property}>{station.Property}</div>
-                <div className={sidebarStyles.city}>{station.City}</div>
-            </div>;
-            stationList.push(element);
+        if (visibleStations.length > 0) {
+            let visibleElements = [];
+            for (let station of visibleStations) {
+                let element = <div
+                    key={station.ID}
+                    className={sidebarStyle.item}
+                    onMouseEnter={() => {
+                        this.setState({
+                            selectedStation: station.ID
+                        });
+                    }}>
+                    <div className={sidebarStyle.property}>{station.Property}</div>
+                    <div className={sidebarStyle.city}>{station.City}</div>
+                </div>;
+                visibleElements.push(element);
+            }
+            
+            stationList.push(<div key='on-screen-stations'>
+                <div className={sidebarStyle.heading}>Visible Stations</div>
+                <div>{visibleElements}</div>
+            </div>);
+        }
+        
+        if (offScreenStations.length > 0) {
+            let visibleElements = [];
+            for (let station of offScreenStations) {
+                let element = <div
+                    key={station.ID}
+                    className={sidebarStyle.item}
+                    onMouseEnter={() => {
+                        this.setState({
+                            selectedStation: station.ID
+                        });
+                    }}>
+                    <div className={sidebarStyle.property}>{station.Property}</div>
+                    <div className={sidebarStyle.city}>{station.City}</div>
+                </div>;
+                visibleElements.push(element);
+            }
+            
+            stationList.push(<div key='off-screen-stations'>
+                <div className={sidebarStyle.heading}>Other Stations</div>
+                <div>{visibleElements}</div>
+            </div>);
         }
         
         this.setState({stationList: stationList});
-        
-        console.log(visibleStations);
     }
 
     choose(choices) {
@@ -219,6 +272,19 @@ export class App extends Component {
         } = this.props;
 
         let layers = [
+            new TextLayer({
+                id: 'station-labels',
+                data: this.state.data.labels,
+                getPosition: data => data.coordinates,
+                getText: data => data.label,
+                getSize: 18,
+                getColor: [255, 255, 255, 255],
+                getAngle: 0,
+                getTextAnchor: 'middle',
+                getAlignmentBaseline: 'center',
+                getPixelOffset: [0, 30],
+                fontFamily: 'Roboto, Arial'
+            }),
             new PolygonLayer({
                 id: 'buildings',
                 data: this.state.data.buildings,
@@ -244,7 +310,7 @@ export class App extends Component {
                 trailLength: 10,
                 currentTime: this.state.time,
                 shadowEnabled: false
-            }),
+            })
         ];
 
         for (let charger of this.state.data.chargeStations) {
@@ -256,14 +322,11 @@ export class App extends Component {
                 filled: true,
                 extruded: true,
                 lineWidthMinPixels: 1,
-                getPolygon: d => d.contour,
-                getElevation: d => this.state.stationElevation,
-                getFillColor: d => [255, 255, 204],
+                getPolygon: d => this.state.selectedStation === charger.ID ? getContour(d, 3) : getContour(d),
+                getElevation: d => this.state.selectedStation === charger.ID ? this.state.stationElevation * 3 : this.state.stationElevation,
+                getFillColor: d => this.state.selectedStation === charger.ID ? [253, 128, 93] : [255, 255, 204],
                 getLineColor: [80, 80, 80],
                 getLineWidth: 1,
-                onClick: (info, event) => {
-                    // console.log(info);
-                },
                 updateTriggers: {
                     getElevation: [this.state.stationElevation]
                 }
@@ -274,15 +337,15 @@ export class App extends Component {
     }
 
     render() {
+        
         const {mapStyle = 'mapbox://styles/lovemilktea/ck1yqjfgi4wge1co4075zwrnh'} = this.props;
         return (
             <div style={{display: "flex"}}>
-                <div id='stations'>
+                <div className={sidebarStyle.sidebar}>
                     {this.state.stationList}
                 </div>
-                <div style={{position: 'relative', flex: 1}}>
+                <div id='main-map' style={{position: 'relative', flex: 1}}>
                     <DeckGL
-                        
                         layers={this._renderLayers()}
                         onViewStateChange={this._onViewStateChange}
                         initialViewState={INITIAL_VIEW_STATE}
@@ -300,12 +363,10 @@ export class App extends Component {
                             mapStyle={mapStyle}
                             preventStyleDiffing={true}
                             mapboxApiAccessToken={MAPBOX_TOKEN}
-                            ref={map => this.mapRef = map}
+                            ref={this.componentDidFirstRender}
                         />
                     </DeckGL>
                 </div>
-               
-                
             </div>
         );
     }
