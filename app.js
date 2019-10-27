@@ -192,9 +192,9 @@ export class App extends Component {
 //            element.appendChild(property);
 //            element.appendChild(city);
 //            visibleStationsElement.appendChild(element);
-            let element =  <div key={station.ID} class={sidebarStyles.item} style={{padding: '0.6em 1.2em'}}>
-                <div style={{fontSize: '1.1em'}}>{station.Property}</div>
-                <div style={{fontSize: '0.9em', color: '#959799'}}>{station.City}</div>
+            let element =  <div key={station.ID} className={sidebarStyles.item}>
+                <div className={sidebarStyles.property}>{station.Property}</div>
+                <div className={sidebarStyles.city}>{station.City}</div>
             </div>;
             stationList.push(element);
         }
