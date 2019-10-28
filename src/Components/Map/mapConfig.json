@@ -8,5 +8,6 @@
     "maxZoom": 15,
     "pitch": 45,
     "bearing": 15
-  }
+  },
+  "mapStyle":"mapbox://styles/lovemilktea/ck1yqjfgi4wge1co4075zwrnh"
 }
