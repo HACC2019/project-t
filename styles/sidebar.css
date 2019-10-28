@@ -1,9 +1,12 @@
 :local(.sidebar) {
     height: 100vh;
+    max-width: 23em;
+    min-width: 12.5em;
     width: 20vw;
     color: #b9bbbe;
     background: #2c2d31;
     overflow-y: auto;
+    user-select: none;
 }
 
 :local(.heading) {
