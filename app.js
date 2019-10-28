@@ -145,7 +145,8 @@ export class App extends Component {
                 labels: labels
             },
             stationList: [],
-            selectedStation: undefined
+            selectedStation: undefined,
+            zoomLevel: INITIAL_VIEW_STATE.zoom
         };
         this.mapRef = null;
         this._onViewStateChange = this._onViewStateChange.bind(this);
@@ -185,7 +186,7 @@ export class App extends Component {
     _onViewStateChange(states) {
         const percentage = INITIAL_VIEW_STATE.minZoom / states.viewState.zoom;
 
-        this.setState({stationElevation: INITIAL_STATION_ELEVATION * percentage});
+        this.setState({stationElevation: INITIAL_STATION_ELEVATION * percentage, zoomLevel: states.viewState.zoom});
         
         this.updateStationSidebar();
     }
@@ -270,19 +271,19 @@ export class App extends Component {
         const {
             getWidth = 3
         } = this.props;
-
+        
         let layers = [
             new TextLayer({
                 id: 'station-labels',
                 data: this.state.data.labels,
                 getPosition: data => data.coordinates,
                 getText: data => data.label,
-                getSize: 18,
+                getSize: Math.pow(this.state.zoomLevel, 1.5) / 2.2,
                 getColor: [255, 255, 255, 255],
                 getAngle: 0,
                 getTextAnchor: 'middle',
                 getAlignmentBaseline: 'center',
-                getPixelOffset: [0, 30],
+                getPixelOffset: [0, (Math.pow(this.state.zoomLevel, 2) - 60)],
                 fontFamily: 'Roboto, Arial'
             }),
             new PolygonLayer({
