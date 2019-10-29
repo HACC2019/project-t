@@ -7,12 +7,12 @@ import { TripsLayer } from "@deck.gl/geo-layers";
 import "mapbox-gl/dist/mapbox-gl.css";
 import GL from "@luma.gl/constants";
 
+import SidebarStation from './SidebarStation'
+
 import CHARGE_STATIONS from "../../../json/chargeStations";
 import ROADS from "../../../json/trips";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
-
-import sidebarStyles from '../../styles/sidebar.css';
 
 class Map extends Component {
   constructor(props) {
@@ -21,9 +21,7 @@ class Map extends Component {
       time: 0,
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION,
       data: {
-        chargeStations: CHARGE_STATIONS,
-        trips: ROADS,
-        buildings: BUILDINGS
+        chargeStations: CHARGE_STATIONS
       },
       stationList: []
     };
@@ -33,6 +31,7 @@ class Map extends Component {
 
   componentDidMount() {
     this._animate();
+
   }
 
   componentWillUnmount() {
@@ -63,8 +62,10 @@ class Map extends Component {
 
     this.setState({
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION * percentage
-    });
+    }, this.updateVisibleStations());
+  }
 
+  updateVisibleStations() {
     // Which Charge Stations are in view?
     const mapBounds = this.mapRef.getMap().getBounds();
     const visibleStations = this.state.data.chargeStations.filter(e => {
@@ -78,39 +79,9 @@ class Map extends Component {
       return false;
     });
 
-    //        let visibleStationsElement = document.getElementById('stations');
-    //        while (visibleStationsElement.lastChild) {
-    //            visibleStationsElement.removeChild(visibleStationsElement.lastChild);
-    //        }
-
-    let stationList = [];
-
-    for (let station of visibleStations) {
-      //            let element = document.createElement('div');
-      //            let property = document.createElement('div');
-      //            let city = document.createElement('div');
-      //            let property = document.createElement('div');
-      //            let city = document.createElement('div');
-      //            property.innerText = `${station.Property}`;
-      //            property.style.fontSize = "1.2em";
-      //            city.innerText = `${station.City}`;
-      //            city.style.fontSize = "0.9em";
-      //            city.style.paddingBottom = "10px";
-      //            element.appendChild(property);
-      //            element.appendChild(city);
-      //            visibleStationsElement.appendChild(element);
-      let element = (
-        <div key={station.ID} className={sidebarStyles.item}>
-          <div className={sidebarStyles.property}>{station.Property}</div>
-          <div className={sidebarStyles.city}>{station.City}</div>
-        </div>
-      );
-      stationList.push(element);
+    if(this.state.stationList.length !== visibleStations.length) {
+      this.setState({ stationList: visibleStations }, console.log(visibleStations));
     }
-
-    this.setState({ stationList: stationList });
-
-    console.log(visibleStations);
   }
 
   choose(choices) {
@@ -128,7 +99,7 @@ class Map extends Component {
     let layers = [
       new PolygonLayer({
         id: "buildings",
-        data: this.state.data.buildings,
+        data: BUILDINGS,
         stroked: true,
         filled: true,
         extruded: true,
@@ -139,19 +110,7 @@ class Map extends Component {
         getElevation: d => 50,
         getFillColor: d => [33, 33, 33]
       }),
-      new TripsLayer({
-        id: "trips",
-        data: this.state.data.trips,
-        getPath: d => d.path,
-        getTimestamps: d => d.timestamps,
-        getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
-        opacity: 0.5,
-        widthMinPixels: 2,
-        rounded: true,
-        trailLength: 10,
-        currentTime: this.state.time,
-        shadowEnabled: false
-      })
+
     ];
 
     for (let charger of this.state.data.chargeStations) {
@@ -182,12 +141,33 @@ class Map extends Component {
     return layers;
   }
 
+  _renderTrips() {
+    const layer = new TripsLayer({
+      id: "trips",
+      data: ROADS,
+      getPath: d => d.path,
+      getTimestamps: d => d.timestamps,
+      getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
+      opacity: 0.5,
+      widthMinPixels: 2,
+      rounded: true,
+      trailLength: 10,
+      currentTime: this.state.time,
+      shadowEnabled: false
+    })
+
+    return layer;
+  }
+
   render() {
-    const {
-    } = this.props;
+    const stations = [];
+    for (let station of this.state.stationList) {
+      stations.push( <SidebarStation station={station} /> );
+    }
+
     return (
       <div style={{ display: "flex" }}>
-        <div id="stations">{this.state.stationList}</div>
+        <div id="stations">{stations}</div>
         <div style={{ position: "relative", flex: 1 }}>
           <DeckGL
             layers={this._renderLayers()}
@@ -200,6 +180,19 @@ class Map extends Component {
               blendEquation: GL.FUNC_ADD
             }}
           >
+            <TripsLayer 
+                  id= "trips"
+                  data= {ROADS}
+                  getPath= {d => d.path}
+                  getTimestamps= {d => d.timestamps}
+                  getColor= {d => this.choose([[253, 128, 93], [75, 218, 250]])}
+                  opacity= {0.5}
+                  widthMinPixels= {2}
+                  rounded= {true}
+                  trailLength= {10}
+                  currentTime= {this.state.time}
+                  shadowEnabled= {false}
+            />
             <InteractiveMap
               reuseMaps
               mapStyle={mapConfig.mapStyle}
