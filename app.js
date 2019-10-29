@@ -219,6 +219,11 @@ export class App extends Component {
                         this.setState({
                             selectedStation: station.ID
                         });
+                    }}
+                    onMouseLeave={() => {
+                        this.setState({
+                            selectedStation: undefined
+                        });
                     }}>
                     <div className={sidebarStyle.property}>{station.Property}</div>
                     <div className={sidebarStyle.city}>{station.City}</div>
@@ -238,11 +243,7 @@ export class App extends Component {
                 let element = <div
                     key={station.ID}
                     className={sidebarStyle.item}
-                    onMouseEnter={() => {
-                        this.setState({
-                            selectedStation: station.ID
-                        });
-                    }}>
+                    >
                     <div className={sidebarStyle.property}>{station.Property}</div>
                     <div className={sidebarStyle.city}>{station.City}</div>
                 </div>;
