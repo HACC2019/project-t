@@ -146,24 +146,6 @@ class Map extends Component {
     return layers;
   }
 
-  _renderTrips() {
-    const layer = new TripsLayer({
-      id: "trips",
-      data: this.state.trips,
-      getPath: d => d.path,
-      getTimestamps: d => d.timestamps,
-      getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
-      opacity: 0.5,
-      widthMinPixels: 2,
-      rounded: true,
-      trailLength: 10,
-      currentTime: this.state.time,
-      shadowEnabled: false
-    })
-
-    return layer;
-  }
-
   render() {
     const stations = [];
     for (let station of this.state.stationList) {
