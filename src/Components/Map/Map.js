@@ -1,16 +1,11 @@
 import React, { Component } from "react";
 import { InteractiveMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
-import { LineLayer, ScatterplotLayer, PolygonLayer } from "@deck.gl/layers";
+import { PolygonLayer } from "@deck.gl/layers";
 import { TripsLayer } from "@deck.gl/geo-layers";
-// import {MapboxLayer} from '@deck.gl/mapbox';
-import "mapbox-gl/dist/mapbox-gl.css";
 import GL from "@luma.gl/constants";
-
-import SidebarStation from './SidebarStation'
-
+import SidebarStation from "./SidebarStation";
 import CHARGE_STATIONS from "../../../json/chargeStations";
-// import ROADS from "../../../json/trips";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
 
@@ -149,7 +144,7 @@ class Map extends Component {
   render() {
     const stations = [];
     for (let station of this.state.stationList) {
-      stations.push( <SidebarStation station={station} /> );
+      stations.push( <SidebarStation key={station.ID} station={station} /> );
     }
 
     return (
