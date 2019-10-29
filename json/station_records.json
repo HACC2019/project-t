@@ -1,4 +1,4 @@
-const STATION_RECORDS = [{
+[{
     "Charge Station Name": "A",
     "Session Initiated By": "MOBILE",
     "Start Time": "09-01-18 07:25:03",

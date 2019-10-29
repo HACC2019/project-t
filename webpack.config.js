@@ -1,19 +1,26 @@
-// NOTE: To use this example standalone (e.g. outside of deck.gl repo)
-// delete the local development overrides at the bottom of this file
-
 const webpack = require('webpack');
+const path = require('path')
+const Dotenv = require('dotenv-webpack');
 
-const CONFIG = {
+module.exports = {
   mode: 'development',
 
   entry: {
-    app: './app.js'
+    app: './src/index.js',
+    maptools: './lib/maptools.js'
   },
 
   output: {
-    library: 'App'
+    filename: './[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
   },
-
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    compress: true,
+    port: 8080,
+    watchContentBase: true,
+    progress: true
+  },
   module: {
     rules: [
       {
@@ -43,9 +50,24 @@ const CONFIG = {
     ]
   },
 
-  // Optional: Enables reading mapbox token from environment variable
-  plugins: [new webpack.EnvironmentPlugin(['MapboxAccessToken'])]
-};
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all',
+        }
+      }
+    }
+  },
 
-// This line enables bundling against src in this repo rather than installed module
-module.exports = env => (env ? require('../../webpack.config.local')(CONFIG)(env) : CONFIG);
+  plugins: [
+    new Dotenv(),
+  ],
+
+  node: {
+    fs: 'empty'
+  },
+
+};
