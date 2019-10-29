@@ -6,6 +6,7 @@ import DeckGL from '@deck.gl/react';
 import {PolygonLayer, TextLayer} from '@deck.gl/layers';
 import {TripsLayer} from '@deck.gl/geo-layers';
 import {MapboxLayer} from '@deck.gl/mapbox';
+import StationSidebar from './components/StationSidebar.jsx';
 
 import GL from '@luma.gl/constants';
 
@@ -144,7 +145,7 @@ export class App extends Component {
                 buildings: BUILDINGS,
                 labels: labels
             },
-            stationList: [],
+            stationList: {visible: [], other: []},
             selectedStation: undefined,
             zoomLevel: INITIAL_VIEW_STATE.zoom
         };
@@ -200,63 +201,22 @@ export class App extends Component {
             }
             return false;
         });
-        const offScreenStations = this.state.data.chargeStations.filter((e) => {
+        const otherStations = this.state.data.chargeStations.filter((e) => {
             if ((e.Longitude > mapBounds._sw.lng && e.Longitude < mapBounds._ne.lng) && (e.Latitude > mapBounds._sw.lat && e.Latitude < mapBounds._ne.lat)) {
                 return false;
             }
             return true;
         });
         
-        let stationList = [];
-        
-        if (visibleStations.length > 0) {
-            let visibleElements = [];
-            for (let station of visibleStations) {
-                let element = <div
-                    key={station.ID}
-                    className={sidebarStyle.item}
-                    onMouseEnter={() => {
-                        this.setState({
-                            selectedStation: station.ID
-                        });
-                    }}
-                    onMouseLeave={() => {
-                        this.setState({
-                            selectedStation: undefined
-                        });
-                    }}>
-                    <div className={sidebarStyle.property}>{station.Property}</div>
-                    <div className={sidebarStyle.city}>{station.City}</div>
-                </div>;
-                visibleElements.push(element);
-            }
-            
-            stationList.push(<div key='on-screen-stations'>
-                <div className={sidebarStyle.heading}>Visible Stations</div>
-                <div>{visibleElements}</div>
-            </div>);
-        }
-        
-        if (offScreenStations.length > 0) {
-            let visibleElements = [];
-            for (let station of offScreenStations) {
-                let element = <div
-                    key={station.ID}
-                    className={sidebarStyle.item}
-                    >
-                    <div className={sidebarStyle.property}>{station.Property}</div>
-                    <div className={sidebarStyle.city}>{station.City}</div>
-                </div>;
-                visibleElements.push(element);
-            }
-            
-            stationList.push(<div key='off-screen-stations'>
-                <div className={sidebarStyle.heading}>Other Stations</div>
-                <div>{visibleElements}</div>
-            </div>);
-        }
-        
-        this.setState({stationList: stationList});
+        this.setState({stationList: {visible: visibleStations, other: otherStations}})
+    }
+    
+    onStationHover = (stationID) => {
+        this.setState({selectedStation: stationID});
+    }
+    
+    onStationLeave = () => {
+        this.setState({selectedStation: undefined});
     }
 
     choose(choices) {
@@ -343,9 +303,11 @@ export class App extends Component {
         const {mapStyle = 'mapbox://styles/lovemilktea/ck1yqjfgi4wge1co4075zwrnh'} = this.props;
         return (
             <div style={{display: "flex"}}>
-                <div className={sidebarStyle.sidebar}>
-                    {this.state.stationList}
-                </div>
+                <StationSidebar
+                    stations={this.state.stationList}
+                    onStationHover={this.onStationHover}
+                    onStationLeave={this.onStationLeave}
+                />
                 <div id='main-map' style={{position: 'relative', flex: 1}}>
                     <DeckGL
                         layers={this._renderLayers()}
