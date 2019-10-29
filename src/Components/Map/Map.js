@@ -10,7 +10,7 @@ import GL from "@luma.gl/constants";
 import SidebarStation from './SidebarStation'
 
 import CHARGE_STATIONS from "../../../json/chargeStations";
-import ROADS from "../../../json/trips";
+// import ROADS from "../../../json/trips";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
 
@@ -23,6 +23,7 @@ class Map extends Component {
       data: {
         chargeStations: CHARGE_STATIONS
       },
+      trips: [],
       stationList: []
     };
     this.mapRef = null;
@@ -31,7 +32,11 @@ class Map extends Component {
 
   componentDidMount() {
     this._animate();
-
+    fetch('trips.json')
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ trips: data })
+      })
   }
 
   componentWillUnmount() {
@@ -144,7 +149,7 @@ class Map extends Component {
   _renderTrips() {
     const layer = new TripsLayer({
       id: "trips",
-      data: ROADS,
+      data: this.state.trips,
       getPath: d => d.path,
       getTimestamps: d => d.timestamps,
       getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
@@ -182,7 +187,7 @@ class Map extends Component {
           >
             <TripsLayer 
                   id= "trips"
-                  data= {ROADS}
+                  data= {this.state.trips}
                   getPath= {d => d.path}
                   getTimestamps= {d => d.timestamps}
                   getColor= {d => this.choose([[253, 128, 93], [75, 218, 250]])}
