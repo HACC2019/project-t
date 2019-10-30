@@ -12,28 +12,6 @@ export class StationSidebar extends Component {
         };
     }
 
-    updateStationSidebar() {
-        
-        let visibleElements = [];
-        for (let station of offScreenStations) {
-            let element = <div
-                key={station.ID}
-                className={sidebarStyle.item}
-                >
-                <div className={sidebarStyle.property}>{station.Property}</div>
-                <div className={sidebarStyle.city}>{station.City}</div>
-            </div>;
-            visibleElements.push(element);
-        }
-
-        stationList.push(<div key='off-screen-stations'>
-            <div className={sidebarStyle.heading}>Other Stations</div>
-            <div>{visibleElements}</div>
-        </div>);
-        
-        this.setState({stationList: stationList});
-    }
-
     render() {
         let visibleStations = [];
         for (let station of this.props.stations.visible) {
