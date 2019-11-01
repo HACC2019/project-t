@@ -14,7 +14,7 @@ A clear and concise description of the feature you'd like to implement.
 - [ ] detail1
 
 
-**Describe alternatives you've considered**
+**Describe alternatives or extra features you've considered**
 A clear and concise description of any alternative solutions or features you've considered.
 
 **Additional context**
