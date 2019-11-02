@@ -308,7 +308,7 @@ export class App extends Component {
                     onStationHover={this.onStationHover}
                     onStationLeave={this.onStationLeave}
                 />
-                <div id='main-map' style={{position: 'relative', flex: 1}}>
+                <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
                     <DeckGL
                         layers={this._renderLayers()}
                         onViewStateChange={this._onViewStateChange}
