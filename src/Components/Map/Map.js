@@ -1,17 +1,33 @@
 import React, { Component } from "react";
 import { InteractiveMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
-import { PolygonLayer } from "@deck.gl/layers";
+import { PolygonLayer, TextLayer } from "@deck.gl/layers";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import GL from "@luma.gl/constants";
-import SidebarStation from "./SidebarStation";
+import StationSidebar from './StationSidebar.jsx';
 import CHARGE_STATIONS from "../../../json/chargeStations";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
 
+function getContour(station, scale = 1) {
+  return [
+    [station.Longitude + (.001 * scale), station.Latitude - (.0005 * scale)],
+    [station.Longitude + (.001 * scale), station.Latitude + (.0005 * scale)],
+    [station.Longitude - (.001 * scale), station.Latitude + (.0005 * scale)],
+    [station.Longitude - (.001 * scale), station.Latitude - (.0005 * scale)]
+  ];
+}
+
 class Map extends Component {
   constructor(props) {
     super(props);
+    
+    let labels = [];
+        
+    for (let station of CHARGE_STATIONS) {
+        labels.push({label: station.Property, coordinates: [station.Longitude, station.Latitude]});
+    }
+    
     this.state = {
       time: 0,
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION,
@@ -19,7 +35,9 @@ class Map extends Component {
         chargeStations: CHARGE_STATIONS
       },
       trips: [],
-      stationList: []
+      stationList: {visible: [], other: []},
+      selectedStation: undefined,
+      zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom
     };
     this.mapRef = null;
     this._onViewStateChange = this._onViewStateChange.bind(this);
@@ -38,6 +56,13 @@ class Map extends Component {
     if (this._animationFrame) {
       window.cancelAnimationFrame(this._animationFrame);
     }
+  }
+  
+  // Class property syntax means no need to .bind() this function
+  componentDidFirstRender = (mapRef) => {
+      this.mapRef = mapRef;
+
+      this.updateStationSidebar();
   }
 
   _animate() {
@@ -61,11 +86,14 @@ class Map extends Component {
       mapConfig.INITIAL_VIEW_STATE.minZoom / states.viewState.zoom;
 
     this.setState({
-      stationElevation: mapConfig.INITIAL_STATION_ELEVATION * percentage
-    }, this.updateVisibleStations());
+      stationElevation: mapConfig.INITIAL_STATION_ELEVATION * percentage,
+      zoomLevel: states.viewState.zoom
+    });
+    
+    this.updateStationSidebar();
   }
 
-  updateVisibleStations() {
+  updateStationSidebar() {
     // Which Charge Stations are in view?
     const mapBounds = this.mapRef.getMap().getBounds();
     const visibleStations = this.state.data.chargeStations.filter(e => {
@@ -78,10 +106,26 @@ class Map extends Component {
       }
       return false;
     });
+    const otherStations = this.state.data.chargeStations.filter(e => {
+      if (
+        e.Longitude > mapBounds._sw.lng &&
+        e.Longitude < mapBounds._ne.lng &&
+        (e.Latitude > mapBounds._sw.lat && e.Latitude < mapBounds._ne.lat)
+      ) {
+        return false;
+      }
+      return true;
+    });
 
-    if(this.state.stationList.length !== visibleStations.length) {
-      this.setState({ stationList: visibleStations }, console.log(visibleStations));
-    }
+    this.setState({stationList: {visible: visibleStations, other: otherStations}})
+  }
+
+  onStationHover = (stationID) => {
+      this.setState({selectedStation: stationID});
+  }
+
+  onStationLeave = () => {
+      this.setState({selectedStation: undefined});
   }
 
   choose(choices) {
@@ -97,6 +141,19 @@ class Map extends Component {
     const { getWidth = 3 } = this.props;
 
     let layers = [
+      new TextLayer({
+        id: 'station-labels',
+        data: this.state.data.labels,
+        getPosition: data => data.coordinates,
+        getText: data => data.label,
+        getSize: Math.pow(this.state.zoomLevel, 1.5) / 2.2,
+        getColor: [255, 255, 255, 255],
+        getAngle: 0,
+        getTextAnchor: 'middle',
+        getAlignmentBaseline: 'center',
+        getPixelOffset: [0, (Math.pow(this.state.zoomLevel, 2) - 60)],
+        fontFamily: 'Roboto, Arial'
+      }),
       new PolygonLayer({
         id: "buildings",
         data: BUILDINGS,
@@ -123,14 +180,11 @@ class Map extends Component {
           filled: true,
           extruded: true,
           lineWidthMinPixels: 1,
-          getPolygon: d => d.contour,
-          getElevation: d => this.state.stationElevation,
-          getFillColor: d => [255, 255, 204],
+          getPolygon: d => this.state.selectedStation === charger.ID ? getContour(d, 3) : getContour(d),
+          getElevation: d => this.state.selectedStation === charger.ID ? this.state.stationElevation * 3 : this.state.stationElevation,
+          getFillColor: d => this.state.selectedStation === charger.ID ? [253, 128, 93] : [255, 255, 204],
           getLineColor: [80, 80, 80],
           getLineWidth: 1,
-          onClick: (info, event) => {
-            // console.log(info);
-          },
           updateTriggers: {
             getElevation: [this.state.stationElevation]
           }
@@ -142,15 +196,14 @@ class Map extends Component {
   }
 
   render() {
-    const stations = [];
-    for (let station of this.state.stationList) {
-      stations.push( <SidebarStation key={station.ID} station={station} /> );
-    }
-
     return (
       <div style={{ display: "flex" }}>
-        <div id="stations">{stations}</div>
-        <div style={{ position: "relative", flex: 1 }}>
+        <StationSidebar
+          stations={this.state.stationList}
+          onStationHover={this.onStationHover}
+          onStationLeave={this.onStationLeave}
+        />
+        <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
           <DeckGL
             layers={this._renderLayers()}
             onViewStateChange={this._onViewStateChange}
@@ -180,7 +233,7 @@ class Map extends Component {
               mapStyle={mapConfig.mapStyle}
               preventStyleDiffing={true}
               mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
-              ref={map => (this.mapRef = map)}
+              ref={this.componentDidFirstRender}
             />
           </DeckGL>
         </div>
