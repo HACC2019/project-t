@@ -40,7 +40,12 @@ class Map extends Component {
       zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom
     };
     this.mapRef = null;
+    
+    this._animate = this._animate.bind(this);
     this._onViewStateChange = this._onViewStateChange.bind(this);
+    this.componentDidFirstRender = this.componentDidFirstRender.bind(this);
+    this.onStationHover = this.onStationHover.bind(this);
+    this.onStationLeave = this.onStationLeave.bind(this);
   }
 
   componentDidMount() {
@@ -58,8 +63,7 @@ class Map extends Component {
     }
   }
   
-  // Class property syntax means no need to .bind() this function
-  componentDidFirstRender = (mapRef) => {
+  componentDidFirstRender(mapRef) {
       this.mapRef = mapRef;
 
       this.updateStationSidebar();
@@ -77,7 +81,7 @@ class Map extends Component {
       time: ((timestamp % loopTime) / loopTime) * loopLength
     });
     this._animationFrame = window.requestAnimationFrame(
-      this._animate.bind(this)
+      this._animate
     );
   }
 
@@ -120,11 +124,11 @@ class Map extends Component {
     this.setState({stationList: {visible: visibleStations, other: otherStations}})
   }
 
-  onStationHover = (stationID) => {
+  onStationHover(stationID) {
       this.setState({selectedStation: stationID});
   }
 
-  onStationLeave = () => {
+  onStationLeave() {
       this.setState({selectedStation: undefined});
   }
 
