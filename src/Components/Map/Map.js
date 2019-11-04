@@ -7,6 +7,7 @@ import GL from "@luma.gl/constants";
 import CHARGE_STATIONS from "../../../json/chargeStations";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
+import { processStationRecords } from '../../../lib/maptools.js';
 
 function getContour(station, scale = 1) {
   return [
@@ -34,7 +35,8 @@ class Map extends Component {
         chargeStations: CHARGE_STATIONS
       },
       trips: [],
-      zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom
+      zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom,
+      faultMap: processStationRecords()
     };
     this.mapRef = null;
     
@@ -163,6 +165,14 @@ class Map extends Component {
 
     ];
 
+    if (this.state.selectedStation !== undefined) {
+      console.log(processStationRecords());
+    }
+      
+      
+    // GREEN: [82, 125, 85]
+    // ORANGE: [253, 128, 93]
+    // RED: [184, 81, 81]
     for (let charger of this.state.data.chargeStations) {
       layers.push(
         new PolygonLayer({
@@ -175,7 +185,15 @@ class Map extends Component {
           lineWidthMinPixels: 1,
           getPolygon: d => this.props.selectedStation === charger.ID ? getContour(d, 3) : getContour(d),
           getElevation: d => this.props.selectedStation === charger.ID ? this.state.stationElevation * 3 : this.state.stationElevation,
-          getFillColor: d => this.props.selectedStation === charger.ID ? [253, 128, 93] : [255, 255, 204],
+          getFillColor: data => {
+            if (!data.Servicing) {
+              return [184, 81, 81];
+            } else if (this.state.faultMap.has(data.ID)) {
+              return [253, 128, 93];
+            } else {
+              return [82, 125, 85];
+            }
+          },
           getLineColor: [80, 80, 80],
           getLineWidth: 1,
           updateTriggers: {
