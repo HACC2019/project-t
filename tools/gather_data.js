@@ -1,7 +1,5 @@
 const file = "json\station_records.json";
 
-let current_time = Date.now();
-
 /*
 General function to calculate 1, 3, 6, or 12 months ago to parse data younger than that age
 args time is the number of months back the user would like to see
@@ -9,8 +7,7 @@ returns the current time, minus time
  */
 function calcTime(time) {
   let current_time = Date.now();
-  let earliest = current_time.setMonth(current_time.getMonth()- time);
-  return earliest;
+  return current_time.setMonth(current_time.getMonth()- time);
 }
 
 
@@ -44,9 +41,7 @@ function findAvgTurn(station, time) {
   for(i=0; i < arr_start.length; i++) {
     arr_turn[i] = arr_fin[i] - arr_start[i];
   }
-  let avgTurn = arr_turn.reduce() / arr_turn.length;
-
-  return avgTurn;
+  return arr_turn.reduce() / arr_turn.length;
  }
 
 
@@ -81,9 +76,7 @@ function findAvgTurn(station, time) {
  function findAvgPower(station, time) {
   const power = findStationPower(station, time);
 
-  const avgPower = power.reduce() / power.length;
-
-  return avgPower;
+  return power.reduce() / power.length;
  }
 
  function findChargeDurations(station, time) {
@@ -146,6 +139,18 @@ function getSessAmount (station, time) {
   }
   return amount;
 }
+
+function getPowerPerTime(station, time) {
+  const power = findStationPower(station, time);
+  const duration = findChargeDurations(station, time);
+  const powOverDuration = [];
+  for (let i = 0; i < power.length; i++) {
+    powOverDuration[i] = power / duration;
+  }
+  return powOverDuration;
+}
+
+
 
 
 
