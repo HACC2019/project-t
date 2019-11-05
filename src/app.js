@@ -5,8 +5,8 @@ import {
     Route,
     Link
 } from 'react-router-dom';
-import Map from './Components/Map/Map';
-import StationSidebar from './Components/layout/MainSidebar/StationSidebar';
+import MapComponent from './Components/Map/MapComponent.jsx';
+import StationSidebar from './Components/Map/StationSidebar.jsx';
 import Dashboard from './Components/Dashboard/Dashboard';
 
 class App extends Component {
@@ -40,7 +40,7 @@ class App extends Component {
         <div style={{ display: 'flex'}} >
           <StationSidebar
             stations={this.state.stationList}
-            onStationSelect={this.handleStationSelect}
+            onStationSelect={this.handleStationHover}
             onStationLeave={this.handleStationLeave}
           />
           <div style={{ display: 'inline-flex', flexDirection: 'column', width: '100%'}}>
@@ -51,7 +51,7 @@ class App extends Component {
                 </Route>
               </Switch>
             </Router>
-            <Map 
+            <MapComponent
               selectedStation={this.state.selectedStation}
               onMapChange={this.handleMapChange}
             />
