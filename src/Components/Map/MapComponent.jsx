@@ -4,10 +4,13 @@ import DeckGL from "@deck.gl/react";
 import { PolygonLayer, TextLayer } from "@deck.gl/layers";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import GL from "@luma.gl/constants";
+import StationSidebar from './StationSidebar.jsx';
+import TimeSimulationController from '../../../lib/TimeSimulationController.js';
+import SimulationControl from './SimulationControl.jsx';
 import CHARGE_STATIONS from "../../../json/chargeStations";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
-import { processStationRecords } from '../../../lib/maptools.js';
+import { processStationRecords } from '../../../lib/map_tools.js';
 
 function getContour(station, scale = 1) {
   return [
@@ -18,16 +21,19 @@ function getContour(station, scale = 1) {
   ];
 }
 
-class Map extends Component {
+class MapComponent extends Component {
   constructor(props) {
     super(props);
     
     let labels = [];
         
-    for (let station of CHARGE_STATIONS) {
-        labels.push({label: station.Property, coordinates: [station.Longitude, station.Latitude]});
-    }
+		for (let station of CHARGE_STATIONS) {
+			labels.push({label: station.Property, coordinates: [station.Longitude, station.Latitude]});
+		}
     
+  	this.timeController = new TimeSimulationController();
+		this.timeController.addListener(this.onTimeChange.bind(this));
+		
     this.state = {
       time: 0,
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION,
@@ -36,7 +42,7 @@ class Map extends Component {
       },
       trips: [],
       zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom,
-      faultMap: processStationRecords()
+      faultMap: processStationRecords(this.timeController.getRecords())
     };
     this.mapRef = null;
     
@@ -61,7 +67,7 @@ class Map extends Component {
   }
   
   componentDidFirstRender(mapRef) {
-      this.mapRef = mapRef;
+    this.mapRef = mapRef;
 
       const visibleStations = this.updateStationSidebar();
       this.props.onMapChange(visibleStations);
@@ -122,6 +128,10 @@ class Map extends Component {
 
     return {visible: visibleStations, other: otherStations}
   }
+  
+  onTimeChange(records) {
+    this.setState({faultMap: processStationRecords(records)});
+  }
 
   choose(choices) {
     var index = Math.floor(Math.random() * 100);
@@ -164,10 +174,6 @@ class Map extends Component {
       }),
 
     ];
-
-    if (this.state.selectedStation !== undefined) {
-      console.log(processStationRecords());
-    }
       
       
     // GREEN: [82, 125, 85]
@@ -208,42 +214,52 @@ class Map extends Component {
 
   render() {
     return (
-        <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
-          <DeckGL
-            layers={this._renderLayers()}
-            onViewStateChange={this._onViewStateChange}
-            initialViewState={mapConfig.INITIAL_VIEW_STATE}
-            controller={true}
-            pickingRadius={5}
-            parameters={{
-              blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
-              blendEquation: GL.FUNC_ADD
-            }}
-          >
-            <TripsLayer 
-                  id= "trips"
-                  data= {this.state.trips}
-                  getPath= {d => d.path}
-                  getTimestamps= {d => d.timestamps}
-                  getColor= {d => this.choose([[253, 128, 93], [75, 218, 250]])}
-                  opacity= {0.5}
-                  widthMinPixels= {2}
-                  rounded= {true}
-                  trailLength= {10}
-                  currentTime= {this.state.time}
-                  shadowEnabled= {false}
-            />
-            <InteractiveMap
-              reuseMaps
-              mapStyle={mapConfig.mapStyle}
-              preventStyleDiffing={true}
-              mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
-              ref={this.componentDidFirstRender}
-            />
-          </DeckGL>
+      <div style={{ display: "flex", flexDirection: 'column' }}>
+        <SimulationControl controller={this.timeController} />
+        <div style={{ display: "flex", flex: 1 }}>
+          <StationSidebar
+            stations={this.state.stationList}
+            onStationHover={this.onStationHover}
+            onStationLeave={this.onStationLeave}
+          />
+          <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
+            <DeckGL
+              layers={this._renderLayers()}
+              onViewStateChange={this._onViewStateChange}
+              initialViewState={mapConfig.INITIAL_VIEW_STATE}
+              controller={true}
+              pickingRadius={5}
+              parameters={{
+                blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
+                blendEquation: GL.FUNC_ADD
+              }}
+            >
+              <TripsLayer 
+                id= "trips"
+                data= {this.state.trips}
+                getPath= {d => d.path}
+                getTimestamps= {d => d.timestamps}
+                getColor= {d => this.choose([[253, 128, 93], [75, 218, 250]])}
+                opacity= {0.5}
+                widthMinPixels= {2}
+                rounded= {true}
+                trailLength= {10}
+                currentTime= {this.state.time}
+                shadowEnabled= {false}
+              />
+              <InteractiveMap
+                reuseMaps
+                mapStyle={mapConfig.mapStyle}
+                preventStyleDiffing={true}
+                mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
+                ref={this.componentDidFirstRender}
+              />
+            </DeckGL>
+          </div>
         </div>
+      </div>
     );
   }
 }
 
-export default Map;
+export default MapComponent;
