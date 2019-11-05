@@ -1,0 +1,23 @@
+$link-color: #3D5170;
+$background-color: #f5f6f8;
+
+:local(body) {
+  background-color: $background-color;
+}
+
+:local(.dashboard){
+  display: flex;
+  height: 100vh;
+}
+
+:local(.container) { // usable dash area
+  display: block;
+  padding: 1rem;
+  height: 50%; 
+  background-color: $background-color;
+}
+
+:local(.dashView) {
+  display: flex;
+  position: relative;
+}
