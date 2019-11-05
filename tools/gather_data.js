@@ -28,12 +28,11 @@ function findAvgTurn(station, time) {
   let arr_fin = [];
   let arr_turn = [];
   let earliest = calcTime(time);
-  for( let x in raw_data) {
-    if(x["End Time"] > earliest ) {
-      if(x["Charge Station Name"] === station) {
-        arr_start.push(x["Start Time"]);
-        arr_fin.push(x["Finish Time"]);
-      }
+  for( station in raw_data) {
+    if(station["End Time"] > earliest ) {
+      arr_start.push(station["Start Time"]);
+      arr_fin.push(station["Finish Time"]);
+
     }
   }
   arr_start = arr_start.sort((a, b) => b.date - a.date);
@@ -56,11 +55,10 @@ function findStationPower(station, time) {
   const raw_data = JSON.parse(file);
   const power = []
   let earliest = calcTime(time);
-  for(let x in raw_data) {
-    if(x["End Time"] > earliest) {
-      if(x["Charge Station Name"] === station) {
+  for(station in raw_data) {
+    if(station["End Time"] > earliest) {
         power.push(x["Energy(kWh)"])
-      }
+
     }
   }
   return power;
@@ -85,18 +83,16 @@ function findChargeDurations(station, time) {
 
   let earliest = calcTime(time);
 
-  for (let x in raw_data) {
-    if (x["End Time"] > earliest) {
-      if (x["Charge Station Name"] === station) {
-
-        let hms = x["Duration"];   // your input string
+  for (station in raw_data) {
+    if (station["End Time"] > earliest) {
+        let hms = station["Duration"];   // your input string
         let a = hms.split(':'); // split it at the colons
 
 // minutes are worth 60 seconds. Hours are worth 60 minutes.
         let seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
 
         durations.push(seconds);
-      }
+
 
     }
 
@@ -128,13 +124,11 @@ function getSessAmount (station, time) {
   let amount = [];
   let earliest = calcTime(time);
 
-  for(let x in raw_data) {
-    if(x["End Time"] > earliest) {
-      if(x["Charge Station Name"] === station) {
-        let raw_amount = x["Charge Amount"];
+  for(station in raw_data) {
+    if(station["End Time"] > earliest) {
+        let raw_amount = station["Charge Amount"];
         raw_amount = raw_amount.slice(1);
         amount.push(raw_amount);
-      }
     }
   }
   return amount;
