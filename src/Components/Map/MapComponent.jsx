@@ -217,11 +217,6 @@ class MapComponent extends Component {
       <div style={{ display: "flex", flexDirection: 'column' }}>
         <SimulationControl controller={this.timeController} />
         <div style={{ display: "flex", flex: 1 }}>
-          <StationSidebar
-            stations={this.state.stationList}
-            onStationHover={this.onStationHover}
-            onStationLeave={this.onStationLeave}
-          />
           <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
             <DeckGL
               layers={this._renderLayers()}
