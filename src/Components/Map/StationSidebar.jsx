@@ -24,7 +24,7 @@ export class StationSidebar extends Component {
                 key={station.ID}
                 className={sidebarStyle.item}
                 onMouseEnter={() => {
-                    this.props.onStationHover(station.ID);
+                    this.props.onStationSelect(station.ID);
                 }}
                 onMouseLeave={() => {
                     this.props.onStationLeave();
