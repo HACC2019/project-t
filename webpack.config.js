@@ -13,13 +13,15 @@ module.exports = {
   output: {
     filename: './[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
     port: 8080,
     watchContentBase: true,
-    progress: true
+    progress: true,
+    historyApiFallback: true
   },
   module: {
     rules: [
@@ -34,8 +36,8 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        use: ['style-loader', 
+        test: /\.s?css$/i,
+        use: ['style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -44,9 +46,12 @@ module.exports = {
               },
               importLoaders: 1
             }
+          },
+          {
+            loader: 'sass-loader'
           }
         ]
-      }
+      },
     ]
   },
 
