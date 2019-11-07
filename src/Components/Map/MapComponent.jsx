@@ -4,7 +4,6 @@ import DeckGL from "@deck.gl/react";
 import { PolygonLayer, TextLayer } from "@deck.gl/layers";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import GL from "@luma.gl/constants";
-import StationSidebar from './StationSidebar.jsx';
 import TimeSimulationController from '../../../lib/TimeSimulationController.js';
 import SimulationControl from './SimulationControl.jsx';
 import CHARGE_STATIONS from "../../../json/chargeStations";
@@ -53,11 +52,11 @@ class MapComponent extends Component {
 
   componentDidMount() {
     this._animate();
-    fetch('trips.json')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ trips: data })
-      })
+    // fetch('trips.json')
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     this.setState({ trips: data })
+    //   })
   }
 
   componentWillUnmount() {
@@ -214,9 +213,9 @@ class MapComponent extends Component {
 
   render() {
     return (
-      <div style={{ display: "flex", flexDirection: 'column' }}>
+      <div style={{ display: "flex", flexDirection: 'column', height: '100%' }}>
         <SimulationControl controller={this.timeController} />
-        <div style={{ display: "flex", flex: 1 }}>
+        {/* <div style={{ display: "flex", flex: 1 }}> */}
           <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
             <DeckGL
               layers={this._renderLayers()}
@@ -250,7 +249,7 @@ class MapComponent extends Component {
                 ref={this.componentDidFirstRender}
               />
             </DeckGL>
-          </div>
+          {/* </div> */}
         </div>
       </div>
     );
