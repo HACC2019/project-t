@@ -7,7 +7,7 @@ module.exports = {
 
   entry: {
     app: './src/index.js',
-    maptools: './lib/maptools.js'
+    maptools: './lib/map_tools.js'
   },
 
   output: {

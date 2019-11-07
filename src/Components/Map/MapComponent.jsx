@@ -4,9 +4,12 @@ import DeckGL from "@deck.gl/react";
 import { PolygonLayer, TextLayer } from "@deck.gl/layers";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import GL from "@luma.gl/constants";
+import TimeSimulationController from '../../../lib/TimeSimulationController.js';
+import SimulationControl from './SimulationControl.jsx';
 import CHARGE_STATIONS from "../../../json/chargeStations";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
+import { processStationRecords } from '../../../lib/map_tools.js';
 
 function getContour(station, scale = 1) {
   return [
@@ -17,16 +20,19 @@ function getContour(station, scale = 1) {
   ];
 }
 
-class Map extends Component {
+class MapComponent extends Component {
   constructor(props) {
     super(props);
     
     let labels = [];
         
-    for (let station of CHARGE_STATIONS) {
-        labels.push({label: station.Property, coordinates: [station.Longitude, station.Latitude]});
-    }
+		for (let station of CHARGE_STATIONS) {
+			labels.push({label: station.Property, coordinates: [station.Longitude, station.Latitude]});
+		}
     
+  	this.timeController = new TimeSimulationController();
+		this.timeController.addListener(this.onTimeChange.bind(this));
+		
     this.state = {
       time: 0,
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION,
@@ -34,7 +40,8 @@ class Map extends Component {
         chargeStations: CHARGE_STATIONS
       },
       trips: [],
-      zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom
+      zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom,
+      faultMap: processStationRecords(this.timeController.getRecords())
     };
     this.mapRef = null;
     
@@ -45,11 +52,11 @@ class Map extends Component {
 
   componentDidMount() {
     this._animate();
-    fetch('trips.json')
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ trips: data })
-      })
+    // fetch('trips.json')
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     this.setState({ trips: data })
+    //   })
   }
 
   componentWillUnmount() {
@@ -59,7 +66,7 @@ class Map extends Component {
   }
   
   componentDidFirstRender(mapRef) {
-      this.mapRef = mapRef;
+    this.mapRef = mapRef;
 
       const visibleStations = this.updateStationSidebar();
       this.props.onMapChange(visibleStations);
@@ -120,6 +127,10 @@ class Map extends Component {
 
     return {visible: visibleStations, other: otherStations}
   }
+  
+  onTimeChange(records) {
+    this.setState({faultMap: processStationRecords(records)});
+  }
 
   choose(choices) {
     var index = Math.floor(Math.random() * 100);
@@ -162,7 +173,11 @@ class Map extends Component {
       }),
 
     ];
-
+      
+      
+    // GREEN: [82, 125, 85]
+    // ORANGE: [253, 128, 93]
+    // RED: [184, 81, 81]
     for (let charger of this.state.data.chargeStations) {
       layers.push(
         new PolygonLayer({
@@ -175,7 +190,15 @@ class Map extends Component {
           lineWidthMinPixels: 1,
           getPolygon: d => this.props.selectedStation === charger.ID ? getContour(d, 3) : getContour(d),
           getElevation: d => this.props.selectedStation === charger.ID ? this.state.stationElevation * 3 : this.state.stationElevation,
-          getFillColor: d => this.props.selectedStation === charger.ID ? [253, 128, 93] : [255, 255, 204],
+          getFillColor: data => {
+            if (!data.Servicing) {
+              return [184, 81, 81];
+            } else if (this.state.faultMap.has(data.ID)) {
+              return [253, 128, 93];
+            } else {
+              return [82, 125, 85];
+            }
+          },
           getLineColor: [80, 80, 80],
           getLineWidth: 1,
           updateTriggers: {
@@ -190,42 +213,47 @@ class Map extends Component {
 
   render() {
     return (
-        <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
-          <DeckGL
-            layers={this._renderLayers()}
-            onViewStateChange={this._onViewStateChange}
-            initialViewState={mapConfig.INITIAL_VIEW_STATE}
-            controller={true}
-            pickingRadius={5}
-            parameters={{
-              blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
-              blendEquation: GL.FUNC_ADD
-            }}
-          >
-            <TripsLayer 
-                  id= "trips"
-                  data= {this.state.trips}
-                  getPath= {d => d.path}
-                  getTimestamps= {d => d.timestamps}
-                  getColor= {d => this.choose([[253, 128, 93], [75, 218, 250]])}
-                  opacity= {0.5}
-                  widthMinPixels= {2}
-                  rounded= {true}
-                  trailLength= {10}
-                  currentTime= {this.state.time}
-                  shadowEnabled= {false}
-            />
-            <InteractiveMap
-              reuseMaps
-              mapStyle={mapConfig.mapStyle}
-              preventStyleDiffing={true}
-              mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
-              ref={this.componentDidFirstRender}
-            />
-          </DeckGL>
+      <div style={{ display: "flex", flexDirection: 'column', height: '100%' }}>
+        <SimulationControl controller={this.timeController} />
+        {/* <div style={{ display: "flex", flex: 1 }}> */}
+          <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
+            <DeckGL
+              layers={this._renderLayers()}
+              onViewStateChange={this._onViewStateChange}
+              initialViewState={mapConfig.INITIAL_VIEW_STATE}
+              controller={true}
+              pickingRadius={5}
+              parameters={{
+                blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
+                blendEquation: GL.FUNC_ADD
+              }}
+            >
+              <TripsLayer 
+                id= "trips"
+                data= {this.state.trips}
+                getPath= {d => d.path}
+                getTimestamps= {d => d.timestamps}
+                getColor= {d => this.choose([[253, 128, 93], [75, 218, 250]])}
+                opacity= {0.5}
+                widthMinPixels= {2}
+                rounded= {true}
+                trailLength= {10}
+                currentTime= {this.state.time}
+                shadowEnabled= {false}
+              />
+              <InteractiveMap
+                reuseMaps
+                mapStyle={mapConfig.mapStyle}
+                preventStyleDiffing={true}
+                mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
+                ref={this.componentDidFirstRender}
+              />
+            </DeckGL>
+          {/* </div> */}
         </div>
+      </div>
     );
   }
 }
 
-export default Map;
+export default MapComponent;

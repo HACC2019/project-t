@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {render} from 'react-dom';
-
 import sidebarStyle from '../../styles/sidebar.css';
 
 export class StationSidebar extends Component {
@@ -26,7 +24,7 @@ export class StationSidebar extends Component {
                 key={station.ID}
                 className={sidebarStyle.item}
                 onMouseEnter={() => {
-                    this.props.onStationHover(station.ID);
+                    this.props.onStationSelect(station.ID);
                 }}
                 onMouseLeave={() => {
                     this.props.onStationLeave();
