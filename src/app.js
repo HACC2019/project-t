@@ -18,7 +18,7 @@ class App extends Component {
     }
 
     this.handleMapChange = this.handleMapChange.bind(this);
-    this.handleStationSelect = this.handleStationSelect.bind(this);
+    this.handleStationHover = this.handleStationHover.bind(this);
     this.handleStationLeave = this.handleStationLeave.bind(this);
   }
 
@@ -26,8 +26,8 @@ class App extends Component {
     this.setState({stationList: stations});
   }
 
-  handleStationSelect(s) {
-    this.setState({ selectedStation: s }, console.log('station selected', s))
+  handleStationHover(s) {
+    this.setState({ selectedStation: s });
   }
 
   handleStationLeave() {
