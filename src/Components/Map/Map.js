@@ -4,7 +4,6 @@ import DeckGL from "@deck.gl/react";
 import { PolygonLayer, TextLayer } from "@deck.gl/layers";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import GL from "@luma.gl/constants";
-import StationSidebar from './StationSidebar.jsx';
 import CHARGE_STATIONS from "../../../json/chargeStations";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
@@ -35,8 +34,6 @@ class Map extends Component {
         chargeStations: CHARGE_STATIONS
       },
       trips: [],
-      stationList: {visible: [], other: []},
-      selectedStation: undefined,
       zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom
     };
     this.mapRef = null;
@@ -44,8 +41,6 @@ class Map extends Component {
     this._animate = this._animate.bind(this);
     this._onViewStateChange = this._onViewStateChange.bind(this);
     this.componentDidFirstRender = this.componentDidFirstRender.bind(this);
-    this.onStationHover = this.onStationHover.bind(this);
-    this.onStationLeave = this.onStationLeave.bind(this);
   }
 
   componentDidMount() {
@@ -66,7 +61,8 @@ class Map extends Component {
   componentDidFirstRender(mapRef) {
       this.mapRef = mapRef;
 
-      this.updateStationSidebar();
+      const visibleStations = this.updateStationSidebar();
+      this.props.onMapChange(visibleStations);
   }
 
   _animate() {
@@ -94,7 +90,8 @@ class Map extends Component {
       zoomLevel: states.viewState.zoom
     });
     
-    this.updateStationSidebar();
+    const visibleStations = this.updateStationSidebar();
+    this.props.onMapChange(visibleStations);
   }
 
   updateStationSidebar() {
@@ -121,15 +118,7 @@ class Map extends Component {
       return true;
     });
 
-    this.setState({stationList: {visible: visibleStations, other: otherStations}})
-  }
-
-  onStationHover(stationID) {
-      this.setState({selectedStation: stationID});
-  }
-
-  onStationLeave() {
-      this.setState({selectedStation: undefined});
+    return {visible: visibleStations, other: otherStations}
   }
 
   choose(choices) {
@@ -184,9 +173,9 @@ class Map extends Component {
           filled: true,
           extruded: true,
           lineWidthMinPixels: 1,
-          getPolygon: d => this.state.selectedStation === charger.ID ? getContour(d, 3) : getContour(d),
-          getElevation: d => this.state.selectedStation === charger.ID ? this.state.stationElevation * 3 : this.state.stationElevation,
-          getFillColor: d => this.state.selectedStation === charger.ID ? [253, 128, 93] : [255, 255, 204],
+          getPolygon: d => this.props.selectedStation === charger.ID ? getContour(d, 3) : getContour(d),
+          getElevation: d => this.props.selectedStation === charger.ID ? this.state.stationElevation * 3 : this.state.stationElevation,
+          getFillColor: d => this.props.selectedStation === charger.ID ? [253, 128, 93] : [255, 255, 204],
           getLineColor: [80, 80, 80],
           getLineWidth: 1,
           updateTriggers: {
@@ -201,12 +190,6 @@ class Map extends Component {
 
   render() {
     return (
-      <div style={{ display: "flex" }}>
-        <StationSidebar
-          stations={this.state.stationList}
-          onStationHover={this.onStationHover}
-          onStationLeave={this.onStationLeave}
-        />
         <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
           <DeckGL
             layers={this._renderLayers()}
@@ -241,7 +224,6 @@ class Map extends Component {
             />
           </DeckGL>
         </div>
-      </div>
     );
   }
 }
