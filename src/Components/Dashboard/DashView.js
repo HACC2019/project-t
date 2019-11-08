@@ -1,10 +1,12 @@
 import React from 'react';
 import { Card, Image, Statistic } from 'semantic-ui-react';
-import { Pie, Bar } from 'react-chartjs-2'
+import { Pie, Bar } from 'react-chartjs-2';
 import style from './dashboard.scss';
 
-export default function DashView() {
+import SomeBarChart from './Charts/SomeBarChart';
+import SomePieChart from './Charts/SomePieChart';
 
+export default function DashView() {
 
   return (
     <div className={style.container}>
@@ -22,13 +24,7 @@ export default function DashView() {
               <Card.Header>
                 Some Data
               </Card.Header>
-              let BarChart = require("react-chartjs").Bar;
-
-              let MyComponent = React.createClass({
-              render: function() {
-              return <BarChart data={chartData} options={chartOptions}/>
-            }
-            });
+              <SomeBarChart />
             </Card.Content>
           </Card>
           <Card color='red'>
@@ -36,13 +32,7 @@ export default function DashView() {
               <Card.Header>
                 Some more Data
               </Card.Header>
-              let PieChart = require("react-chartjs").Pie;
-
-              let MyComponent = React.createClass({
-              render: function() {
-              return <PieChart data={chartData} options={chartOptions}/>
-            }
-            });
+              <SomePieChart />
             </Card.Content>
           </Card>
         </Card.Group>
