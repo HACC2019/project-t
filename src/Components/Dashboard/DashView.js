@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, Image, Statistic } from 'semantic-ui-react';
-import { Pie, Bar } from 'react-chartjs-2';
 import style from './dashboard.scss';
 
 import SomeBarChart from './Charts/SomeBarChart';
