@@ -1,8 +1,6 @@
 import React from 'react';
 import { Card, Image, Statistic } from 'semantic-ui-react';
 import style from './dashboard.scss';
-import SomeBarChart from './Charts/SomeBarChart';
-import SomePieChart from './Charts/SomePieChart';
 
 import SomeBarChart from './Charts/SomeBarChart';
 import SomePieChart from './Charts/SomePieChart';
@@ -17,10 +15,9 @@ export default function DashView() {
             Turnaround Time
           </Statistic.Value>
           <Statistic.Label>Average Time Between Uses</Statistic.Label>
-
         </Statistic>
         <Card.Group>
-        <Card color='red'> 
+          <Card color='red'> 
             <Card.Content>
               <Card.Header>
                 Some Data
