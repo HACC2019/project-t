@@ -1,5 +1,5 @@
 :local(.sidebar) {
-    height: 100vh;
+/*    height: 100vh;*/
     max-width: 23em;
     min-width: 12.5em;
     width: 20vw;
@@ -7,6 +7,14 @@
     background: #2c2d31;
     overflow-y: auto;
     user-select: none;
+}
+
+:local(.sidebar::-webkit-scrollbar-track) {
+	background: rgba(255,255,255,.1);
+}
+
+:local(.sidebar::-webkit-scrollbar-thumb) {
+	background: rgba(0,0,0,.5);
 }
 
 :local(.heading) {
