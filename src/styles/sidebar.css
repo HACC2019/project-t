@@ -45,3 +45,14 @@
     font-size: 0.8em;
     color: #959799;
 }
+
+:local(.svgDiv) {
+    position: absolute;
+    top: 12px;
+    right: -23px;
+    width: 23px;
+    height: 48px;
+    background: #53555a;
+    z-index: 2;
+    cursor: pointer;
+}
