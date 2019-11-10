@@ -265,7 +265,7 @@ class MapComponent extends Component {
 
   render() {
     return (
-      <div style={{ display: "flex", flexDirection: 'column', height: '100%' }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: 'column' }}>
         <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
           <DeckGL
             layers={this._renderLayers()}
