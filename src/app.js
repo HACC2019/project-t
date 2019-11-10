@@ -11,6 +11,7 @@ import MapComponent from './Components/Map/MapComponent.jsx';
 import StationSidebar from './Components/Map/StationSidebar.jsx';
 import Dashboard from './Components/Dashboard/Dashboard';
 import { processStationRecords } from '../lib/map_tools.js';
+import RecordAnalytics from '../lib/gather_data.js';
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class App extends Component {
     
     this.timeController = new TimeSimulation();
     this.timeController.addListener(this.onTimeChange.bind(this));
+    window.analytics = new RecordAnalytics(this.timeController);
     
     this.state = {
       stationList: {visible: [], other: []},
