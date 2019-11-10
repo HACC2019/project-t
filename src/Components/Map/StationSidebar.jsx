@@ -77,7 +77,7 @@ export class StationSidebar extends Component {
                         undefined
                 }
                 </div>
-                <div style={{position: 'absolute', top: '12px', right: '-23px', width: '23px', height: '48px', background: '#53555a', zIndex: 2, cursor: 'pointer'}} onClick={this.handleShowHide}>
+                <div className={sidebarStyle.svgDiv} onClick={this.handleShowHide}>
                     <svg style={svgStyle} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill='#FFFFFF' d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>
                 </div>
             </div>
