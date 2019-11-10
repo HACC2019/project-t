@@ -47,7 +47,7 @@ export class StationSidebar extends Component {
             otherStations.push(element);
         }
         
-        const style = {position: 'relative', transition: 'margin-left 250ms'};
+        const style = {position: 'relative', display: 'flex', transition: 'margin-left 250ms'};
         const svgStyle = {position: 'absolute', top: '50%', transform: 'translateY(-50%)', transition: 'transform 250ms'};
         
         if (!this.state.visible) {

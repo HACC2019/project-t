@@ -4,8 +4,6 @@ import DeckGL from "@deck.gl/react";
 import { PolygonLayer, TextLayer } from "@deck.gl/layers";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import GL from "@luma.gl/constants";
-import TimeSimulationController from '../../../lib/TimeSimulationController.js';
-import SimulationControl from './SimulationControl.jsx';
 import CHARGE_STATIONS from "../../../json/chargeStations";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
@@ -24,16 +22,13 @@ function getContour(station, scale = 1) {
 class MapComponent extends Component {
   constructor(props) {
     super(props);
-    
+
     let labels = [];
-        
-		for (let station of CHARGE_STATIONS) {
-			labels.push({label: station.Property, coordinates: [station.Longitude, station.Latitude]});
-		}
-    
-  	this.timeController = new TimeSimulationController();
-		this.timeController.addListener(this.onTimeChange.bind(this));
-		
+
+    for (let station of CHARGE_STATIONS) {
+        labels.push({label: station.Property, coordinates: [station.Longitude, station.Latitude]});
+    }
+
     this.state = {
       time: 0,
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION,
@@ -43,11 +38,10 @@ class MapComponent extends Component {
       newStations: [],
       trips: [],
       zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom,
-      faultMap: processStationRecords(this.timeController.getRecords()),
       editMode: false
     };
     this.mapRef = null;
-    
+
     this._animate = this._animate.bind(this);
     this._onViewStateChange = this._onViewStateChange.bind(this);
     this.componentDidFirstRender = this.componentDidFirstRender.bind(this);
@@ -70,7 +64,7 @@ class MapComponent extends Component {
       window.cancelAnimationFrame(this._animationFrame);
     }
   }
-  
+
   componentDidFirstRender(mapRef) {
     this.mapRef = mapRef;
 
@@ -102,7 +96,7 @@ class MapComponent extends Component {
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION * percentage,
       zoomLevel: states.viewState.zoom
     });
-    
+
     const visibleStations = this.updateStationSidebar();
     this.props.onMapChange(visibleStations);
   }
@@ -133,10 +127,6 @@ class MapComponent extends Component {
 
     return {visible: visibleStations, other: otherStations}
   }
-  
-  onTimeChange(records) {
-    this.setState({faultMap: processStationRecords(records)});
-  }
 
   choose(choices) {
     var index = Math.floor(Math.random() * 100);
@@ -146,7 +136,7 @@ class MapComponent extends Component {
       return choices[0];
     }
   }
-  
+
   handleMapClick(info, event) {
     if (this.state.editMode) {
       this.setState({
@@ -161,11 +151,11 @@ class MapComponent extends Component {
       });
     }
   }
-  
+
   toggleEditMode() {
     this.setState({editMode: !this.state.editMode});
   }
-  
+
   deleteNewStation(info, event) {
     if (this.state.editMode) {
       this.setState({
@@ -215,8 +205,7 @@ class MapComponent extends Component {
       }),
 
     ];
-      
-      
+
     // GREEN: [82, 125, 85]
     // ORANGE: [253, 128, 93]
     // RED: [184, 81, 81]
@@ -235,7 +224,7 @@ class MapComponent extends Component {
           getFillColor: data => {
             if (!data.Servicing) {
               return [184, 81, 81];
-            } else if (this.state.faultMap.has(data.ID)) {
+            } else if (this.props.faultMap.has(data.ID)) {
               return [253, 128, 93];
             } else {
               return [82, 125, 85];
@@ -249,7 +238,7 @@ class MapComponent extends Component {
         })
       );
     }
-    
+
     for (let charger of this.state.newStations) {
       layers.push(new PolygonLayer({
         id: `new-station-${charger.ID}`,
@@ -277,7 +266,6 @@ class MapComponent extends Component {
   render() {
     return (
       <div style={{ display: "flex", flexDirection: 'column', height: '100%' }}>
-        <SimulationControl controller={this.timeController} />
         <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
           <DeckGL
             layers={this._renderLayers()}
