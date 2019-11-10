@@ -1,0 +1,17 @@
+:local(.material-icon) {
+  width: 1em;
+  height: 1.125em;
+/*  margin: auto 0 auto 1em;*/
+  margin: auto 1.0835rem auto 0;
+  font-family: 'Material Icons';
+  font-size: 1.333em;
+  line-height: 1.125;
+  
+/*
+  position: absolute;
+  width: 1.333rem;
+  top: 1.0001875rem;
+  right: 1.0835rem;
+  height: 1.499625rem;
+*/
+}

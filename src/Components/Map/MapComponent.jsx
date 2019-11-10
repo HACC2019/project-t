@@ -10,6 +10,7 @@ import CHARGE_STATIONS from "../../../json/chargeStations";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
 import { processStationRecords } from '../../../lib/map_tools.js';
+import mapStyles from '../../styles/map.css';
 
 function getContour(station, scale = 1) {
   return [
@@ -39,15 +40,20 @@ class MapComponent extends Component {
       data: {
         chargeStations: CHARGE_STATIONS
       },
+      newStations: [],
       trips: [],
       zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom,
-      faultMap: processStationRecords(this.timeController.getRecords())
+      faultMap: processStationRecords(this.timeController.getRecords()),
+      editMode: false
     };
     this.mapRef = null;
     
     this._animate = this._animate.bind(this);
     this._onViewStateChange = this._onViewStateChange.bind(this);
     this.componentDidFirstRender = this.componentDidFirstRender.bind(this);
+    this.handleMapClick = this.handleMapClick.bind(this);
+    this.toggleEditMode = this.toggleEditMode.bind(this);
+    this.deleteNewStation = this.deleteNewStation.bind(this);
   }
 
   componentDidMount() {
@@ -140,6 +146,42 @@ class MapComponent extends Component {
       return choices[0];
     }
   }
+  
+  handleMapClick(info, event) {
+    if (this.state.editMode) {
+      this.setState({
+        newStations: [
+          ...this.state.newStations,
+          {
+            ID: Math.floor(Math.random() * 1000),
+            Longitude: info.coordinate[0],
+            Latitude: info.coordinate[1]
+          }
+        ]
+      });
+    }
+  }
+  
+  toggleEditMode() {
+    this.setState({editMode: !this.state.editMode});
+  }
+  
+  deleteNewStation(info, event) {
+    if (this.state.editMode) {
+      this.setState({
+          newStations: this.state.newStations.filter(
+          (element) => {
+          if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
+            return false;
+          } else {
+            return true;
+          }
+        })
+      });
+
+      return true;
+    }
+  }
 
   _renderLayers() {
     const { getWidth = 3 } = this.props;
@@ -207,6 +249,27 @@ class MapComponent extends Component {
         })
       );
     }
+    
+    for (let charger of this.state.newStations) {
+      layers.push(new PolygonLayer({
+        id: `new-station-${charger.ID}`,
+        data: [charger],
+        pickable: true,
+        stroked: true,
+        filled: true,
+        extruded: true,
+        lineWidthMinPixels: 1,
+        getPolygon: d => getContour(d),
+        getElevation: d => this.state.stationElevation,
+        getFillColor: d => [75, 218, 250],
+        getLineColor: [80, 80, 80],
+        getLineWidth: 1,
+        updateTriggers: {
+          getElevation: [this.state.stationElevation]
+        },
+        onClick: this.deleteNewStation
+      }));
+    }
 
     return layers;
   }
@@ -215,41 +278,46 @@ class MapComponent extends Component {
     return (
       <div style={{ display: "flex", flexDirection: 'column', height: '100%' }}>
         <SimulationControl controller={this.timeController} />
-        {/* <div style={{ display: "flex", flex: 1 }}> */}
-          <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
-            <DeckGL
-              layers={this._renderLayers()}
-              onViewStateChange={this._onViewStateChange}
-              initialViewState={mapConfig.INITIAL_VIEW_STATE}
-              controller={true}
-              pickingRadius={5}
-              parameters={{
-                blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
-                blendEquation: GL.FUNC_ADD
-              }}
-            >
-              <TripsLayer 
-                id= "trips"
-                data= {this.state.trips}
-                getPath= {d => d.path}
-                getTimestamps= {d => d.timestamps}
-                getColor= {d => this.choose([[253, 128, 93], [75, 218, 250]])}
-                opacity= {0.5}
-                widthMinPixels= {2}
-                rounded= {true}
-                trailLength= {10}
-                currentTime= {this.state.time}
-                shadowEnabled= {false}
-              />
-              <InteractiveMap
-                reuseMaps
-                mapStyle={mapConfig.mapStyle}
-                preventStyleDiffing={true}
-                mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
-                ref={this.componentDidFirstRender}
-              />
-            </DeckGL>
-          {/* </div> */}
+        <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
+          <DeckGL
+            layers={this._renderLayers()}
+            onViewStateChange={this._onViewStateChange}
+            initialViewState={mapConfig.INITIAL_VIEW_STATE}
+            controller={true}
+            pickingRadius={5}
+            parameters={{
+              blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
+              blendEquation: GL.FUNC_ADD
+            }}
+            onClick={this.handleMapClick}
+          >
+            <TripsLayer 
+              id= "trips"
+              data= {this.state.trips}
+              getPath= {d => d.path}
+              getTimestamps= {d => d.timestamps}
+              getColor= {d => this.choose([[253, 128, 93], [75, 218, 250]])}
+              opacity= {0.5}                                                                                                        
+              widthMinPixels= {2}
+              rounded= {true}
+              trailLength= {10}
+              currentTime= {this.state.time}
+              shadowEnabled= {false}
+            />
+            <InteractiveMap
+              reuseMaps
+              mapStyle={mapConfig.mapStyle}
+              preventStyleDiffing={true}
+              mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
+              ref={this.componentDidFirstRender}
+            />
+          </DeckGL>
+          <div style={{position: 'absolute', display: 'flex', flexDirection: 'row', height: '3.5rem', minWidth: '3.5rem', bottom: '2.4em', right: '1em', borderRadius: '3.5rem', background: this.state.editMode ? '#00C853' : '#2193F6', textAlign: 'right', color: '#FFFFFF', cursor: 'pointer'}} onClick={this.toggleEditMode}>
+            <span style={{flex: 1, margin: 'auto 1em'}}>
+              {this.state.editMode ? 'Edit Mode: On' : 'Edit Mode'}
+            </span>
+            <span className={mapStyles['material-icon']}>edit</span>
+          </div>
         </div>
       </div>
     );
