@@ -10,7 +10,7 @@ export default function DashView() {
   return (
     <div className={style.container}>
       <div className={style.dashView}>
-        <Statistic size='small'>
+        <Statistic size='mini'>
           <Statistic.Value>
             Turnaround Time
           </Statistic.Value>
