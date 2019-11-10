@@ -3,21 +3,21 @@ import React, {Component} from 'react';
 const weekDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export class SimulationControl extends Component {
+export class SimulationController extends Component {
   constructor(props) {
     super(props);
 
-		this.state = {
-			running: false
-		}
-		
+    this.state = {
+        running: false
+    }
+
     this.nextDay = this.nextDay.bind(this);
     this.previousDay = this.previousDay.bind(this);
     this.nextWeek = this.nextWeek.bind(this);
     this.previousWeek = this.previousWeek.bind(this);
-		this.toggleSimulation = this.toggleSimulation.bind(this);
-		this.runSimulation = this.runSimulation.bind(this);
-		this.props.controller.addListener(this.render.bind(this));
+    this.toggleSimulation = this.toggleSimulation.bind(this);
+    this.runSimulation = this.runSimulation.bind(this);
+    this.props.controller.addListener(this.render.bind(this));
   }
 
   nextDay() {
@@ -35,26 +35,25 @@ export class SimulationControl extends Component {
   previousWeek() {
     this.props.controller.previousWeek();
   }
-  
-	toggleSimulation() {
-		this.setState({running: !this.state.running}, () => {
-			if (this.state.running) {
-				console.log('starting');
-				this.runSimulation();
-			} else {
-				clearTimeout(this._timeout);
-			}
-		});
-	}
-	
-	runSimulation() {
-		this.props.controller.nextDay();
-		this._timeout = setTimeout(this.runSimulation, 100);
-	}
-	
+
+    toggleSimulation() {
+        this.setState({running: !this.state.running}, () => {
+            if (this.state.running) {
+                this.runSimulation();
+            } else {
+                clearTimeout(this._timeout);
+            }
+        });
+    }
+
+    runSimulation() {
+        this.props.controller.nextDay();
+        this._timeout = setTimeout(this.runSimulation, 100);
+    }
+
   render() {
-		let date = new Date(this.props.controller.getTime());
-		
+    let date = new Date(this.props.controller.getTime());
+
     return (
       <div style={{ display: 'flex', flexDirection: 'row', height: '3em', padding: '0 1em', background: '#111116', color: '#FFF'}}>
         <div style={{margin: 'auto 0'}}>Week of {weekDayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getFullYear()} (week {this.props.controller.getWeekNumber()})</div>
@@ -69,4 +68,4 @@ export class SimulationControl extends Component {
   }
 }
 
-export default SimulationControl;
+export default SimulationController;
