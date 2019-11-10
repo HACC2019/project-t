@@ -7,13 +7,13 @@ $background-color: #f5f6f8;
 
 :local(.dashboard){
   display: flex;
-  height: 100vh;
+  //height: 100vh;
 }
 
 :local(.container) { // usable dash area
   display: block;
   padding: 3rem;
-  height: 100%; 
+  //height: 50%; 
   background-color: $background-color;
   overflow: auto;
 }
@@ -21,4 +21,16 @@ $background-color: #f5f6f8;
 :local(.dashView) {
   display: flex;
   position: relative;
+}
+
+:local(.box) {
+  display: inline-block;
+  border: 1px solid black;
+  // text-align: center;
+  padding: 0px;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+  overflow: hidden;
+  position: relative;
+  margin: 0px;
 }
