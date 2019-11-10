@@ -1,25 +1,34 @@
-// NOTE: To use this example standalone (e.g. outside of deck.gl repo)
-// delete the local development overrides at the bottom of this file
-
 const webpack = require('webpack');
+const path = require('path')
+const Dotenv = require('dotenv-webpack');
 
-const CONFIG = {
+module.exports = {
   mode: 'development',
 
   entry: {
-    app: './app.js'
+    app: './src/index.js',
+    maptools: './lib/map_tools.js'
   },
 
   output: {
-    library: 'App'
+    filename: './[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
-
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    compress: true,
+    port: 8080,
+    watchContentBase: true,
+    progress: true,
+    historyApiFallback: true
+  },
   module: {
     rules: [
       {
         // Transpile ES6 to ES5 with babel
         // Remove if your app does not use JSX or you don't need to support old browsers
-        test: /\.js$/,
+        test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: [/node_modules/],
         options: {
@@ -27,8 +36,8 @@ const CONFIG = {
         }
       },
       {
-        test: /\.css$/,
-        use: ['style-loader', 
+        test: /\.s?css$/i,
+        use: ['style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -37,15 +46,33 @@ const CONFIG = {
               },
               importLoaders: 1
             }
+          },
+          {
+            loader: 'sass-loader'
           }
         ]
-      }
+      },
     ]
   },
 
-  // Optional: Enables reading mapbox token from environment variable
-  plugins: [new webpack.EnvironmentPlugin(['MapboxAccessToken'])]
-};
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all',
+        }
+      }
+    }
+  },
 
-// This line enables bundling against src in this repo rather than installed module
-module.exports = env => (env ? require('../../webpack.config.local')(CONFIG)(env) : CONFIG);
+  plugins: [
+    new Dotenv(),
+  ],
+
+  node: {
+    fs: 'empty'
+  },
+
+};

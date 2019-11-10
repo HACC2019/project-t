@@ -4,22 +4,36 @@
   "license": "MIT",
   "scripts": {
     "start-local": "webpack-dev-server --env.local --progress --hot --open",
-    "start": "webpack-dev-server --progress --hot --open"
+    "start": "webpack-dev-server --hot --open"
   },
   "dependencies": {
+    "chart.js": "^2.9.2",
     "deck.gl": "^7.3.0",
+    "dotenv-webpack": "^1.7.0",
+    "re-resizable": "^6.1.0",
     "react": "^16.3.0",
+    "react-chartjs-2": "^2.8.0",
     "react-dom": "^16.3.0",
-    "react-map-gl": "^5.0.0"
+    "react-map-gl": "^5.0.0",
+    "react-router-dom": "^5.1.2",
+    "semantic-ui-react": "^0.88.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",
     "css-loader": "^3.2.0",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
-    "webpack": "^4.20.2",
+    "webpack": "^4.41.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
   }
 }
