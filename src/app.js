@@ -31,6 +31,7 @@ class App extends Component {
     this.handleStationLeave = this.handleStationLeave.bind(this);
     this.handleStationClick = this.handleStationClick.bind(this);
     this.handleSidebarClick = this.handleSidebarClick.bind(this);
+    this.handleGoBack = this.handleGoBack.bind(this);
 
   }
 
@@ -58,6 +59,10 @@ class App extends Component {
     this.setState({stationClicked: s, home: false});
   }
 
+  handleGoBack(val){
+    this.setState({home: val})
+  }
+
   render() {
       return(
         <div style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
@@ -70,7 +75,7 @@ class App extends Component {
               onStationClick={this.handleSidebarClick}
             />
             <div style={{ display: 'inline-flex', flexDirection: 'column', width: '100%'}}>
-              {(this.state.home) ? <Dashboard analytics={this.analytics}/> : <DashboardStation pickedStation={this.state.stationClicked}/>}
+              {(this.state.home) ? <Dashboard analytics={this.analytics}/> : <DashboardStation pickedStation={this.state.stationClicked} home={this.handleGoBack}/>}
               <MapComponent
                 selectedStation={this.state.selectedStation}
                 onMapChange={this.handleMapChange}
