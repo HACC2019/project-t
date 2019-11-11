@@ -352,7 +352,7 @@ class MapComponent extends Component {
               opacity= {0.5}                                                                                                        
               widthMinPixels= {2}
               rounded= {true}
-              trailLength= {500}
+              trailLength= {10}
               currentTime= {this.state.time}
               shadowEnabled= {false}
             />
