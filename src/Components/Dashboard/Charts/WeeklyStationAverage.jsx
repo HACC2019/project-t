@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 
-export default class WeeklyAverage5 extends Component {
+export default class WeeklyStationAverage extends Component {
 //  constructor(props) {
 //    super(props);
 //  }
   
   render() {
     // fetch data here
+    console.log(this.props.analytics)
     let data = getWeeklyTotals(this.props.analytics.getRecords(this.props.stationID));
     let labels = [];
     console.log(data);
