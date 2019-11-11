@@ -33,7 +33,8 @@ class MapComponent extends Component {
       time: 0,
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION,
       data: {
-        chargeStations: CHARGE_STATIONS
+        chargeStations: CHARGE_STATIONS,
+        labels: labels,
       },
       newStations: [],
       trips: [],
