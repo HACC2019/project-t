@@ -11,7 +11,7 @@ import MapComponent from './Components/Map/MapComponent.jsx';
 import StationSidebar from './Components/Map/StationSidebar.jsx';
 import Dashboard from './Components/Dashboard/Dashboard';
 import { processStationRecords } from '../lib/map_tools.js';
-import RecordAnalytics from '../lib/gather_data.js';
+import RecordAnalytics from '../lib/RecordAnalytics';
 
 class App extends Component {
   constructor(props) {
@@ -19,12 +19,13 @@ class App extends Component {
     
     this.timeController = new TimeSimulation();
     this.timeController.addListener(this.onTimeChange.bind(this));
-    window.analytics = new RecordAnalytics(this.timeController);
+    this.analytics = new RecordAnalytics(this.timeController);
+    window.analytics = this.analytics;
     
     this.state = {
       stationList: {visible: [], other: []},
       selectedStation: undefined,
-      faultMap: processStationRecords(this.timeController.getRecords())
+      faultMap: processStationRecords(this.timeController.getValidRecords())
     }
 
     this.handleMapChange = this.handleMapChange.bind(this);
@@ -62,7 +63,7 @@ class App extends Component {
               <Router>
                 <Switch>
                   <Route path="/">
-                    <Dashboard />
+                    <Dashboard analytics={this.analytics} />
                   </Route>
                 </Switch>
               </Router>
