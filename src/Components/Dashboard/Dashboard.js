@@ -18,7 +18,7 @@ class Dashboard extends Component {
                     minHeight={'20%'}
                     enable={{bottom: true}}
                     >
-        <DashView />
+        <DashView analytics={this.props.analytics} />
       </Resizable>
     )
   }
