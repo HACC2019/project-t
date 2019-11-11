@@ -18,7 +18,7 @@ class Dashboard extends Component {
                     minConstraints={[200, 300]}
                     handleSize={[20,20]}
                     >
-        <DashView />
+        <DashView analytics={this.props.analytics} />
       </ResizableBox>
     )
   }
