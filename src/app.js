@@ -21,13 +21,17 @@ class App extends Component {
       stationList: {visible: [], other: []},
       selectedStation: undefined,
       faultMap: processStationRecords(this.timeController.getValidRecords()),
-      home: false
+      stationClicked: '',
+      home: true
 
     }
 
     this.handleMapChange = this.handleMapChange.bind(this);
     this.handleStationHover = this.handleStationHover.bind(this);
     this.handleStationLeave = this.handleStationLeave.bind(this);
+    this.handleStationClick = this.handleStationClick.bind(this);
+    this.handleSidebarClick = this.handleSidebarClick.bind(this);
+
   }
 
   handleMapChange(stations) {
@@ -46,6 +50,14 @@ class App extends Component {
     this.setState({faultMap: processStationRecords(records)});
   }
 
+  handleStationClick(el) {
+    this.setState({stationClicked: el, home: false});
+  }
+
+  handleSidebarClick(s) {
+    this.setState({stationClicked: s, home: false});
+  }
+
   render() {
       return(
         <div style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
@@ -55,13 +67,15 @@ class App extends Component {
               stations={this.state.stationList}
               onStationSelect={this.handleStationHover}
               onStationLeave={this.handleStationLeave}
+              onStationClick={this.handleSidebarClick}
             />
             <div style={{ display: 'inline-flex', flexDirection: 'column', width: '100%'}}>
-              {(this.state.home) ? <Dashboard analytics={this.analytics}/> : <DashboardStation />}
+              {(this.state.home) ? <Dashboard analytics={this.analytics}/> : <DashboardStation pickedStation={this.state.stationClicked}/>}
               <MapComponent
                 selectedStation={this.state.selectedStation}
                 onMapChange={this.handleMapChange}
                 faultMap={this.state.faultMap}
+                stationClicked={this.handleStationClick}
               />
             </div>
           </div>
