@@ -11,18 +11,10 @@ export default class DashView extends Component {
     return (
       <div className={style.container}>
         <div className={style.dashView}>
-          <Grid centered columns={4}>
-            <Grid.Row centered stretched>
-              <Statistic inverted size='small'>
-                <Statistic.Value>
-                  Turnaround Time
-                </Statistic.Value>
-                <Statistic.Label>Average Time Between Uses</Statistic.Label>
-              </Statistic>
-            </Grid.Row>
-            <Grid.Row stretched centered >
-              <Grid.Column width={8}>
-                <Card fluid color='orange'> 
+          <Grid centered columns='equal'>
+            <Grid.Row stretched centered>
+              <Grid.Column>
+                <Card fluid> 
                   <Card.Content>
                     <Card.Header>
                       Station 5
@@ -30,25 +22,9 @@ export default class DashView extends Component {
                     <WeeklyStationAverage analytics={this.props.analytics} stationID={5} />
                   </Card.Content>
                 </Card>
-                <Card fluid color='blue'> 
-                  <Card.Content>
-                    <Card.Header>
-                      Station 6
-                    </Card.Header>
-                    <WeeklyStationAverage analytics={this.props.analytics} stationID={6} />
-                  </Card.Content>
-                </Card>
-                <Card fluid>
-                  <Card.Content>
-                    <Card.Header>
-                    Some Data
-                    </Card.Header>
-                    <SomeBarChart />
-                  </Card.Content>
-                </Card>
               </Grid.Column>
               <Grid.Column>
-                <Card>
+                <Card fluid>
                   <Card.Content>
                     <Card.Header>
                       Some more Data
@@ -56,7 +32,11 @@ export default class DashView extends Component {
                     <SomePieChart />
                   </Card.Content>
                 </Card>
-                <Card>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row stretched centered>
+              <Grid.Column>
+                <Card fluid>
                   <Card.Content>
                     <Card.Header>
                       Some more Data
@@ -66,7 +46,7 @@ export default class DashView extends Component {
                 </Card>
               </Grid.Column>
               <Grid.Column>
-                <Card>
+                <Card fluid>
                   <Card.Content>
                     <Card.Header>
                       Some more Data
@@ -74,14 +54,28 @@ export default class DashView extends Component {
                     <SomeBarChart />
                   </Card.Content>
                 </Card>
-                  <Card>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row stretched centered>
+              <Grid.Column>
+                <Card fluid>
                   <Card.Content>
-                      <Card.Header>
-                        Some more Data
-                      </Card.Header>
-                      <SomeBarChart />
-                    </Card.Content>
-                  </Card>
+                    <Card.Header>
+                      Some more Data
+                    </Card.Header>
+                    <SomeBarChart />
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+              <Grid.Column>
+                <Card fluid>
+                  <Card.Content>
+                    <Card.Header>
+                      Some more Data
+                    </Card.Header>
+                    <SomeBarChart />
+                  </Card.Content>
+                </Card>
               </Grid.Column>
             </Grid.Row>
           </Grid>
