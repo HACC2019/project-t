@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Image } from 'semantic-ui-react';
 import style from './singlestyle.scss';
+import Chart1 from "./SingleCharts/Chart1.jsx";
 
 class DashboardStation extends Component {
     constructor(props) {
@@ -16,10 +17,10 @@ class DashboardStation extends Component {
                 <div className={style.dashView}>
                     <Card.Group>
                         <Card color='red'>
-                            <Image src="https://via.placeholder.com/150" />
                             <Card.Content>
                                 <Card.Header>
-                                    Single Station
+                                    Station: {this.props.pickedStation}
+                                    <Chart1 />
                                 </Card.Header>
                             </Card.Content>
                         </Card>
