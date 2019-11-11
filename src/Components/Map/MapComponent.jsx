@@ -37,6 +37,7 @@ class MapComponent extends Component {
       },
       newStations: [],
       trips: [],
+      newTrips: [],
       zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom,
       editMode: false
     };
@@ -52,11 +53,11 @@ class MapComponent extends Component {
 
   componentDidMount() {
     this._animate();
-    // fetch('trips.json')
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({ trips: data })
-    //   })
+    fetch('trips.json')
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ trips: data })
+      })
   }
 
   componentWillUnmount() {
@@ -138,14 +139,49 @@ class MapComponent extends Component {
   }
 
   handleMapClick(info, event) {
+    let newStationID = Math.floor(Math.random() * 1000);
+
     if (this.state.editMode) {
       this.setState({
         newStations: [
           ...this.state.newStations,
           {
-            ID: Math.floor(Math.random() * 1000),
+            ID: `${newStationID}`,
             Longitude: info.coordinate[0],
             Latitude: info.coordinate[1]
+          }
+        ]
+      });
+
+      let smallestDistance = 25;
+      let closestStation = null;
+      // Find the closest charging station to generate cars (trips) from
+      for (let station of this.state.data.chargeStations) {
+        let a = info.coordinate[0] - station.Longitude;
+        let b = info.coordinate[1] - station.Latitude;
+
+        let distance = Math.sqrt( a*a + b*b );
+        if (distance < smallestDistance) {
+          smallestDistance = distance;
+          closestStation = station;
+        }
+      }
+
+      this.setState({
+        newTrips: [
+          ...this.state.newTrips,
+          {
+            Latitude: info.coordinate[1],
+            Longitude: info.coordinate[0],
+            stationID: newStationID,
+            path: [
+              [closestStation.Longitude, closestStation.Latitude],
+              [info.coordinate[0], info.coordinate[1]] 
+            ],
+            timestamps: [
+              0,
+              1000
+            ]
           }
         ]
       });
@@ -160,6 +196,17 @@ class MapComponent extends Component {
     if (this.state.editMode) {
       this.setState({
           newStations: this.state.newStations.filter(
+          (element) => {
+          if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
+            return false;
+          } else {
+            return true;
+          }
+        })
+      });
+
+      this.setState({
+          newTrips: this.state.newTrips.filter(
           (element) => {
           if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
             return false;
@@ -260,6 +307,23 @@ class MapComponent extends Component {
       }));
     }
 
+
+    for (let trips of this.state.newTrips) {
+      layers.push(new TripsLayer({
+        id: `new-trip-${trips.stationID}`,
+        data: [trips],
+        getPath: d => d.path,
+        getTimestamps: d => d.timestamps,
+        getColor: d => this.choose([[253, 128, 93], [75, 218, 250]]),
+        opacity: 0.5,                                                                                                        
+        widthMinPixels: 2,
+        rounded: true,
+        trailLength: 10,
+        currentTime: this.state.time,
+        shadowEnabled: false
+      }));
+    }
+
     return layers;
   }
 
@@ -288,7 +352,7 @@ class MapComponent extends Component {
               opacity= {0.5}                                                                                                        
               widthMinPixels= {2}
               rounded= {true}
-              trailLength= {10}
+              trailLength= {500}
               currentTime= {this.state.time}
               shadowEnabled= {false}
             />
