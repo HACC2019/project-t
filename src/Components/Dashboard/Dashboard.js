@@ -14,7 +14,7 @@ class Dashboard extends Component {
   render() {
     return (
       <ResizableBox className={style.box} axis="y"
-                    height={300}
+                    height={600}
                     minConstraints={[200, 300]}
                     handleSize={[20,20]}
                     >
