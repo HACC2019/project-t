@@ -30,9 +30,9 @@ $background-color: #f5f6f8;
   padding: 0px;
   box-sizing: border-box;
   margin-bottom: 5px;
-  overflow: hidden;
   position: relative;
   margin: 0px;
+  z-index: 2;
 }
 
 //:local(.card) {

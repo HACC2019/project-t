@@ -1,10 +1,4 @@
 import React, {Component} from 'react';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from 'react-router-dom';
 import TimeSimulation from '../lib/TimeSimulation.js';
 import SimulationController from './Components/SimulationController.jsx';
 import MapComponent from './Components/Map/MapComponent.jsx';
@@ -12,6 +6,7 @@ import StationSidebar from './Components/Map/StationSidebar.jsx';
 import Dashboard from './Components/Dashboard/Dashboard';
 import { processStationRecords } from '../lib/map_tools.js';
 import RecordAnalytics from '../lib/RecordAnalytics';
+import DashboardStation from './Components/SingleStation/DashboardStation.jsx'
 
 class App extends Component {
   constructor(props) {
@@ -25,7 +20,9 @@ class App extends Component {
     this.state = {
       stationList: {visible: [], other: []},
       selectedStation: undefined,
-      faultMap: processStationRecords(this.timeController.getValidRecords())
+      faultMap: processStationRecords(this.timeController.getValidRecords()),
+      home: false
+
     }
 
     this.handleMapChange = this.handleMapChange.bind(this);
@@ -60,13 +57,7 @@ class App extends Component {
               onStationLeave={this.handleStationLeave}
             />
             <div style={{ display: 'inline-flex', flexDirection: 'column', width: '100%'}}>
-              <Router>
-                <Switch>
-                  <Route path="/">
-                    <Dashboard analytics={this.analytics} />
-                  </Route>
-                </Switch>
-              </Router>
+              {(this.state.home) ? <Dashboard analytics={this.analytics}/> : <DashboardStation />}
               <MapComponent
                 selectedStation={this.state.selectedStation}
                 onMapChange={this.handleMapChange}
