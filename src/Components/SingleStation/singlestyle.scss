@@ -7,17 +7,29 @@ $background-color: #f5f6f8;
 
 :local(.dashboard){
   display: flex;
-  height: 100vh;
+  // height: 200vh;
 }
 
 :local(.container) { // usable dash area
   display: block;
-  padding: 1rem;
-  height: 50%;
-  background-color: $background-color;
+  padding: 2rem;
+  height: 100%;
+  overflow: auto;
 }
 
 :local(.dashView) {
   display: flex;
   position: relative;
+}
+
+:local(.box) {
+  display: inline-block;
+  // text-align: center;
+  padding: 0px;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+  position: relative;
+  background-color: #161719;
+  margin: 0px;
+  z-index: 1;
 }
