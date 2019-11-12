@@ -8,8 +8,8 @@ export default function SomePieChart() {
       datasets: [
         {
           data: [10, 20, 30],
-          backgroundColor: ['red', 'blue', 'green'],
-          borderColor: '#D8D9DA',
+          backgroundColor: ['rgba(195, 21, 21, 0.6)', 'rgba(48, 21, 195, 0.6)', 'rgba(24, 195, 21, 0.6)'],
+          borderColor: '#464648',
         }
       ], 
       labels: [
