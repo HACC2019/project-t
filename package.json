@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start-local": "webpack-dev-server --env.local --progress --hot --open",
-    "start": "webpack-dev-server --hot --open"
+    "start": "webpack-dev-server --hot --open",
+    "build": "webpack -p --config ./webpack.production.config.js"
   },
   "dependencies": {
     "chart.js": "^2.9.2",
