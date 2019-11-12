@@ -8,7 +8,8 @@ export default function SomePieChart() {
       datasets: [
         {
           data: [10, 20, 30],
-          backgroundColor: ['red', 'blue', 'green']
+          backgroundColor: ['rgba(195, 21, 21, 0.6)', 'rgba(48, 21, 195, 0.6)', 'rgba(24, 195, 21, 0.6)'],
+          borderColor: '#464648',
         }
       ], 
       labels: [
@@ -19,7 +20,14 @@ export default function SomePieChart() {
     }
   )
 
-  const chartOptions = defaults.pie;
+  const chartOptions = {
+    legend: {
+      labels: {
+        fontColor: '#D8D9DA'
+      }
+    },
+    
+  }
 
   return (
     <div>
