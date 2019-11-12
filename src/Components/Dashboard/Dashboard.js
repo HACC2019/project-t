@@ -13,13 +13,7 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <Resizable className={style.box}
-                    defaultSize={{height: 300}}
-                    minHeight={'20%'}
-                    enable={{bottom: true}}
-                    >
         <DashView analytics={this.props.analytics} />
-      </Resizable>
     )
   }
 }
