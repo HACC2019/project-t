@@ -9,6 +9,7 @@ import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
 import mapStyles from '../../styles/map.css';
 
+
 function getContour(station, scale = 1) {
   return [
     [station.Longitude + (.001 * scale), station.Latitude - (.0005 * scale)],
@@ -37,6 +38,7 @@ class MapComponent extends Component {
       },
       newStations: [],
       trips: [],
+      newTrips: [],
       zoomLevel: mapConfig.INITIAL_VIEW_STATE.zoom,
       editMode: false
     };
@@ -48,16 +50,15 @@ class MapComponent extends Component {
     this.handleMapClick = this.handleMapClick.bind(this);
     this.toggleEditMode = this.toggleEditMode.bind(this);
     this.deleteNewStation = this.deleteNewStation.bind(this);
-    this.handleStationClick = this.handleStationClick.bind(this);
   }
 
   componentDidMount() {
-//    this._animate();
-    // fetch('trips.json')
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     this.setState({ trips: data })
-    //   })
+    this._animate();
+    fetch('trips.json')
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ trips: data })
+      })
   }
 
   componentWillUnmount() {
@@ -139,16 +140,91 @@ class MapComponent extends Component {
   }
 
   handleMapClick(info, event) {
+    let newStationID = Math.floor(Math.random() * 1000);
+
     if (this.state.editMode) {
+
+      function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = deg2rad(lat2-lat1);  // deg2rad below
+        var dLon = deg2rad(lon2-lon1); 
+        var a = 
+          Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+          Math.sin(dLon/2) * Math.sin(dLon/2)
+          ; 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c; // Distance in km
+        return d;
+      }
+      
+      function deg2rad(deg) {
+        return deg * (Math.PI/180)
+      }
+
+      let validRadius = 16.0934; // 10 Miles in Kilometers
+      let validStations = [];
+
+      let totalPowerUsageOfValidStations = 0; 
+
+      //Link new stations to new stations also
+      let allStations = this.state.data.chargeStations.concat(this.state.newStations);
+      
+      // Find the closest charging station to generate cars (trips) from
+      for (let station of allStations) {
+        let distance = getDistanceFromLatLonInKm(info.coordinate[1], info.coordinate[0], station.Latitude, station.Longitude);
+
+        if (distance <= validRadius) {
+          validStations.push(station);
+          totalPowerUsageOfValidStations += window.analytics.getTotalPowerUsage(station.ID, 24);
+        }
+      }
+
+      let sumOfPredictedUse = 0;
+
+      for (let station of validStations) {
+        let stationUse = window.analytics.getTotalPowerUsage(station.ID, 24);
+        station.percentageUse = stationUse / totalPowerUsageOfValidStations;
+        station.predictedPercentageUse = station.percentageUse * ((validStations.length - 1) / validStations.length);
+        console.log(station.predictedPercentageUse);
+        sumOfPredictedUse += station.predictedPercentageUse;
+      }
+      
       this.setState({
         newStations: [
           ...this.state.newStations,
           {
-            ID: Math.floor(Math.random() * 1000),
+            ID: newStationID,
             Longitude: info.coordinate[0],
-            Latitude: info.coordinate[1]
+            Latitude: info.coordinate[1],
+            predictedPercentageUse: 1 - sumOfPredictedUse
           }
         ]
+      });
+      
+      console.log( 1 - sumOfPredictedUse);
+
+      const newTrips = this.state.newTrips;
+      for (let station of validStations) {
+        newTrips.push({
+          Latitude: info.coordinate[1],
+          Longitude: info.coordinate[0],
+          originID: station.ID,
+          destinationID: newStationID,
+          path: [
+            [station.Longitude, station.Latitude],
+            [info.coordinate[0], info.coordinate[1]] 
+          ],
+          timestamps: [
+            this.state.time,
+            this.state.time + 100
+          ]
+        });
+      }
+
+
+      this.setState({
+        newTrips: newTrips
       });
     }
   }
@@ -159,9 +235,15 @@ class MapComponent extends Component {
 
   deleteNewStation(info, event) {
     this.setState({
-      newStations: this.state.newStations.filter(
-        (element) => {
+      newStations: this.state.newStations.filter((element) => {
         if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
+          return false;
+        } else {
+          return true;
+        }
+      }),
+      newTrips: this.state.newTrips.filter((element) => {
+        if (element.originID === info.object.ID || element.destinationID == info.object.ID) {
           return false;
         } else {
           return true;
@@ -170,15 +252,6 @@ class MapComponent extends Component {
     });
 
     return true;
-  }
-
-  handleStationClick() {
-    const clickedObject = this.state.clickedObject;
-    this.setState({
-      stationClicked: clickedObject.ID
-    });
-    this.props.stationDashboard(clickedObject.ID);
-
   }
 
   _renderLayers() {
@@ -271,7 +344,7 @@ class MapComponent extends Component {
         getFillColor: d => [75, 218, 250],
         onClick:  (info, event) => {
           if (this.state.editMode) {
-            this.deleteNewStation(info, event);
+            return this.deleteNewStation(info, event);
           } else {
             this.props.stationClicked(info.object.ID);
             console.log(info.object.ID);
@@ -282,6 +355,23 @@ class MapComponent extends Component {
         updateTriggers: {
           getElevation: [this.state.stationElevation]
         },
+      }));
+    }
+
+
+    for (let trips of this.state.newTrips) {
+      layers.push(new TripsLayer({
+        id: `new-trip-${trips.stationID}`,
+        data: [trips],
+        getPath: d => d.path,
+        getTimestamps: d => d.timestamps,
+        getColor: d => [253, 128, 93],
+        opacity: 0.5,                                                                                                        
+        widthMinPixels: 2,
+        rounded: true,
+        trailLength: 50000,
+        currentTime: this.state.time,
+        shadowEnabled: false
       }));
     }
 
