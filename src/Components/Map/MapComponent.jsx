@@ -255,22 +255,7 @@ class MapComponent extends Component {
     });
     this.props.stationDashboard(clickedObject.ID);
 
-<<<<<<< HEAD
-      this.setState({
-          newTrips: this.state.newTrips.filter(
-          (element) => {
-          if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
-            return false;
-          } else {
-            return true;
-          }
-        })
-      });
 
-      return true;
-    }
-=======
->>>>>>> 69136462816922599684f7d4dcbe24c4bad346ee
   }
 
   _renderLayers() {
