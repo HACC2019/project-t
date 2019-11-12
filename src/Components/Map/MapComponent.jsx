@@ -50,7 +50,6 @@ class MapComponent extends Component {
     this.handleMapClick = this.handleMapClick.bind(this);
     this.toggleEditMode = this.toggleEditMode.bind(this);
     this.deleteNewStation = this.deleteNewStation.bind(this);
-    this.handleStationClick = this.handleStationClick.bind(this);
   }
 
   componentDidMount() {
@@ -168,8 +167,11 @@ class MapComponent extends Component {
 
       let totalPowerUsageOfValidStations = 0; 
 
-      // Find all the stations within the valid radius to generate cars (trips) from
-      for (let station of this.state.data.chargeStations) {
+      //Link new stations to new stations also
+      let allStations = this.state.data.chargeStations.concat(this.state.newStations);
+      
+      // Find the closest charging station to generate cars (trips) from
+      for (let station of allStations) {
         let distance = getDistanceFromLatLonInKm(info.coordinate[1], info.coordinate[0], station.Latitude, station.Longitude);
 
         if (distance <= validRadius) {
@@ -192,7 +194,7 @@ class MapComponent extends Component {
         newStations: [
           ...this.state.newStations,
           {
-            ID: `${newStationID}`,
+            ID: newStationID,
             Longitude: info.coordinate[0],
             Latitude: info.coordinate[1],
             predictedPercentageUse: 1 - sumOfPredictedUse
@@ -207,7 +209,8 @@ class MapComponent extends Component {
         newTrips.push({
           Latitude: info.coordinate[1],
           Longitude: info.coordinate[0],
-          stationID: newStationID,
+          originID: station.ID,
+          destinationID: newStationID,
           path: [
             [station.Longitude, station.Latitude],
             [info.coordinate[0], info.coordinate[1]] 
@@ -232,9 +235,15 @@ class MapComponent extends Component {
 
   deleteNewStation(info, event) {
     this.setState({
-      newStations: this.state.newStations.filter(
-        (element) => {
+      newStations: this.state.newStations.filter((element) => {
         if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
+          return false;
+        } else {
+          return true;
+        }
+      }),
+      newTrips: this.state.newTrips.filter((element) => {
+        if (element.originID === info.object.ID || element.destinationID == info.object.ID) {
           return false;
         } else {
           return true;
@@ -243,16 +252,6 @@ class MapComponent extends Component {
     });
 
     return true;
-  }
-
-  handleStationClick() {
-    const clickedObject = this.state.clickedObject;
-    this.setState({
-      stationClicked: clickedObject.ID
-    });
-    this.props.stationDashboard(clickedObject.ID);
-
-
   }
 
   _renderLayers() {
