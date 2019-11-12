@@ -34,6 +34,7 @@ export default class WeeklyStationAverage extends Component {
         barThickness: 'flex',
         maxBarThickness: 8,
         minBarLength: 2,
+        borderColor: '#464648',
 
         labels: labels, // label all bars here
         datasets: [
@@ -49,14 +50,35 @@ export default class WeeklyStationAverage extends Component {
     )
 
     const chartOptions = {
+      legend: {
+        labels: {
+          fontColor: '#D8D9DA'
+        }
+      },
       scales: {
         xAxes: [{
-            stacked: true
+          ticks: {
+            fontColor: '#D8D9DA'
+          },
+          gridLines: {
+          color: '#464648'
+        },
+        stacked: true
+
         }],
         yAxes: [{
+          ticks: {
+            fontColor: '#D8D9DA'
+          },
+          gridLines: {
+            color: '#464648'
+          },
             stacked: true
         }]
-      }
+      },
+      chartArea: {
+        backgroundColor: '#212124'
+    }
     }
 
     return (

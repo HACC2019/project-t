@@ -9,6 +9,7 @@ export default function SomeBarChart() {
       barThickness: 'flex',
       maxBarThickness: 8,
       minBarLength: 2,
+      borderColor: '#464648',
 
       labels: ['2018', '2019'], // label all axes here
       datasets: [
@@ -31,13 +32,33 @@ export default function SomeBarChart() {
   )
 
   const chartOptions = {
+    legend: {
+        labels: {
+          fontColor: '#D8D9DA'
+        }
+    },
     scales: {
       xAxes: [{
-          stacked: true
+        ticks: {
+            fontColor: '#D8D9DA'
+          },
+          gridLines: {
+          color: '#464648'
+        },
+        stacked: true
       }],
       yAxes: [{
-          stacked: true
+        ticks: {
+            fontColor: '#D8D9DA'
+          },
+          gridLines: {
+          color: '#464648'
+        },
+        stacked: true
       }]
+    },
+    chartArea: {
+        backgroundColor: '#212124'
     }
   }
 
