@@ -28,6 +28,9 @@ export class StationSidebar extends Component {
                 }}
                 onMouseLeave={() => {
                     this.props.onStationLeave();
+                }}
+                onMouseDown={() => {
+                    this.props.onStationClick(station.ID);
                 }}>
                 <div className={sidebarStyle.property}>{station.Property}</div>
                 <div className={sidebarStyle.city}>{station.City}</div>
@@ -40,6 +43,9 @@ export class StationSidebar extends Component {
             let element = <div
                 key={station.ID}
                 className={sidebarStyle.item}
+                onMouseDown={() => {
+                    this.props.onStationClick(station.ID);
+                }}
                 >
                 <div className={sidebarStyle.property}>{station.Property}</div>
                 <div className={sidebarStyle.city}>{station.City}</div>
