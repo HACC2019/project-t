@@ -77,6 +77,7 @@ class DashboardStation extends Component {
                                 :
                                 undefined
                         }
+                      
                       <Grid.Row stretched centered>
                         <Grid.Column>
                           <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}> 
@@ -149,7 +150,7 @@ class DashboardStation extends Component {
                                 <Grid>
                                   <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                                     <Grid.Column>
-                                      {this.props.analytics.getAverageTurnaround(this.props.pickedStation, 1)} s
+                                      {Math.round(this.props.analytics.getAverageTurnaround(this.props.pickedStation, 1) * 1000) / 1000} s
                                     </Grid.Column>
                                   </Grid.Row>
                                 </Grid>
