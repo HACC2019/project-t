@@ -20,7 +20,7 @@ class App extends Component {
     this.state = {
       stationList: {visible: [], other: []},
       selectedStation: undefined,
-      faultMap: processStationRecords(this.timeController.getValidRecords()),
+      faultMap: this.analytics.getFaults(),
       stationClicked: '',
       home: true
 
@@ -47,7 +47,7 @@ class App extends Component {
   }
 
   onTimeChange(records) {
-    this.setState({faultMap: processStationRecords(records)});
+    this.setState({faultMap: this.analytics.getFaults()});
   }
 
   handleStationClick(el) {
@@ -76,6 +76,7 @@ class App extends Component {
                 onMapChange={this.handleMapChange}
                 faultMap={this.state.faultMap}
                 stationClicked={this.handleStationClick}
+                analytics={this.analytics}
               />
             </div>
           </div>
