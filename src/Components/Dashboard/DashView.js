@@ -37,18 +37,6 @@ export default class DashView extends Component {
             }
             <Grid.Row stretched centered>
               <Grid.Column>
-                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA'}}>
-                      Station 5
-                    </Card.Header>
-                    <SampleLineGraph/>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row stretched centered>
-              <Grid.Column>
                 <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}> 
                   <Card.Content>
                     <Card.Header style={{color: '#D8D9DA'}}>
@@ -62,9 +50,9 @@ export default class DashView extends Component {
                 <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
                   <Card.Content>
                     <Card.Header style={{color: '#D8D9DA'}}>
-                      Some more Data
+                      Station 6
                     </Card.Header>
-                    <SomePieChart />
+                    <WeeklyStationAverage analytics={this.props.analytics} stationID={6}/>
                   </Card.Content>
                 </Card>
               </Grid.Column>

@@ -1,13 +1,13 @@
 {
   "INITIAL_STATION_ELEVATION":3000,
   "INITIAL_VIEW_STATE": {
-    "latitude": 21.479635,
-    "longitude": -157.97240,
-    "zoom": 10.5,
+    "latitude": 21.414833738527054,
+    "longitude": -157.90437646900136,
+    "zoom": 9.863456836312682,
     "minZoom": 8,
     "maxZoom": 15,
-    "pitch": 45,
-    "bearing": 15
+    "pitch": 43.27690110930438,
+    "bearing": 5.5655004068348255
   },
   "mapStyle":"mapbox://styles/lovemilktea/ck1yqjfgi4wge1co4075zwrnh"
 }
