@@ -7,16 +7,18 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import { processStationRecords } from '../lib/map_tools.js';
 import RecordAnalytics from '../lib/RecordAnalytics';
 import DashboardStation from './Components/SingleStation/DashboardStation.jsx'
+import { Resizable } from 're-resizable';
+import style from "./Components/Dashboard/dashboard.scss";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    
+
     this.timeController = new TimeSimulation();
     this.timeController.addListener(this.onTimeChange.bind(this));
     this.analytics = new RecordAnalytics(this.timeController);
     window.analytics = this.analytics;
-    
+
     this.state = {
       stationList: {visible: [], other: []},
       selectedStation: undefined,
@@ -75,10 +77,16 @@ class App extends Component {
               onStationClick={this.handleSidebarClick}
             />
             <div style={{ display: 'inline-flex', flexDirection: 'column', width: '100%'}}>
+              <Resizable className={style.box}
+                         defaultSize={{height: 300}}
+                         minHeight={'20%'}
+                         enable={{bottom: true}}
+              >
               {(this.state.home) ?
                   <Dashboard analytics={this.analytics}/>
                   : <DashboardStation pickedStation={this.state.stationClicked} home={this.handleGoBack}/>}
-              <MapComponent
+            </Resizable>
+            <MapComponent
                 selectedStation={this.state.selectedStation}
                 onMapChange={this.handleMapChange}
                 faultMap={this.state.faultMap}
