@@ -56,6 +56,11 @@ export default class WeeklyStationAverage extends Component {
       },
       scales: {
         xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Week',
+            fontColor: '#D8D9DA'
+          },
           ticks: {
             fontColor: '#D8D9DA'
           },
@@ -66,6 +71,11 @@ export default class WeeklyStationAverage extends Component {
 
         }],
         yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Sessions',
+            fontColor: '#D8D9DA'
+          },
           ticks: {
             fontColor: '#D8D9DA'
           },
