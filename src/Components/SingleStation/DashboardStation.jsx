@@ -126,7 +126,7 @@ class DashboardStation extends Component {
                                       Duration
                                     </Grid.Column>
                                     <Grid.Column>
-                                      {this.props.analytics.getAverageDuration(this.props.pickedStation, 1)} ms
+                                      {Math.round(this.props.analytics.getAverageDuration(this.props.pickedStation, 1) * 1000) / 1000} ms
                                     </Grid.Column>
                                   </Grid.Row>
                                   <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
