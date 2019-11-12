@@ -347,7 +347,6 @@ class MapComponent extends Component {
             return this.deleteNewStation(info, event);
           } else {
             this.props.stationClicked(info.object.ID);
-            console.log(info.object.ID);
           }
         },
         getLineColor: [80, 80, 80],
