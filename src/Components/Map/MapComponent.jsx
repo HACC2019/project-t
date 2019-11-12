@@ -380,7 +380,7 @@ class MapComponent extends Component {
   render() {
     return (
       <div style={{ flex: 1, display: "flex", flexDirection: 'column' }}>
-        <div id='main-map' style={{position: 'relative', flex: 1, zIndex: 1}}>
+        <div id='main-map' style={{position: 'relative', flex: 1}}>
           <DeckGL
             layers={this._renderLayers()}
             onViewStateChange={this._onViewStateChange}
