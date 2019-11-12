@@ -1,33 +1,40 @@
 import React, {Component} from 'react';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from 'react-router-dom';
 import TimeSimulation from '../lib/TimeSimulation.js';
 import SimulationController from './Components/SimulationController.jsx';
 import MapComponent from './Components/Map/MapComponent.jsx';
 import StationSidebar from './Components/Map/StationSidebar.jsx';
 import Dashboard from './Components/Dashboard/Dashboard';
 import { processStationRecords } from '../lib/map_tools.js';
+import RecordAnalytics from '../lib/RecordAnalytics';
+import DashboardStation from './Components/SingleStation/DashboardStation.jsx'
+import { Resizable } from 're-resizable';
+import style from "./Components/Dashboard/dashboard.scss";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    
+
     this.timeController = new TimeSimulation();
     this.timeController.addListener(this.onTimeChange.bind(this));
-    
+    this.analytics = new RecordAnalytics(this.timeController);
+    window.analytics = this.analytics;
+
     this.state = {
       stationList: {visible: [], other: []},
       selectedStation: undefined,
-      faultMap: processStationRecords(this.timeController.getRecords())
+      faultMap: this.analytics.getFaults(),
+      stationClicked: '',
+      home: true
+
     }
 
     this.handleMapChange = this.handleMapChange.bind(this);
     this.handleStationHover = this.handleStationHover.bind(this);
     this.handleStationLeave = this.handleStationLeave.bind(this);
+    this.handleStationClick = this.handleStationClick.bind(this);
+    this.handleSidebarClick = this.handleSidebarClick.bind(this);
+    this.handleGoBack = this.handleGoBack.bind(this);
+
   }
 
   handleMapChange(stations) {
@@ -43,7 +50,19 @@ class App extends Component {
   }
 
   onTimeChange(records) {
-    this.setState({faultMap: processStationRecords(records)});
+    this.setState({faultMap: this.analytics.getFaults()});
+  }
+
+  handleStationClick(el) {
+    this.setState({stationClicked: el, home: false});
+  }
+
+  handleSidebarClick(s) {
+    this.setState({stationClicked: s, home: false});
+  }
+
+  handleGoBack(val){
+    this.setState({home: val})
   }
 
   render() {
@@ -55,19 +74,24 @@ class App extends Component {
               stations={this.state.stationList}
               onStationSelect={this.handleStationHover}
               onStationLeave={this.handleStationLeave}
+              onStationClick={this.handleSidebarClick}
             />
             <div style={{ display: 'inline-flex', flexDirection: 'column', width: '100%'}}>
-              <Router>
-                <Switch>
-                  <Route path="/">
-                    <Dashboard />
-                  </Route>
-                </Switch>
-              </Router>
-              <MapComponent
+              <Resizable className={style.box}
+                         defaultSize={{height: 300}}
+                         minHeight={'20%'}
+                         enable={{bottom: true}}
+              >
+              {(this.state.home) ?
+                  <Dashboard analytics={this.analytics}/>
+                  : <DashboardStation pickedStation={this.state.stationClicked} home={this.handleGoBack} analytics={this.analytics}/>}
+            </Resizable>
+            <MapComponent
                 selectedStation={this.state.selectedStation}
                 onMapChange={this.handleMapChange}
                 faultMap={this.state.faultMap}
+                stationClicked={this.handleStationClick}
+                analytics={this.analytics}
               />
             </div>
           </div>
