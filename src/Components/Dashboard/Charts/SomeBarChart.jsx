@@ -1,8 +1,43 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
+import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 
-export default function SomeBarChart() {
+export default class SomeBarChart extends Component {
   // fetch data here
+  
+  render() {
+    
+    console.log(this.props.stationID);
+    let valid = getWeeklyTotals(this.props.analytics.getRecords(this.props.stationID));
+    let invalid = getWeeklyTotals(this.props.analytics.getInvalidRecords(this.props.stationID));
+  
+
+    let labels = [];
+
+    
+    let startIndex = -1;
+    
+    for (let i = 0; i < valid.length; i++) {
+      if (valid[i] !== undefined) {
+        if (startIndex === -1) {
+          startIndex = i;
+        }
+        if (startIndex !== -1) {
+          labels.push(i);
+        }
+      }
+    }
+    valid = valid.splice(startIndex);
+    
+    for (let i = 0; i < invalid.length; i++) {
+      if (invalid[i] !== undefined) {
+        if (startIndex === -1) {
+          startIndex = i;
+        }
+      }
+    }
+    invalid = invalid.splice(startIndex);
+  
   const chartData = () => (
     {
       barPercentage: 0.3,
@@ -11,18 +46,18 @@ export default function SomeBarChart() {
       minBarLength: 2,
       borderColor: '#464648',
 
-      labels: ['2018', '2019'], // label all axes here
+      labels: labels, // label all axes here
       datasets: [
           { // one stack of the bar
-          label: 'Oahu',
-          data: [10, 15],
+          label: 'Invalid Sessions',
+          data: invalid,
           backgroundColor: 'rgba(255, 159, 64, 0.2)',
           borderColor: 'rgba(255, 159, 64, 1)',
           borderWidth: 1
           },
           {
-            label: 'Maui County',
-            data: [5, 7],
+            label: 'Valid Sessions',
+            data: valid,
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1
@@ -67,4 +102,5 @@ export default function SomeBarChart() {
       <Bar data={chartData} options={chartOptions}/>
     </div>
   )
+  }
 }
