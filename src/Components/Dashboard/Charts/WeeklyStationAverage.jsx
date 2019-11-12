@@ -9,7 +9,6 @@ export default class WeeklyStationAverage extends Component {
   
   render() {
     // fetch data here
-    console.log(this.props.analytics)
     let data = getWeeklyTotals(this.props.analytics.getRecords(this.props.stationID));
     let labels = [];
     console.log(data);
