@@ -34,7 +34,8 @@ class MapComponent extends Component {
       time: 0,
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION,
       data: {
-        chargeStations: CHARGE_STATIONS
+        chargeStations: CHARGE_STATIONS,
+        labels: labels,
       },
       newStations: [],
       trips: [],
@@ -50,6 +51,9 @@ class MapComponent extends Component {
     this.handleMapClick = this.handleMapClick.bind(this);
     this.toggleEditMode = this.toggleEditMode.bind(this);
     this.deleteNewStation = this.deleteNewStation.bind(this);
+    this.handleStationClick = this.handleStationClick.bind(this);
+
+
   }
 
   componentDidMount() {
@@ -162,13 +166,16 @@ class MapComponent extends Component {
         return deg * (Math.PI/180)
       }
 
-      let validRadius = 16.0934; // 10 Miles in Kilometers
+      let validRadius = 11.2654; // 7 Miles in Kilometers
       let validStations = [];
 
       let totalPowerUsageOfValidStations = 0; 
 
-      // Find all the stations within the valid radius to generate cars (trips) from
-      for (let station of this.state.data.chargeStations) {
+      //Link new stations to new stations also
+      let allStations = this.state.data.chargeStations.concat(this.state.newStations);
+      console.log(allStations);
+      // Find the closest charging station to generate cars (trips) from
+      for (let station of allStations) {
         let distance = getDistanceFromLatLonInKm(info.coordinate[1], info.coordinate[0], station.Latitude, station.Longitude);
 
         if (distance <= validRadius) {
@@ -230,17 +237,26 @@ class MapComponent extends Component {
   }
 
   deleteNewStation(info, event) {
-    if (this.state.editMode) {
-      this.setState({
-          newStations: this.state.newStations.filter(
-          (element) => {
-          if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
-            return false;
-          } else {
-            return true;
-          }
-        })
-      });
+    this.setState({
+      newStations: this.state.newStations.filter(
+        (element) => {
+        if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
+          return false;
+        } else {
+          return true;
+        }
+      })
+    });
+
+    return true;
+  }
+
+  handleStationClick() {
+    const clickedObject = this.state.clickedObject;
+    this.setState({
+      stationClicked: clickedObject.ID
+    });
+    this.props.stationDashboard(clickedObject.ID);
 
       this.setState({
           newTrips: this.state.newTrips.filter(
@@ -314,6 +330,9 @@ class MapComponent extends Component {
               return [82, 125, 85];
             }
           },
+          onClick: (info) => {
+            this.props.stationClicked(info.object.ID);
+            console.log(info.object.ID)},
           getLineColor: [80, 80, 80],
           getLineWidth: 1,
           updateTriggers: {
@@ -335,12 +354,19 @@ class MapComponent extends Component {
         getPolygon: d => getContour(d),
         getElevation: d => this.state.stationElevation,
         getFillColor: d => [75, 218, 250],
+        onClick:  (info, event) => {
+          if (this.state.editMode) {
+            return this.deleteNewStation(info, event);
+          } else {
+            this.props.stationClicked(info.object.ID);
+            console.log(info.object.ID);
+          }
+        },
         getLineColor: [80, 80, 80],
         getLineWidth: 1,
         updateTriggers: {
           getElevation: [this.state.stationElevation]
         },
-        onClick: this.deleteNewStation
       }));
     }
 
