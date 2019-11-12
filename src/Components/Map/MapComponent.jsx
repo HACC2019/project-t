@@ -271,7 +271,7 @@ class MapComponent extends Component {
 
       return true;
     }
-  }
+  
 
   _renderLayers() {
     const { getWidth = 3 } = this.props;
