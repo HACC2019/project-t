@@ -1,0 +1,10 @@
+:local(.dark.dropdown),
+:local(.dark.dropdown .menu) {
+  background: #2c2d31;
+  color: #b9bbbe;
+}
+
+:local(.dark.ui.selection.visible.dropdown > .text:not(.default)),
+:local(.dark.ui.selection.dropdown .menu > .item) {
+  color: #b9bbbe;
+}

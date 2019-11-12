@@ -9,7 +9,7 @@ import SomePieChart from './Charts/SomePieChart';
 export default class DashView extends Component {
   render() {
     let alerts = [];
-    let faultMap = this.props.analytics.getFaults();
+    let faultMap = this.props.analytics.getFaults(null, 9);
     
     for (let [stationID, faults] of faultMap) {
       let currentWeek = this.props.analytics.getWeekNumberOf(new Date(this.props.analytics.getTime()));
