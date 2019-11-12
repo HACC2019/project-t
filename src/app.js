@@ -9,6 +9,7 @@ import RecordAnalytics from '../lib/RecordAnalytics';
 import DashboardStation from './Components/SingleStation/DashboardStation.jsx'
 import { Resizable } from 're-resizable';
 import style from "./Components/Dashboard/dashboard.scss";
+import resize from './resizable.css';
 
 class App extends Component {
   constructor(props) {
@@ -78,7 +79,7 @@ class App extends Component {
             />
             <div style={{ display: 'inline-flex', flexDirection: 'column', width: '100%'}}>
               <Resizable className={style.box}
-                         defaultSize={{height: '50%'}}
+                         defaultSize={{height: 300}}
                          minHeight={'20%'}
                          enable={{bottom: true}}
               >

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Card, Table, TableBody, Button, Grid} from 'semantic-ui-react';
 import style from './singlestyle.scss';
 import CHARGE_STATIONS from "../../../json/chargeStations";
-import SampleLineGraph from "../Dashboard/Charts/SampleLineGraph.jsx";
+import SomeBarChart from "../Dashboard/Charts/SomeBarChart.jsx";
 import WeeklyStationAverage from "../Dashboard/Charts/WeeklyStationAverage.jsx";
 import Warning from "../Dashboard/Warning.jsx";
 
@@ -43,9 +43,9 @@ class DashboardStation extends Component {
         let mobileTotal;
         let deviceTotal;
         let webTotal;
-        mobileTotal = this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation, 1).invalid.length + this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation, 1).valid.length;
-        deviceTotal = this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation, 1).invalid.length + this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation, 1).valid.length;
-        webTotal = this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation, 1).invalid.length + this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation, 1).valid.length;
+        mobileTotal = this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length + this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).valid.length;
+        deviceTotal = this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length + this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).valid.length;
+        webTotal = this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length + this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).valid.length;
       
         for (let [stationID, faults] of faultMap) {
             let currentWeek = this.props.analytics.getWeekNumberOf(new Date(this.props.analytics.getTime()));
@@ -91,7 +91,7 @@ class DashboardStation extends Component {
                                     Mobile
                                   </Grid.Column>
                                   <Grid.Column>
-                                    {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation, 1).invalid.length} invalid sessions/{mobileTotal}
+                                    {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length} invalid sessions/{mobileTotal}
                                   </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -99,7 +99,7 @@ class DashboardStation extends Component {
                                     Device
                                   </Grid.Column>
                                   <Grid.Column>
-                                    {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation, 1).invalid.length} invalid sessions/{deviceTotal}
+                                    {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length} invalid sessions/{deviceTotal}
                                   </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -107,7 +107,7 @@ class DashboardStation extends Component {
                                     Web
                                   </Grid.Column>
                                   <Grid.Column>
-                                    {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation, 1).invalid.length} invalid sessions/{webTotal}
+                                    {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length} invalid sessions/{webTotal}
                                   </Grid.Column>
                                 </Grid.Row>
                               </Grid>
@@ -126,7 +126,7 @@ class DashboardStation extends Component {
                                       Duration
                                     </Grid.Column>
                                     <Grid.Column>
-                                      {Math.round(this.props.analytics.getAverageDuration(this.props.pickedStation, 1) * 1000) / 1000} ms
+                                      {Math.round(this.props.analytics.getAverageDuration(this.props.pickedStation) * 1000) / 1000} ms
                                     </Grid.Column>
                                   </Grid.Row>
                                   <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -134,7 +134,7 @@ class DashboardStation extends Component {
                                       Electricity Usage
                                     </Grid.Column>
                                     <Grid.Column>
-                                      {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation, 1) * 1000) / 1000} kWh/session
+                                      {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation) * 1000) / 1000} kWh/session
                                     </Grid.Column>
                                   </Grid.Row>
                               </Grid>
@@ -150,10 +150,22 @@ class DashboardStation extends Component {
                                 <Grid>
                                   <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                                     <Grid.Column>
-                                      {Math.round(this.props.analytics.getAverageTurnaround(this.props.pickedStation, 1) * 1000) / 1000} s
+                                      {Math.round(this.props.analytics.getAverageTurnaround(this.props.pickedStation) * 1000) / 1000} s
                                     </Grid.Column>
                                   </Grid.Row>
                                 </Grid>
+                            </Card.Content>
+                          </Card>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
+                            <Card.Content>
+                              <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
+                                Average Turnaround Time
+                              </Card.Header>
+                                <SomeBarChart analytics={this.props.analytics} stationID={this.props.pickedStation} />
                             </Card.Content>
                           </Card>
                         </Grid.Column>

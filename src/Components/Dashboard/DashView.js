@@ -3,7 +3,7 @@ import { Grid, Card } from 'semantic-ui-react';
 import style from './dashboard.scss';
 import Warning from './Warning.jsx'
 import WeeklyStationAverage from './Charts/WeeklyStationAverage.jsx';
-import SomeBarChart from './Charts/SomeBarChart';
+import SomeBarChart from './Charts/SomeBarChart.jsx';
 import SomePieChart from './Charts/SomePieChart';
 
 export default class DashView extends Component {
@@ -63,7 +63,7 @@ export default class DashView extends Component {
                     <Card.Header style={{color: '#D8D9DA'}}>
                       Some more Data
                     </Card.Header>
-                    <SomeBarChart />
+                    <SomeBarChart analytics={this.props.analytics} />
                   </Card.Content>
                 </Card>
               </Grid.Column>
@@ -73,7 +73,7 @@ export default class DashView extends Component {
                     <Card.Header style={{color: '#D8D9DA'}}>
                       Some more Data
                     </Card.Header>
-                    <SomeBarChart />
+                    <SomeBarChart analytics={this.props.analytics} />
                   </Card.Content>
                 </Card>
               </Grid.Column>
@@ -85,7 +85,7 @@ export default class DashView extends Component {
                     <Card.Header style={{color: '#D8D9DA'}}>
                       Some more Data
                     </Card.Header>
-                    <SomeBarChart />
+                    <SomeBarChart analytics={this.props.analytics} />
                   </Card.Content>
                 </Card>
               </Grid.Column>
@@ -95,7 +95,7 @@ export default class DashView extends Component {
                     <Card.Header style={{color: '#D8D9DA'}}>
                       Some more Data
                     </Card.Header>
-                    <SomeBarChart />
+                    <SomeBarChart analytics={this.props.analytics} />
                   </Card.Content>
                 </Card>
               </Grid.Column>
