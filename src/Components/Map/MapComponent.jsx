@@ -34,7 +34,8 @@ class MapComponent extends Component {
       time: 0,
       stationElevation: mapConfig.INITIAL_STATION_ELEVATION,
       data: {
-        chargeStations: CHARGE_STATIONS
+        chargeStations: CHARGE_STATIONS,
+        labels: labels,
       },
       newStations: [],
       trips: [],
@@ -50,6 +51,9 @@ class MapComponent extends Component {
     this.handleMapClick = this.handleMapClick.bind(this);
     this.toggleEditMode = this.toggleEditMode.bind(this);
     this.deleteNewStation = this.deleteNewStation.bind(this);
+    this.handleStationClick = this.handleStationClick.bind(this);
+
+
   }
 
   componentDidMount() {
@@ -230,18 +234,28 @@ class MapComponent extends Component {
   }
 
   deleteNewStation(info, event) {
-    if (this.state.editMode) {
-      this.setState({
-          newStations: this.state.newStations.filter(
-          (element) => {
-          if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
-            return false;
-          } else {
-            return true;
-          }
-        })
-      });
+    this.setState({
+      newStations: this.state.newStations.filter(
+        (element) => {
+        if (element.Longitude === info.object.Longitude && element.Latitude === info.object.Latitude) {
+          return false;
+        } else {
+          return true;
+        }
+      })
+    });
 
+    return true;
+  }
+
+  handleStationClick() {
+    const clickedObject = this.state.clickedObject;
+    this.setState({
+      stationClicked: clickedObject.ID
+    });
+    this.props.stationDashboard(clickedObject.ID);
+
+<<<<<<< HEAD
       this.setState({
           newTrips: this.state.newTrips.filter(
           (element) => {
@@ -255,6 +269,8 @@ class MapComponent extends Component {
 
       return true;
     }
+=======
+>>>>>>> 69136462816922599684f7d4dcbe24c4bad346ee
   }
 
   _renderLayers() {
@@ -314,6 +330,9 @@ class MapComponent extends Component {
               return [82, 125, 85];
             }
           },
+          onClick: (info) => {
+            this.props.stationClicked(info.object.ID);
+            console.log(info.object.ID)},
           getLineColor: [80, 80, 80],
           getLineWidth: 1,
           updateTriggers: {
@@ -335,12 +354,19 @@ class MapComponent extends Component {
         getPolygon: d => getContour(d),
         getElevation: d => this.state.stationElevation,
         getFillColor: d => [75, 218, 250],
+        onClick:  (info, event) => {
+          if (this.state.editMode) {
+            this.deleteNewStation(info, event);
+          } else {
+            this.props.stationClicked(info.object.ID);
+            console.log(info.object.ID);
+          }
+        },
         getLineColor: [80, 80, 80],
         getLineWidth: 1,
         updateTriggers: {
           getElevation: [this.state.stationElevation]
         },
-        onClick: this.deleteNewStation
       }));
     }
 
