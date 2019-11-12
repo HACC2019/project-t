@@ -9,11 +9,11 @@
 
 <div align="center">
   <h3>
-  	<a href="">
+  	<a href="https://project-t.s3-us-west-1.amazonaws.com/index.html">
       Website
     </a>
   	<span> | </span>
-    <a href="">
+    <a href="https://devpost.com/software/project-t">
       Devpost
     </a>
   </h3>
