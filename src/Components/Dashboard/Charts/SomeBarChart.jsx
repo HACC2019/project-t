@@ -80,6 +80,11 @@ export default class SomeBarChart extends Component {
           gridLines: {
           color: '#464648'
         },
+        scaleLabel: {
+            display: true,
+            labelString: 'Week',
+            fontColor: '#D8D9DA'
+          },
         stacked: true
       }],
       yAxes: [{
