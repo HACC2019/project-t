@@ -10,6 +10,7 @@ import mapConfig from "./mapConfig";
 import { processStationRecords } from '../../../lib/map_tools.js';
 import mapStyles from '../../styles/map.css';
 
+
 function getContour(station, scale = 1) {
   return [
     [station.Longitude + (.001 * scale), station.Latitude - (.0005 * scale)],
@@ -142,16 +143,6 @@ class MapComponent extends Component {
     let newStationID = Math.floor(Math.random() * 1000);
 
     if (this.state.editMode) {
-      this.setState({
-        newStations: [
-          ...this.state.newStations,
-          {
-            ID: `${newStationID}`,
-            Longitude: info.coordinate[0],
-            Latitude: info.coordinate[1]
-          }
-        ]
-      });
 
       function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
         var R = 6371; // Radius of the earth in km
@@ -174,14 +165,41 @@ class MapComponent extends Component {
       let validRadius = 16.0934; // 10 Miles in Kilometers
       let validStations = [];
 
-      // Find the closest charging station to generate cars (trips) from
+      let totalPowerUsageOfValidStations = 0; 
+
+      // Find all the stations within the valid radius to generate cars (trips) from
       for (let station of this.state.data.chargeStations) {
         let distance = getDistanceFromLatLonInKm(info.coordinate[1], info.coordinate[0], station.Latitude, station.Longitude);
 
         if (distance <= validRadius) {
           validStations.push(station);
+          totalPowerUsageOfValidStations += window.analytics.getTotalPowerUsage(station.ID, 24);
         }
       }
+
+      let sumOfPredictedUse = 0;
+
+      for (let station of validStations) {
+        let stationUse = window.analytics.getTotalPowerUsage(station.ID, 24);
+        station.percentageUse = stationUse / totalPowerUsageOfValidStations;
+        station.predictedPercentageUse = station.percentageUse * ((validStations.length - 1) / validStations.length);
+        console.log(station.predictedPercentageUse);
+        sumOfPredictedUse += station.predictedPercentageUse;
+      }
+      
+      this.setState({
+        newStations: [
+          ...this.state.newStations,
+          {
+            ID: `${newStationID}`,
+            Longitude: info.coordinate[0],
+            Latitude: info.coordinate[1],
+            predictedPercentageUse: 1 - sumOfPredictedUse
+          }
+        ]
+      });
+      
+      console.log( 1 - sumOfPredictedUse);
 
       const newTrips = this.state.newTrips;
       for (let station of validStations) {
@@ -194,8 +212,8 @@ class MapComponent extends Component {
             [info.coordinate[0], info.coordinate[1]] 
           ],
           timestamps: [
-            0,
-            1000
+            this.state.time,
+            this.state.time + 100
           ]
         });
       }
