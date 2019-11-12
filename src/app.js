@@ -84,7 +84,7 @@ class App extends Component {
               >
               {(this.state.home) ?
                   <Dashboard analytics={this.analytics}/>
-                  : <DashboardStation pickedStation={this.state.stationClicked} home={this.handleGoBack}/>}
+                  : <DashboardStation pickedStation={this.state.stationClicked} home={this.handleGoBack} analytics={this.analytics}/>}
             </Resizable>
             <MapComponent
                 selectedStation={this.state.selectedStation}
