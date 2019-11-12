@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Card, Image, Statistic } from 'semantic-ui-react';
+import { Grid, Card } from 'semantic-ui-react';
 import style from './dashboard.scss';
 import Warning from './Warning.jsx'
 import WeeklyStationAverage from './Charts/WeeklyStationAverage.jsx';
