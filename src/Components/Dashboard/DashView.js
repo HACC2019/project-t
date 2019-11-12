@@ -53,13 +53,13 @@ export default class DashView extends Component {
                     <Card.Header>
                     </Card.Header>
                     <Card.Content>
-                      Valid Sessions: {new RecordAnalytics().getRecordsFor(this.props.stationID, 12).length)}
+                      Valid Sessions: {new RecordAnalytics().getRecordsFor(this.props.stationID, 12).length}
                     </Card.Content>
                     <Card.Content>
                       Invalid Sessions: {new RecordAnalytics().getInvalidRecords().length}
                     </Card.Content>
                     <Card.Content>
-                      Total Sessions: {new RecordAnalytics().gerRec}
+                      Total Sessions: {new RecordAnalytics().gerRecordsFor(this.props.stationID, 12).length}
                     </Card.Content>
                   </Card.Content>
                 </Card>
