@@ -11,13 +11,11 @@ class Warning extends Component {
     let stationDetails;
     
     for (let station of CHARGE_STATIONS) {
-      if (station.ID === this.props.station.id) {
+      if (station.ID === this.props.stationID) {
         stationDetails = station;
       }
     }
     
-    console.log(this.props.station);
-    console.log(stationDetails);
     return (
       <Message warning>
         <Message.Header>Warning: Possible Fault at {stationDetails.Property}</Message.Header>

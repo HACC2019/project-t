@@ -9,15 +9,32 @@ import SomePieChart from './Charts/SomePieChart';
 
 export default class DashView extends Component {
   render() {
+    let alerts = [];
+    let faultMap = this.props.analytics.getFaults();
+    
+    for (let [stationID, faults] of faultMap) {
+      let currentWeek = this.props.analytics.getWeekNumberOf(new Date(this.props.analytics.getTime()));
+
+      // Color the station orange if there was a probable fault last week
+      if (faults[faults.length - 1].week === currentWeek - 1) {
+        alerts.push(<Warning stationID={stationID}/>);
+      }
+    }
+    
     return (
       <div className={style.container}>
         <div className={style.dashView}>
           <Grid columns='equal'>
-            <Grid.Row stretched centered>
-              <Grid.Column>
-                <Warning station={this.props.analytics.getRecords()[0]}/>
-              </Grid.Column>
-            </Grid.Row>
+            {
+              alerts.length > 0 ?
+                <Grid.Row stretched centered>
+                  <Grid.Column>
+                    {alerts}
+                  </Grid.Column>
+                </Grid.Row>
+              :
+                undefined
+            }
             <Grid.Row stretched centered>
               <Grid.Column>
                 <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>

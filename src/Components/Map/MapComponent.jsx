@@ -7,7 +7,6 @@ import GL from "@luma.gl/constants";
 import CHARGE_STATIONS from "../../../json/chargeStations";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
-import { processStationRecords } from '../../../lib/map_tools.js';
 import mapStyles from '../../styles/map.css';
 
 function getContour(station, scale = 1) {
@@ -55,7 +54,7 @@ class MapComponent extends Component {
   }
 
   componentDidMount() {
-    this._animate();
+//    this._animate();
     // fetch('trips.json')
     //   .then(res => res.json())
     //   .then(data => {
@@ -235,11 +234,19 @@ class MapComponent extends Component {
           getFillColor: data => {
             if (!data.Servicing) {
               return [184, 81, 81];
-            } else if (this.props.faultMap.has(data.ID)) {
-              return [253, 128, 93];
             } else {
-              return [82, 125, 85];
+              if (this.props.faultMap.has(data.ID)) {
+                let faults = this.props.faultMap.get(data.ID);
+                let currentWeek = this.props.analytics.getWeekNumberOf(new Date(this.props.analytics.getTime()));
+
+                // Color the station orange if there was a probable fault last week
+                if (faults[faults.length - 1].week === currentWeek - 1) {
+                  return [253, 128, 93];
+                }
+              }
             }
+            
+            return [82, 125, 85];
           },
           onClick: (info) => {
             this.props.stationClicked(info.object.ID);
