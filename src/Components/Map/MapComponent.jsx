@@ -51,8 +51,6 @@ class MapComponent extends Component {
     this.toggleEditMode = this.toggleEditMode.bind(this);
     this.deleteNewStation = this.deleteNewStation.bind(this);
     this.handleStationClick = this.handleStationClick.bind(this);
-
-
   }
 
   componentDidMount() {
@@ -323,8 +321,7 @@ class MapComponent extends Component {
             return [82, 125, 85];
           },
           onClick: (info) => {
-            this.props.stationClicked(info.object.ID);
-            console.log(info.object.ID)},
+            this.props.stationClicked(info.object.ID);},
           getLineColor: [80, 80, 80],
           getLineWidth: 1,
           updateTriggers: {
