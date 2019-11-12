@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Card, Image, Statistic } from 'semantic-ui-react';
 import style from './dashboard.scss';
+import RecordAnalytics  from '../../../lib/RecordAnalytics.js';
 
 import WeeklyStationAverage from './Charts/WeeklyStationAverage.jsx';
 import SomeBarChart from './Charts/SomeBarChart';
@@ -12,14 +13,6 @@ export default class DashView extends Component {
       <div className={style.container}>
         <div className={style.dashView}>
           <Grid centered columns={4}>
-            <Grid.Row centered stretched>
-              <Statistic inverted size='small'>
-                <Statistic.Value>
-                  Turnaround Time
-                </Statistic.Value>
-                <Statistic.Label>Average Time Between Uses</Statistic.Label>
-              </Statistic>
-            </Grid.Row>
             <Grid.Row stretched centered >
               <Grid.Column width={8}>
                 <Card fluid color='orange'> 
@@ -41,9 +34,16 @@ export default class DashView extends Component {
                 <Card fluid>
                   <Card.Content>
                     <Card.Header>
-                    Some Data
+                    Payment Mode
                     </Card.Header>
-                    <SomeBarChart />
+                    <Card.Content>
+                    Credit Card: {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getInvalidRecords()), 'CREDITCARD'}
+                    / {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getRecordsFor(this.props.stationID, 12), 'CREDITCARD')}
+                    </Card.Content>
+                    <Card.Content>
+                      RFID: {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getInvalidRecords()), 'RFID'}
+                      / {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getRecordsFor(this.props.stationID, 12), 'RFID')}
+                    </Card.Content>
                   </Card.Content>
                 </Card>
               </Grid.Column>
@@ -51,17 +51,24 @@ export default class DashView extends Component {
                 <Card>
                   <Card.Content>
                     <Card.Header>
-                      Some more Data
                     </Card.Header>
-                    <SomePieChart />
+                    <Card.Content>
+                      Valid Sessions: {new RecordAnalytics().getRecordsFor(this.props.stationID, 12).length)}
+                    </Card.Content>
+                    <Card.Content>
+                      Invalid Sessions: {new RecordAnalytics().getInvalidRecords().length}
+                    </Card.Content>
+                    <Card.Content>
+                      Total Sessions: {new RecordAnalytics().gerRec}
+                    </Card.Content>
                   </Card.Content>
                 </Card>
                 <Card>
                   <Card.Content>
                     <Card.Header>
-                      Some more Data
+                      Average Turnaround Time
                     </Card.Header>
-                    <SomeBarChart />
+                      {new RecordAnalytics().getAverageTurnaround(this.props.stationID, 12)} Minutes
                   </Card.Content>
                 </Card>
               </Grid.Column>
@@ -69,17 +76,30 @@ export default class DashView extends Component {
                 <Card>
                   <Card.Content>
                     <Card.Header>
-                      Some more Data
+
                     </Card.Header>
-                    <SomeBarChart />
+                    <Card.Content>
+                      Credit Card: {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getInvalidRecords()), 'CREDITCARD'}
+                      / {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getRecordsFor(this.props.stationID, 12), 'CREDITCARD')}
+                    </Card.Content>
+                    <Card.Content>
+                      RFID: {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getInvalidRecords()), 'RFID'}
+                      / {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getRecordsFor(this.props.stationID, 12), 'RFID')}
+                    </Card.Content>
                   </Card.Content>
                 </Card>
                   <Card>
                   <Card.Content>
                       <Card.Header>
-                        Some more Data
                       </Card.Header>
-                      <SomeBarChart />
+                    <Card.Content>
+                      Credit Card: {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getInvalidRecords()), 'CREDITCARD'}
+                      / {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getRecords(this.props.stationID, 12), 'CREDITCARD')}
+                    </Card.Content>
+                    <Card.Content>
+                      RFID: {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getInvalidRecords()), 'RFID'}
+                      / {new RecordAnalytics().getByDataByPayType(new RecordAnalytics().getRecords(this.props.stationID, 12), 'RFID')}
+                    </Card.Content>
                     </Card.Content>
                   </Card>
               </Grid.Column>
