@@ -1,17 +1,52 @@
 import React, { Component } from 'react';
 import { Grid, Card, Image, Statistic } from 'semantic-ui-react';
 import style from './dashboard.scss';
-
+import Warning from './Warning.jsx'
 import WeeklyStationAverage from './Charts/WeeklyStationAverage.jsx';
+import SampleLineGraph from './Charts/SampleLineGraph.jsx';
 import SomeBarChart from './Charts/SomeBarChart';
 import SomePieChart from './Charts/SomePieChart';
 
 export default class DashView extends Component {
   render() {
+    let alerts = [];
+    let faultMap = this.props.analytics.getFaults();
+    
+    for (let [stationID, faults] of faultMap) {
+      let currentWeek = this.props.analytics.getWeekNumberOf(new Date(this.props.analytics.getTime()));
+
+      // Color the station orange if there was a probable fault last week
+      if (faults[faults.length - 1].week === currentWeek - 1) {
+        alerts.push(<Warning stationID={stationID}/>);
+      }
+    }
+    
     return (
       <div className={style.container}>
         <div className={style.dashView}>
-          <Grid centered columns='equal'>
+          <Grid columns='equal'>
+            {
+              alerts.length > 0 ?
+                <Grid.Row stretched centered>
+                  <Grid.Column>
+                    {alerts}
+                  </Grid.Column>
+                </Grid.Row>
+              :
+                undefined
+            }
+            <Grid.Row stretched centered>
+              <Grid.Column>
+                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
+                  <Card.Content>
+                    <Card.Header style={{color: '#D8D9DA'}}>
+                      Station 5
+                    </Card.Header>
+                    <SampleLineGraph/>
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+            </Grid.Row>
             <Grid.Row stretched centered>
               <Grid.Column>
                 <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}> 
