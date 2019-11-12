@@ -71,9 +71,7 @@ export class SimulationController extends Component {
             trigger={
               <Button icon='step backward' onClick={this.rewindDay} style={{borderRadius: '0px', background: '#2c2d31', color: '#b8bbbe'}}/>
             }/>
-          <Button onClick={this.toggleSimulation} style={{borderRadius: '0px', background: '#2c2d31', color: '#b8bbbe'}}>
-            {this.state.running ? 'PAUSE' : 'PLAY'} 
-          </Button>
+          <Button icon={this.state.running ? 'pause' : 'play'} onClick={this.toggleSimulation} style={{borderRadius: '0px', background: '#2c2d31', color: '#b8bbbe'}} />
           <Popup 
             inverted
             content='Advance 1 day' 
