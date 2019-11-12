@@ -267,7 +267,7 @@ class MapComponent extends Component {
         getFillColor: d => [75, 218, 250],
         onClick:  (info, event) => {
           if (this.state.editMode) {
-            this.deleteNewStation(info, event);
+            return this.deleteNewStation(info, event);
           } else {
             this.props.stationClicked(info.object.ID);
             console.log(info.object.ID);
