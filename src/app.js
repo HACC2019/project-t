@@ -9,6 +9,7 @@ import RecordAnalytics from '../lib/RecordAnalytics';
 import DashboardStation from './Components/SingleStation/DashboardStation.jsx'
 import { Resizable } from 're-resizable';
 import style from "./Components/Dashboard/dashboard.scss";
+import resize from './resizable.css';
 
 class App extends Component {
   constructor(props) {

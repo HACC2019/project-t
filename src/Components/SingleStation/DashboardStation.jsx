@@ -41,23 +41,22 @@ class DashboardStation extends Component {
         let mobileTotal;
         let deviceTotal;
         let webTotal;
-        mobileTotal = this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation, 1).invalid.length + this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation, 1).valid.length;
-        deviceTotal = this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation, 1).invalid.length + this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation, 1).valid.length;
-        webTotal = this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation, 1).invalid.length + this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation, 1).valid.length;
+        mobileTotal = this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length + this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).valid.length;
+        deviceTotal = this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length + this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).valid.length;
+        webTotal = this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length + this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).valid.length;
 
-        const rfidPaymentsTot = (this.props.analytics.getDataByPayType('RFID', this.props.pickedStation,1).invalid.length +
-            this.props.analytics.getDataByPayType('RFID', this.props.pickedStation, 1).valid.length);
-        const creditPaymentsTot = (this.props.analytics.getDataByPayType('CREDITCARD', this.props.pickedStation,1).invalid.length +
-            this.props.analytics.getDataByPayType('CREDITCARD', this.props.pickedStation, 1).valid.length);
-        const webPaymentsTot = (this.props.analytics.getDataByPayType('WEB', this.props.pickedStation,1).invalid.length +
-            this.props.analytics.getDataByPayType('WEB', this.props.pickedStation, 1).valid.length);
-        const sessionTotals = (this.props.analytics.getRecords(this.props.pickedStation,1).length +
-            this.props.analytics.getInvalidRecords( this.props.pickedStation, 1).length);
-        const chadPort = (this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation,1).valid.length +
-            this.props.analytics.getDataByPortType( "CHADEMO", this.props.pickedStation, 1).invalid.length);
-        const dCombo = (this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation,1).valid.length +
-            this.props.analytics.getDataByPortType( "DCCOMBOTYP1", this.props.pickedStation, 1).invalid.length);
-
+        const rfidPaymentsTot = (this.props.analytics.getDataByPayType('RFID', this.props.pickedStation).invalid.length +
+            this.props.analytics.getDataByPayType('RFID', this.props.pickedStation).valid.length);
+        const creditPaymentsTot = (this.props.analytics.getDataByPayType('CREDITCARD', this.props.pickedStation).invalid.length +
+            this.props.analytics.getDataByPayType('CREDITCARD', this.props.pickedStation).valid.length);
+        const webPaymentsTot = (this.props.analytics.getDataByPayType('WEB', this.props.pickedStation).invalid.length +
+            this.props.analytics.getDataByPayType('WEB', this.props.pickedStation).valid.length);
+        const sessionTotals = (this.props.analytics.getRecords(this.props.pickedStation).length +
+            this.props.analytics.getInvalidRecords( this.props.pickedStation).length);
+        const chadPort = (this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation).valid.length +
+            this.props.analytics.getDataByPortType( "CHADEMO", this.props.pickedStation).invalid.length);
+        const dCombo = (this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation).valid.length +
+            this.props.analytics.getDataByPortType( "DCCOMBOTYP1", this.props.pickedStation).invalid.length);
 
         for (let [stationID, faults] of faultMap) {
             let currentWeek = this.props.analytics.getWeekNumberOf(new Date(this.props.analytics.getTime()));
@@ -97,7 +96,7 @@ class DashboardStation extends Component {
                                 }}>
                                     <Card.Content>
                                         <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                                            Payment Mode
+                                            Payment Types
                                         </Card.Header>
                                         <Grid>
                                             <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -105,7 +104,7 @@ class DashboardStation extends Component {
                                                     RFID payments
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getDataByPayType('MOBILE', this.props.pickedStation, 1).valid.length} valid / {rfidPaymentsTot} total
+                                                    {this.props.analytics.getDataByPayType('RFID', this.props.pickedStation).invalid.length} invalid / {rfidPaymentsTot} total
                                                 </Grid.Column>
                                             </Grid.Row>
                                             <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -113,15 +112,7 @@ class DashboardStation extends Component {
                                                     Credit Card
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getDataByPayType('DEVICE', this.props.pickedStation, 1).valid.length} valid / {creditPaymentsTot} total
-                                                </Grid.Column>
-                                            </Grid.Row>
-                                            <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                                                <Grid.Column>
-                                                    Web
-                                                </Grid.Column>
-                                                <Grid.Column>
-                                                    {this.props.analytics.getDataByPayType('WEB', this.props.pickedStation, 1).valid.length} valid / {webPaymentsTot} total
+                                                    {this.props.analytics.getDataByPayType('CREDITCARD', this.props.pickedStation).invalid.length} invalid / {creditPaymentsTot} total
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
@@ -143,7 +134,7 @@ class DashboardStation extends Component {
                                                     Valid Sessions
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getRecords(this.props.pickedStation, 1).length} Valid Sessions
+                                                    {this.props.analytics.getRecords(this.props.pickedStation).length} Valid Sessions
                                                 </Grid.Column>
                                             </Grid.Row>
                                             <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -151,7 +142,7 @@ class DashboardStation extends Component {
                                                     Invalid Sessions
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getInvalidRecords(this.props.pickedStation, 1).length} Invalid Sessions
+                                                    {this.props.analytics.getInvalidRecords(this.props.pickedStation).length} Invalid Sessions
                                                 </Grid.Column>
                                             </Grid.Row>
                                             <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -181,7 +172,7 @@ class DashboardStation extends Component {
                                                     Chademo Ports
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation, 1).valid.length} Valid Sessions
+                                                    {this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation).invalid.length} Invalid Sessions
                                                     / {chadPort} Total Sessions
                                                 </Grid.Column>
                                             </Grid.Row>
@@ -190,7 +181,7 @@ class DashboardStation extends Component {
                                                     DCCOMBOTYP1 Ports
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getDataByPortType("DCCOMBO", this.props.pickedStation, 1).valid.length} Valid Sessions
+                                                    {this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation).invalid.length} Invalid Sessions
                                                     / {dCombo} Total Sessions
                                                 </Grid.Column>
                                             </Grid.Row>
@@ -215,7 +206,7 @@ class DashboardStation extends Component {
                                                     Mobile
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation, 1).invalid.length} invalid
+                                                    {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length} Invalid
                                                     sessions/{mobileTotal}
                                                 </Grid.Column>
                                             </Grid.Row>
@@ -224,7 +215,7 @@ class DashboardStation extends Component {
                                                     Device
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation, 1).invalid.length} invalid
+                                                    {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length} Invalid
                                                     sessions/{deviceTotal}
                                                 </Grid.Column>
                                             </Grid.Row>
@@ -233,7 +224,7 @@ class DashboardStation extends Component {
                                                     Web
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation, 1).invalid.length} invalid
+                                                    {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length} Invalid
                                                     sessions/{webTotal}
                                                 </Grid.Column>
                                             </Grid.Row>
@@ -256,7 +247,7 @@ class DashboardStation extends Component {
                                                     Duration
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getAverageDuration(this.props.pickedStation, 1)} ms
+                                                    {this.props.analytics.getAverageDuration(this.props.pickedStation)} ms
                                                 </Grid.Column>
                                             </Grid.Row>
                                             <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -264,7 +255,7 @@ class DashboardStation extends Component {
                                                     Electricity Usage
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation, 1) * 1000) / 1000} kWh/session
+                                                    {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation) * 1000) / 1000} kWh/session
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
@@ -283,7 +274,7 @@ class DashboardStation extends Component {
                                         <Grid>
                                             <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getAverageTurnaround(this.props.pickedStation, 1)} s
+                                                    {this.props.analytics.getAverageTurnaround(this.props.pickedStation)} s
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
