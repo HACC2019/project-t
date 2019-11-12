@@ -78,7 +78,7 @@ class App extends Component {
             />
             <div style={{ display: 'inline-flex', flexDirection: 'column', width: '100%'}}>
               <Resizable className={style.box}
-                         defaultSize={{height: 300}}
+                         defaultSize={{height: '50%'}}
                          minHeight={'20%'}
                          enable={{bottom: true}}
               >
