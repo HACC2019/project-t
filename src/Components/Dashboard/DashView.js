@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Card, Image, Statistic } from 'semantic-ui-react';
 import style from './dashboard.scss';
-
+import Warning from './Warning.jsx'
 import WeeklyStationAverage from './Charts/WeeklyStationAverage.jsx';
 import SomeBarChart from './Charts/SomeBarChart';
 import SomePieChart from './Charts/SomePieChart';
@@ -11,7 +11,12 @@ export default class DashView extends Component {
     return (
       <div className={style.container}>
         <div className={style.dashView}>
-          <Grid centered columns='equal'>
+          <Grid columns='equal'>
+            <Grid.Row stretched centered>
+              <Grid.Column>
+                <Warning station={this.props.analytics.getRecords()[0]}/>
+              </Grid.Column>
+            </Grid.Row>
             <Grid.Row stretched centered>
               <Grid.Column>
                 <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}> 
