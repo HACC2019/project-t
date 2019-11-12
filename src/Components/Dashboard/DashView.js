@@ -11,54 +11,34 @@ export default class DashView extends Component {
     return (
       <div className={style.container}>
         <div className={style.dashView}>
-          <Grid centered columns={4}>
-            <Grid.Row centered stretched>
-              <Statistic inverted size='small'>
-                <Statistic.Value>
-                  Turnaround Time
-                </Statistic.Value>
-                <Statistic.Label>Average Time Between Uses</Statistic.Label>
-              </Statistic>
-            </Grid.Row>
-            <Grid.Row stretched centered >
-              <Grid.Column width={8}>
-                <Card fluid color='orange'> 
+          <Grid centered columns='equal'>
+            <Grid.Row stretched centered>
+              <Grid.Column>
+                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}> 
                   <Card.Content>
-                    <Card.Header>
+                    <Card.Header style={{color: '#D8D9DA'}}>
                       Station 5
                     </Card.Header>
-                    <WeeklyStationAverage analytics={this.props.analytics} stationID={5} />
-                  </Card.Content>
-                </Card>
-                <Card fluid color='blue'> 
-                  <Card.Content>
-                    <Card.Header>
-                      Station 6
-                    </Card.Header>
-                    <WeeklyStationAverage analytics={this.props.analytics} stationID={6} />
-                  </Card.Content>
-                </Card>
-                <Card fluid>
-                  <Card.Content>
-                    <Card.Header>
-                    Some Data
-                    </Card.Header>
-                    <SomeBarChart />
+                    <WeeklyStationAverage analytics={this.props.analytics} stationID={5}/>
                   </Card.Content>
                 </Card>
               </Grid.Column>
               <Grid.Column>
-                <Card>
+                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
                   <Card.Content>
-                    <Card.Header>
+                    <Card.Header style={{color: '#D8D9DA'}}>
                       Some more Data
                     </Card.Header>
                     <SomePieChart />
                   </Card.Content>
                 </Card>
-                <Card>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row stretched centered>
+              <Grid.Column>
+                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
                   <Card.Content>
-                    <Card.Header>
+                    <Card.Header style={{color: '#D8D9DA'}}>
                       Some more Data
                     </Card.Header>
                     <SomeBarChart />
@@ -66,22 +46,36 @@ export default class DashView extends Component {
                 </Card>
               </Grid.Column>
               <Grid.Column>
-                <Card>
+                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
                   <Card.Content>
-                    <Card.Header>
+                    <Card.Header style={{color: '#D8D9DA'}}>
                       Some more Data
                     </Card.Header>
                     <SomeBarChart />
                   </Card.Content>
                 </Card>
-                  <Card>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row stretched centered>
+              <Grid.Column>
+                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
                   <Card.Content>
-                      <Card.Header>
-                        Some more Data
-                      </Card.Header>
-                      <SomeBarChart />
-                    </Card.Content>
-                  </Card>
+                    <Card.Header style={{color: '#D8D9DA'}}>
+                      Some more Data
+                    </Card.Header>
+                    <SomeBarChart />
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+              <Grid.Column>
+                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
+                  <Card.Content>
+                    <Card.Header style={{color: '#D8D9DA'}}>
+                      Some more Data
+                    </Card.Header>
+                    <SomeBarChart />
+                  </Card.Content>
+                </Card>
               </Grid.Column>
             </Grid.Row>
           </Grid>
