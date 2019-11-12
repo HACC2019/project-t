@@ -56,32 +56,36 @@ export class SimulationController extends Component {
 
     return (
       <div style={{ display: 'flex', flexDirection: 'row', height: '3em', background: '#111116', color: '#FFF'}}>
-        <div style={{margin: 'auto 0', padding: '0 1em'}}>Week of {weekDayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getFullYear()} (week {this.props.controller.getWeekNumber()})</div>
+        <div style={{margin: 'auto 0', padding: '0 1em', color: '#b9bbbe'}}>Week of {weekDayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getFullYear()} (week {this.props.controller.getWeekNumber()})</div>
         <div style={{flex: 1}} />
-        <Button.Group>
+        <Button.Group >
           <Popup 
+            inverted
             content='Reverse 1 week' 
             trigger={
-              <Button icon='fast backward' onClick={this.rewindWeek} style={{borderRadius: '0px'}}/>
+              <Button icon='fast backward' onClick={this.rewindWeek} style={{borderRadius: '0px', background: '#2c2d31', color: '#b8bbbe'}}/>
             }/>
           <Popup 
+            inverted
             content='Reverse 1 day' 
             trigger={
-              <Button icon='step backward' onClick={this.rewindDay} style={{borderRadius: '0px'}}/>
+              <Button icon='step backward' onClick={this.rewindDay} style={{borderRadius: '0px', background: '#2c2d31', color: '#b8bbbe'}}/>
             }/>
-          <Button onClick={this.toggleSimulation} style={{borderRadius: '0px'}}>
+          <Button onClick={this.toggleSimulation} style={{borderRadius: '0px', background: '#2c2d31', color: '#b8bbbe'}}>
             {this.state.running ? 'PAUSE' : 'PLAY'} 
           </Button>
           <Popup 
+            inverted
             content='Advance 1 day' 
             trigger={
-            <Button icon='step forward' onClick={this.advanceDay} style={{borderRadius: '0px'}}/>    
+            <Button icon='step forward' onClick={this.advanceDay} style={{borderRadius: '0px', background: '#2c2d31', color: '#b8bbbe'}}/>    
             }
             position='bottom right'/>
           <Popup 
+            inverted
             content='Advance 1 week' 
             trigger={
-            <Button icon='fast forward' onClick={this.advanceWeek} style={{borderRadius: '0px'}}/>
+            <Button icon='fast forward' onClick={this.advanceWeek} style={{borderRadius: '0px', background: '#2c2d31', color: '#b8bbbe'}}/>
             }
             position='bottom right'/>
         </Button.Group>
