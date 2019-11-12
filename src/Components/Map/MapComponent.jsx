@@ -171,11 +171,14 @@ class MapComponent extends Component {
         return deg * (Math.PI/180)
       }
 
-      let validRadius = 16.0934; // 10 Miles in Kilometers
+      let validRadius = 11.2654; // 7 Miles in Kilometers
       let validStations = [];
 
+      //Link new stations to new stations also
+      let allStations = this.state.data.chargeStations.concat(this.state.newStations);
+      console.log(allStations);
       // Find the closest charging station to generate cars (trips) from
-      for (let station of this.state.data.chargeStations) {
+      for (let station of allStations) {
         let distance = getDistanceFromLatLonInKm(info.coordinate[1], info.coordinate[0], station.Latitude, station.Longitude);
 
         if (distance <= validRadius) {
