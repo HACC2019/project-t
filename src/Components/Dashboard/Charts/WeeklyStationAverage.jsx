@@ -23,7 +23,9 @@ export default class WeeklyStationAverage extends Component {
           startIndex = i;
         }
         if (startIndex !== -1) {
-          labels.push(i);
+          let date = this.props.analytics.getDateFromWeek(i);
+          
+          labels.push(`${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}-${date.getFullYear().toString().substring(2)}`);
         }
       }
     }
