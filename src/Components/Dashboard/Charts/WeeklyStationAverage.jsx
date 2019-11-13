@@ -3,9 +3,11 @@ import { Bar } from 'react-chartjs-2';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 
 export default class WeeklyStationAverage extends Component {
-//  constructor(props) {
-//    super(props);
-//  }
+  constructor(props) {
+    super(props);
+
+    this.props.analytics.addListener(this, this.forceUpdate)
+  }
   
   render() {
     // fetch data here
