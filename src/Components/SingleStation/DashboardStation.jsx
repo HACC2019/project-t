@@ -16,6 +16,11 @@ class DashboardStation extends Component {
 
     getStationDetails() {
         let stationDetails = this.props.analytics.getStationDetails(this.props.pickedStation);
+
+        if (!stationDetails) {
+            return undefined;
+        }
+
         return (
             <Table.Row key={stationDetails}>
                 <Table.Cell>{stationDetails.Street_Address}</Table.Cell>
@@ -31,6 +36,7 @@ class DashboardStation extends Component {
     }
 
     render() {
+        let stationDetails = this.props.analytics.getStationDetails(this.props.pickedStation);
         let alerts = [];
         let faultMap = this.props.analytics.getFaults(this.props.pickedStation);
         let mobileTotal;
@@ -65,7 +71,7 @@ class DashboardStation extends Component {
 
         return (
             <div className={style.container}>
-                <h1 style={{textAlign: 'center', color: '#D8D9DA', fontWeight: 500}}>{this.props.analytics.getStationDetails(this.props.pickedStation).Property}</h1>
+                <h1 style={{textAlign: 'center', color: '#D8D9DA', fontWeight: 500}}>{stationDetails ? stationDetails.Property : 'Newly Placed Station'}</h1>
                 <Button style={{position: 'absolute', top: '1rem', right: '2rem'}} inverted onClick={this.handleClick}>BACK TO SUMMARY</Button>
                 <Table>
                     <TableBody>
