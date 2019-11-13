@@ -59,7 +59,7 @@ class DashboardStation extends Component {
             this.props.analytics.getDataByPortType( "DCCOMBOTYP1", this.props.pickedStation).invalid.length);
 
         for (let [stationID, faults] of faultMap) {
-            let currentWeek = this.props.analytics.getWeekNumberOf(new Date(this.props.analytics.getTime()));
+            let currentWeek = this.props.analytics.getWeekFromDate(new Date(this.props.analytics.getTime()));
 
             // Color the station orange if there was a probable fault last week
             if (faults[faults.length - 1].week === currentWeek - 1) {
