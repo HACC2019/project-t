@@ -103,7 +103,7 @@ export class SimulationController extends Component {
           className={style.dark}
           style={{minWidth: '8em'}}
           selection
-          defaultValue='hour 24'
+          defaultValue='month 1'
           options={[{key: '1 day', text: '1 day', value: 'hour 24'}, {key: '1 week', text: '1 week', value: 'hour 168'}, {key: '1 month', text: '1 month', value: 'month 1'}, {key: '6 months', text: '6 months', value: 'month 6'}, {key: '1 year', text: '1 year', value: 'month 24'}, {key: 'All', text: 'All', value: 'month 999999'}]}
           onChange={this.timeRangeChanged}
         />
