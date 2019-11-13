@@ -308,7 +308,7 @@ class MapComponent extends Component {
             } else {
               if (this.props.faultMap.has(data.ID)) {
                 let faults = this.props.faultMap.get(data.ID);
-                let currentWeek = this.props.analytics.getWeekNumberOf(new Date(this.props.analytics.getTime()));
+                let currentWeek = this.props.analytics.getWeekFromDate(new Date(this.props.analytics.getTime()));
 
                 // Color the station orange if there was a probable fault last week
                 if (faults[faults.length - 1].week === currentWeek - 1) {

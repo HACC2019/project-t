@@ -12,7 +12,7 @@ export default class DashView extends Component {
     let faultMap = this.props.analytics.getFaults(null, 9);
     
     for (let [stationID, faults] of faultMap) {
-      let currentWeek = this.props.analytics.getWeekNumberOf(new Date(this.props.analytics.getTime()));
+      let currentWeek = this.props.analytics.getWeekFromDate(new Date(this.props.analytics.getTime()));
 
       // Color the station orange if there was a probable fault last week
       if (faults[faults.length - 1].week === currentWeek - 1) {
