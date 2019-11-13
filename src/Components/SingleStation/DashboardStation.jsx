@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Card, Table, TableBody, Button, Grid} from 'semantic-ui-react';
 import style from './singlestyle.scss';
-import CHARGE_STATIONS from "../../../json/chargeStations";
 import Warning from "../Dashboard/Warning.jsx";
 
 
@@ -9,9 +8,6 @@ class DashboardStation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: {
-                chargeStations: CHARGE_STATIONS
-            },
             filtered: '',
         }
         this.handleClick = this.handleClick.bind(this);
@@ -19,16 +15,15 @@ class DashboardStation extends Component {
     }
 
     getStationDetails() {
-        return this.state.data.chargeStations
-            .filter(dataItem => (dataItem.ID) === (this.props.pickedStation))
-            .map((item) => (
-                <Table.Row key={item}>
-                    <Table.Cell>{item.Street_Address}</Table.Cell>
-                    <Table.Cell>{item.Hours_Of_Operation}</Table.Cell>
-                    <Table.Cell>{item.Charger_Fee}</Table.Cell>
-                    <Table.Cell>{item.Charging_Standards}</Table.Cell>
-                </Table.Row>
-            ))
+        let stationDetails = this.props.analytics.getStationDetails(this.props.pickedStation);
+        return (
+            <Table.Row key={stationDetails}>
+                <Table.Cell>{stationDetails.Street_Address}</Table.Cell>
+                <Table.Cell>{stationDetails.Hours_Of_Operation}</Table.Cell>
+                <Table.Cell>{stationDetails.Charger_Fee}</Table.Cell>
+                <Table.Cell>{stationDetails.Charging_Standards}</Table.Cell>
+            </Table.Row>
+        )
     }
 
     handleClick() {
@@ -70,8 +65,8 @@ class DashboardStation extends Component {
 
         return (
             <div className={style.container}>
-              <h1 style={{textAlign: 'center', color: '#D8D9DA', fontWeight: 500}}>Station Statistics</h1>
-                <Button onClick={this.handleClick}> Summary </Button>
+                <h1 style={{textAlign: 'center', color: '#D8D9DA', fontWeight: 500}}>{this.props.analytics.getStationDetails(this.props.pickedStation).Property}</h1>
+                <Button style={{position: 'absolute', top: '1rem', right: '2rem'}} inverted onClick={this.handleClick}>BACK TO SUMMARY</Button>
                 <Table>
                     <TableBody>
                         {showItems}
