@@ -11,6 +11,7 @@ $background-color: #f5f6f8;
 }
 
 :local(.container) { // usable dash area
+  posiiton: relative;
   display: block;
   padding: 1rem 2rem;
   height: 100%; 
