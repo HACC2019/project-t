@@ -100,6 +100,11 @@ export default class SomeBarChart extends Component {
           gridLines: {
           color: '#464648'
         },
+        scaleLabel: {
+            display: true,
+            labelString: 'Sessions',
+            fontColor: '#D8D9DA'
+          },
         stacked: true
       }]
     },
