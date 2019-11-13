@@ -63,7 +63,7 @@ export class SimulationController extends Component {
     let date = new Date(this.props.controller.getTime());
 
     return (
-      <div style={{ position: 'relative', display: 'flex', flexDirection: 'row', height: '3em', background: '#111116', color: '#b9bbbe'}}>
+      <div style={{ position: 'relative', display: 'flex', flexDirection: 'row', height: '3rem', background: '#111116', fontSize: '1.1em', color: '#b9bbbe'}}>
        <Button.Group>
           <Popup 
             inverted
