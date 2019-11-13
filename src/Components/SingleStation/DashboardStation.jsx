@@ -70,6 +70,7 @@ class DashboardStation extends Component {
 
         return (
             <div className={style.container}>
+              <h1 style={{textAlign: 'center', color: '#D8D9DA', fontWeight: 500}}>Station Statistics</h1>
                 <Button onClick={this.handleClick}> Summary </Button>
                 <Table>
                     <TableBody>

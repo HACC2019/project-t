@@ -23,6 +23,7 @@ export default class DashView extends Component {
     return (
       <div className={style.container}>
         <div className={style.dashView}>
+          <h1 style={{textAlign: 'center', color: '#D8D9DA', fontWeight: 500}}>Summary Statistics</h1>
           <Grid columns='equal'>
             {
               alerts.length > 0 ?
