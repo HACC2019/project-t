@@ -17,7 +17,7 @@ class Warning extends Component {
     }
     
     return (
-      <Message warning inverted style={{background: '#4d3a2a'}}>
+      <Message warning style={{background: '#4d3a2a'}}>
         <Message.Header style={{color: 'white'}}>Possible Fault at the {stationDetails.Property} charging station</Message.Header>
         <p style={{color: 'white'}}>{stationDetails.Street_Address}</p>
       </Message>
