@@ -275,7 +275,8 @@ class DashboardStation extends Component {
                                         <Grid>
                                             <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                                                 <Grid.Column>
-                                                    {this.props.analytics.getAverageTurnaround(this.props.pickedStation)} s
+                                                    {this.props.analytics.getAverageTurnaround(this.props.pickedStation) > -1 ? `${this.props.analytics.getAverageTurnaround(this.props.pickedStation)} s` :
+                                                    'Not enough data to calculate'}
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
