@@ -12,13 +12,13 @@ $background-color: #f5f6f8;
 
 :local(.container) { // usable dash area
   display: block;
-  padding: 2rem;
+  padding: 1rem 2rem;
   height: 100%; 
   overflow: auto;
 }
 
 :local(.dashView) {
-  display: flex;
+//  display: flex;
   position: relative;
 }
 
