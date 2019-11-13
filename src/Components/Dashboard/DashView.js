@@ -16,7 +16,7 @@ export default class DashView extends Component {
 
       // Color the station orange if there was a probable fault last week
       if (faults[faults.length - 1].week === currentWeek - 1) {
-        alerts.push(<Warning stationID={stationID}/>);
+        alerts.push(<Warning key={stationID} stationID={stationID}/>);
       }
     }
     
