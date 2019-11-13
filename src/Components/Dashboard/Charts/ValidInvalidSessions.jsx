@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 
-export default class SomeBarChart extends Component {
+export default class ValidInvalidSessions extends Component {
   constructor(props) {
     super(props);
 
