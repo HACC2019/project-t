@@ -3,7 +3,11 @@ import { Bar } from 'react-chartjs-2';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 
 export default class SomeBarChart extends Component {
-  // fetch data here
+  constructor(props) {
+    super(props);
+
+    this.props.analytics.addListener(this, this.forceUpdate);
+  }
   
   render() {
     
