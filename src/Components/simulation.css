@@ -1,10 +1,20 @@
-:local(.dark.dropdown),
-:local(.dark.dropdown .menu) {
+:local(.dark):global(.ui.selection.dropdown),
+:local(.dark):global(.ui.selection.dropdown .menu) {
   background: #2c2d31;
   color: #b9bbbe;
 }
 
-:local(.dark.ui.selection.visible.dropdown > .text:not(.default)),
-:local(.dark.ui.selection.dropdown .menu > .item) {
+:local(.dark):global(.ui.selection.active.dropdown),
+:local(.dark):global(.ui.selection.dropdown:focus) {
+  border-color: #111116;
+}
+
+:local(.dark):global(.ui.selection.visible.dropdown > .text:not(.default)),
+:local(.dark):global(.ui.selection.dropdown .menu > .item) {
+  border-color: #111116;
   color: #b9bbbe;
+}
+
+:local(.dark):global(.ui.selection.active.dropdown .menu) {
+  border-color: #111116;
 }
