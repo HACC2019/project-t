@@ -49,8 +49,8 @@ export class SimulationController extends Component {
   }
 
   runSimulation() {
-      this.props.controller.advanceDay();
-      this._timeout = setTimeout(this.runSimulation, 100);
+      this.props.controller.advanceHour(6);
+      this._timeout = setTimeout(this.runSimulation, 25);
   }
   
   timeRangeChanged(event, data) {
