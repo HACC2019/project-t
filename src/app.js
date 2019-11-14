@@ -9,6 +9,7 @@ import RecordAnalytics from '../lib/RecordAnalytics';
 import DashboardStation from './Components/SingleStation/DashboardStation.jsx'
 import { Resizable } from 're-resizable';
 import style from "./Components/Dashboard/dashboard.scss";
+import resize from './resizable.css';
 
 class App extends Component {
   constructor(props) {
@@ -68,7 +69,7 @@ class App extends Component {
   render() {
       return(
         <div style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
-          <SimulationController controller={this.timeController} />
+          <SimulationController controller={this.timeController} analytics={this.analytics} />
           <div style={{ flex: 1, display: 'flex', overflow: 'hidden'}} >
             <StationSidebar
               stations={this.state.stationList}
