@@ -36,16 +36,6 @@ export default class DashView extends Component {
                 undefined
             }
             <Grid.Row stretched centered>
-              <Grid.Column>
-                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}> 
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA'}}>
-                      Station 5
-                    </Card.Header>
-                    <WeeklyStationAverage analytics={this.props.analytics} stationID={5}/>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
                 <Grid.Column>
                 <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
                   <Card.Content>
