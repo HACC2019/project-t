@@ -162,7 +162,7 @@ class MapComponent extends Component {
         return deg * (Math.PI/180)
       }
 
-      let validRadius = 16.0934; // 10 Miles in Kilometers
+      let validRadius = 11.2654; // 7 Miles in Kilometers
       let validStations = [];
 
       let totalPowerUsageOfValidStations = 0; 

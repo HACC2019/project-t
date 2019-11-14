@@ -4,6 +4,8 @@ import style from './dashboard.scss';
 import Warning from './Warning.jsx'
 import WeeklyStationAverage from './Charts/WeeklyStationAverage.jsx';
 import ValidInvalidSessions from './Charts/ValidInvalidSessions.jsx';
+import Test from './Charts/test.jsx';
+
 import SomePieChart from './Charts/SomePieChart';
 
 export default class DashView extends Component {
@@ -62,9 +64,9 @@ export default class DashView extends Component {
                 <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
                   <Card.Content>
                     <Card.Header style={{color: '#D8D9DA'}}>
-                      Some more Data
+                      Test
                     </Card.Header>
-                    <ValidInvalidSessions analytics={this.props.analytics} />
+                    <Test analytics={this.props.analytics} future={true}/>
                   </Card.Content>
                 </Card>
               </Grid.Column>
