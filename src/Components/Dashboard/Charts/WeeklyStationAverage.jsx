@@ -3,9 +3,11 @@ import { Bar } from 'react-chartjs-2';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 
 export default class WeeklyStationAverage extends Component {
-//  constructor(props) {
-//    super(props);
-//  }
+  constructor(props) {
+    super(props);
+
+    this.props.analytics.addListener(this, this.forceUpdate)
+  }
   
   render() {
     // fetch data here
@@ -21,7 +23,9 @@ export default class WeeklyStationAverage extends Component {
           startIndex = i;
         }
         if (startIndex !== -1) {
-          labels.push(i);
+          let date = this.props.analytics.getDateFromWeek(i);
+          
+          labels.push(`${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}-${date.getFullYear().toString().substring(2)}`);
         }
       }
     }
@@ -56,6 +60,11 @@ export default class WeeklyStationAverage extends Component {
       },
       scales: {
         xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Week',
+            fontColor: '#D8D9DA'
+          },
           ticks: {
             fontColor: '#D8D9DA'
           },
@@ -66,6 +75,11 @@ export default class WeeklyStationAverage extends Component {
 
         }],
         yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Sessions',
+            fontColor: '#D8D9DA'
+          },
           ticks: {
             fontColor: '#D8D9DA'
           },
