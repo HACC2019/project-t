@@ -4,7 +4,7 @@ import style from './dashboard.scss';
 import Warning from './Warning.jsx'
 import WeeklyStationAverage from './Charts/WeeklyStationAverage.jsx';
 import ValidInvalidSessions from './Charts/ValidInvalidSessions.jsx';
-import Test from './Charts/test.jsx';
+import CumulativeSessions from './Charts/CumulativeSessions.jsx';
 
 import SomePieChart from './Charts/SomePieChart';
 
@@ -64,41 +64,9 @@ export default class DashView extends Component {
                 <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
                   <Card.Content>
                     <Card.Header style={{color: '#D8D9DA'}}>
-                      Test
+                      Cumulative Amount of Sessions
                     </Card.Header>
-                    <Test analytics={this.props.analytics} future={true}/>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA'}}>
-                      Some more Data
-                    </Card.Header>
-                    <ValidInvalidSessions analytics={this.props.analytics} />
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row stretched centered>
-              <Grid.Column>
-                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA'}}>
-                      Some more Data
-                    </Card.Header>
-                    <ValidInvalidSessions analytics={this.props.analytics} />
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA'}}>
-                      Some more Data
-                    </Card.Header>
-                    <ValidInvalidSessions analytics={this.props.analytics} />
+                    <CumulativeSessions analytics={this.props.analytics}/>
                   </Card.Content>
                 </Card>
               </Grid.Column>
