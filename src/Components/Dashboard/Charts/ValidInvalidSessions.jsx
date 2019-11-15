@@ -131,7 +131,7 @@ export default class ValidInvalidSessions extends Component {
 
     return (
       <GraphCard title='Session Overview'>
-        <div style={{position: 'relative', height: '25vh'}}>
+        <div style={{position: 'relative', height: '30vh'}}>
           <Bar data={chartData} options={chartOptions}/>
         </div>
       </GraphCard>
