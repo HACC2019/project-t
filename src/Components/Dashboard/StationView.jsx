@@ -37,6 +37,27 @@ export default class StationView extends Component {
     this.props.home(true);
   }
 
+  getTime(timestamp) {
+    let hours = Math.floor(timestamp / 3600);
+    timestamp -= hours * 3600;
+    let minutes = Math.floor(timestamp / 60);
+    timestamp -= minutes * 60;
+    let seconds = Math.round(timestamp);
+    let time = '';
+
+    if (hours > 0) {
+      time += `${hours} hour${hours > 1 ? 's' : ''}`;
+    }
+    if (minutes > 0) {
+      time += `${time.length > 1 ? ', ' : ''}${minutes} minute${minutes > 1 ? 's' : ''}`;
+    }
+    if (seconds > 0) {
+      time += `${time.length > 1 ? ', ' : ''}${seconds} second${seconds > 1 ? 's' : ''}`;
+    }
+
+    return time;
+}
+
   render() {
     let stationDetails = this.props.analytics.getStationDetails(this.props.pickedStation);
     let alerts = [];
@@ -129,7 +150,7 @@ export default class StationView extends Component {
               }}>
                 <Card.Content>
                   <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                    Number Of Valid Sessions
+                    Session Overview
                   </Card.Header>
                   <Grid>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -137,7 +158,7 @@ export default class StationView extends Component {
                         Valid Sessions
                       </Grid.Column>
                       <Grid.Column>
-                        {this.props.analytics.getRecords(this.props.pickedStation).length} Valid Sessions
+                        {this.props.analytics.getRecords(this.props.pickedStation).length} valid
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -145,15 +166,15 @@ export default class StationView extends Component {
                         Invalid Sessions
                       </Grid.Column>
                       <Grid.Column>
-                        {this.props.analytics.getInvalidRecords(this.props.pickedStation).length} Invalid Sessions
+                        {this.props.analytics.getInvalidRecords(this.props.pickedStation).length} invalid
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
-                        Valid Sessions
+                        Total Sessions
                       </Grid.Column>
                       <Grid.Column>
-                        {sessionTotals} Total Sessions
+                        {sessionTotals} total
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -167,25 +188,25 @@ export default class StationView extends Component {
               }}>
                 <Card.Content>
                   <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                    Number Of Valid Ports
+                    Port Type
                   </Card.Header>
                   <Grid>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
-                        Chademo Ports
+                        Chademo
                       </Grid.Column>
                       <Grid.Column>
-                        {this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation).invalid.length} Invalid Sessions
-                        / {chadPort} Total Sessions
+                        {this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation).invalid.length} invalid
+                        / {chadPort} total
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
-                        DCCOMBOTYP1 Ports
+                        DCCOMBOTYP1
                       </Grid.Column>
                       <Grid.Column>
-                        {this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation).invalid.length} Invalid Sessions
-                        / {dCombo} Total Sessions
+                        {this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation).invalid.length} invalid
+                        / {dCombo} total
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -209,8 +230,8 @@ export default class StationView extends Component {
                         Mobile
                       </Grid.Column>
                       <Grid.Column>
-                        {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length} Invalid
-                        sessions/{mobileTotal}
+                        {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length} invalid
+                        / {mobileTotal} total
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -218,8 +239,8 @@ export default class StationView extends Component {
                         Device
                       </Grid.Column>
                       <Grid.Column>
-                        {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length} Invalid
-                      sessions/{deviceTotal}
+                        {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length} invalid
+                      / {deviceTotal} total
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -227,8 +248,8 @@ export default class StationView extends Component {
                         Web
                       </Grid.Column>
                       <Grid.Column>
-                        {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length} Invalid
-                        sessions/{webTotal}
+                        {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length} invalid
+                        / {webTotal} total
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -242,7 +263,7 @@ export default class StationView extends Component {
               }}>
                 <Card.Content>
                   <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                    Valid Session Averages
+                    Averages Per Valid Session
                   </Card.Header>
                   <Grid>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -250,7 +271,7 @@ export default class StationView extends Component {
                         Duration
                       </Grid.Column>
                       <Grid.Column>
-                        {this.props.analytics.getAverageDuration(this.props.pickedStation)} ms
+                        {this.getTime(this.props.analytics.getAverageDuration(this.props.pickedStation))}
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
@@ -258,7 +279,7 @@ export default class StationView extends Component {
                         Electricity Usage
                       </Grid.Column>
                       <Grid.Column>
-                        {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation) * 1000) / 1000} kWh/session
+                        {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation) * 1000) / 1000} kWh
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -275,9 +296,9 @@ export default class StationView extends Component {
                     Average Turnaround Time
                   </Card.Header>
                   <Grid>
-                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                    <Grid.Row stretched style={{color: '#D8D9DA'}}>
                       <Grid.Column>
-                        {this.props.analytics.getAverageTurnaround(this.props.pickedStation) > -1 ? `${this.props.analytics.getAverageTurnaround(this.props.pickedStation)} s` :
+                        {this.props.analytics.getAverageTurnaround(this.props.pickedStation) > -1 ? this.getTime(this.props.analytics.getAverageTurnaround(this.props.pickedStation)) :
                       'Not enough data to calculate'}
                       </Grid.Column>
                     </Grid.Row>
