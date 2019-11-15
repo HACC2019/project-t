@@ -90,13 +90,13 @@ class App extends Component {
                 </div>
               </div>
             </Resizable>
-            {/* <MapComponent
+            <MapComponent
               selectedStation={this.state.selectedStation}
               onMapChange={this.handleMapChange}
               faultMap={this.state.faultMap}
               stationClicked={this.handleStationClick}
               analytics={this.analytics}
-            /> */}
+            />
           </div>
         </div>
       </div>
