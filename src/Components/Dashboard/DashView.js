@@ -3,6 +3,7 @@ import { Grid, Card } from 'semantic-ui-react';
 import Warning from './Warning.jsx';
 import ValidInvalidSessions from './Charts/ValidInvalidSessions.jsx';
 import SomePieChart from './Charts/SomePieChart';
+import PaymentType from './Charts/PaymentType.jsx'
 import style from './dashboard.scss';
 
 export default class DashView extends Component {
@@ -37,6 +38,11 @@ export default class DashView extends Component {
             <Grid.Row stretched centered>
               <Grid.Column>
                 <ValidInvalidSessions analytics={this.props.analytics} />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <PaymentType analytics={this.props.analytics} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

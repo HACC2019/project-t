@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Card, Table, TableBody, Button, Grid} from 'semantic-ui-react';
 import ValidInvalidSessions from '../Dashboard/Charts/ValidInvalidSessions.jsx';
+import PaymentType from '../Dashboard/Charts/PaymentType.jsx'
 import Warning from "../Dashboard/Warning.jsx";
 import style from './singlestyle.scss';
 
@@ -289,6 +290,11 @@ class DashboardStation extends Component {
             <Grid.Row stretched centered>
               <Grid.Column>
                 <ValidInvalidSessions analytics={this.props.analytics} />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <PaymentType analytics={this.props.analytics} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
