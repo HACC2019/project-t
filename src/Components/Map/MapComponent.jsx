@@ -360,7 +360,7 @@ class MapComponent extends Component {
 
     for (let trips of this.state.newTrips) {
       layers.push(new TripsLayer({
-        id: `new-trip-${trips.stationID}`,
+        id: `new-trip-${trips.originID}`,
         data: [trips],
         getPath: d => d.path,
         getTimestamps: d => d.timestamps,
