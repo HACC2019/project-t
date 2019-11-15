@@ -4,6 +4,7 @@ import Warning from './Warning.jsx';
 import ValidInvalidSessions from './Charts/ValidInvalidSessions.jsx';
 import SomePieChart from './Charts/SomePieChart';
 import PaymentType from './Charts/PaymentType.jsx'
+import PortType from './Charts/PortType.jsx'
 import style from '../../styles/dashboard.scss';
 
 export default class SummaryView extends Component {
@@ -42,6 +43,9 @@ export default class SummaryView extends Component {
           <Grid.Row>
             <Grid.Column>
               <PaymentType analytics={this.props.analytics} />
+            </Grid.Column>
+            <Grid.Column>
+              <PortType analytics={this.props.analytics} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

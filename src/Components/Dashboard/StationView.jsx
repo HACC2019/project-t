@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Card, Table, TableBody, Button, Grid} from 'semantic-ui-react';
 import ValidInvalidSessions from '../Dashboard/Charts/ValidInvalidSessions.jsx';
 import PaymentType from '../Dashboard/Charts/PaymentType.jsx'
+import PortType from '../Dashboard/Charts/PortType.jsx'
 import Warning from "../Dashboard/Warning.jsx";
 
 export default class StationView extends Component {
@@ -292,6 +293,9 @@ export default class StationView extends Component {
           <Grid.Row>
             <Grid.Column>
               <PaymentType analytics={this.props.analytics} />
+            </Grid.Column>
+            <Grid.Column>
+              <PortType analytics={this.props.analytics} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
