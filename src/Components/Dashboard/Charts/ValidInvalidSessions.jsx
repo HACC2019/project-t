@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
+import GraphCard from '../GraphCard.jsx';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 
 export default class ValidInvalidSessions extends Component {
@@ -73,6 +74,7 @@ export default class ValidInvalidSessions extends Component {
   )
 
   const chartOptions = {
+    maintainAspectRatio: false,
     legend: {
         labels: {
           fontColor: '#D8D9DA'
@@ -114,9 +116,11 @@ export default class ValidInvalidSessions extends Component {
   }
 
   return (
-    <div>
-      <Bar data={chartData} options={chartOptions}/>
-    </div>
+    <GraphCard title='Session Overview'>
+      <div style={{position: 'relative', height: '25vh'}}>
+        <Bar data={chartData} options={chartOptions}/>
+      </div>
+    </GraphCard>
   )
   }
 }

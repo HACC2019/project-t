@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
-import style from './dashboard.scss';
-import Warning from './Warning.jsx'
-import WeeklyStationAverage from './Charts/WeeklyStationAverage.jsx';
+import Warning from './Warning.jsx';
 import ValidInvalidSessions from './Charts/ValidInvalidSessions.jsx';
 import SomePieChart from './Charts/SomePieChart';
+import style from './dashboard.scss';
 
 export default class DashView extends Component {
   render() {
@@ -37,14 +36,7 @@ export default class DashView extends Component {
             }
             <Grid.Row stretched centered>
               <Grid.Column>
-                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA'}}>
-                      Session Overview
-                    </Card.Header>
-                    <ValidInvalidSessions analytics={this.props.analytics} />
-                  </Card.Content>
-                </Card>
+                <ValidInvalidSessions analytics={this.props.analytics} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
