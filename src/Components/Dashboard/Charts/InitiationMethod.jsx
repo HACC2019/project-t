@@ -11,6 +11,10 @@ export default class PaymentType extends Component {
     this.props.analytics.addListener(this, this.forceUpdate);
   }
 
+  componentWillUnmount() {
+    this.props.analytics.removeListener(this);
+  }
+
   render() {
 
     let adjustedEpoch = new Date('01-01-1970 00:00:00');

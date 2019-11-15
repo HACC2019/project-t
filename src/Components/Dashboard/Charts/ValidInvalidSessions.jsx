@@ -11,6 +11,10 @@ export default class ValidInvalidSessions extends Component {
     this.props.analytics.addListener(this, this.forceUpdate);
   }
 
+  componentWillUnmount() {
+    this.props.analytics.removeListener(this);
+  }
+
   render() {
     let adjustedEpoch = new Date('01-01-1970 00:00:00');
     let aggregateHours = this.props.analytics._timeRange.aggregate;
