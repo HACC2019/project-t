@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
+import GraphCard from '../GraphCard.jsx';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export default class ValidInvalidSessions extends Component {
   constructor(props) {
@@ -8,44 +10,46 @@ export default class ValidInvalidSessions extends Component {
 
     this.props.analytics.addListener(this, this.forceUpdate);
   }
-  
+
   render() {
-    
-    console.log(this.props.stationID);
-    let valid = getWeeklyTotals(this.props.analytics.getRecords(this.props.stationID));
-    let invalid = getWeeklyTotals(this.props.analytics.getInvalidRecords(this.props.stationID));
-  
+    let adjustedEpoch = new Date('01-01-1970 00:00:00');
+    let aggregateHours = this.props.analytics._timeRange.aggregate;
+    let valid = this.props.analytics.aggregateRecords(this.props.analytics.getRecords(this.props.stationID));
+    let invalid = this.props.analytics.aggregateRecords(this.props.analytics.getInvalidRecords(this.props.stationID));
 
     let labels = [];
-
-    
     let startIndex = -1;
-    
+
     for (let i = 0; i < valid.length; i++) {
-      if (valid[i] !== undefined) {
-        if (startIndex === -1) {
-          startIndex = i;
+      if (startIndex === -1 && (valid[i] !== undefined || invalid[i] !== undefined)) {
+        startIndex = i;
+      }
+
+      if (startIndex > -1) {
+        if (valid[i] === undefined) {
+          valid[i] = 0;
         }
-        if (startIndex !== -1) {
+        if (invalid[i] === undefined) {
+          invalid[i] = 0;
+        }
+
+        if (aggregateHours == 1) {
+          let date = new Date(1000 * 3600 * i + adjustedEpoch.getTime());
+          labels.push(`${date.getHours() > 12 ? date.getHours() - 12 : date.getHours() == 0 ? 12 : date.getHours()} ${date.getHours() < 12 ? 'AM' : 'PM'}`);
+        } else if (aggregateHours == 24) {
+          let date = new Date(1000 * 3600 * 24 * i + adjustedEpoch.getTime());
+          labels.push(`${monthNames[date.getMonth()]} ${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`);
+        } else if (aggregateHours == 168) {
           let date = this.props.analytics.getDateFromWeek(i);
-          
-          labels.push(`${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}-${date.getFullYear().toString().substring(2)}`);
+          labels.push(`${monthNames[date.getMonth()]} ${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`);
         }
       }
     }
+
     valid = valid.splice(startIndex);
-    
-    for (let i = 0; i < invalid.length; i++) {
-      if (invalid[i] !== undefined) {
-        if (startIndex === -1) {
-          startIndex = i;
-        }
-      }
-    }
     invalid = invalid.splice(startIndex);
-  
-  const chartData = () => (
-    {
+
+    const chartData = {
       barPercentage: 0.3,
       barThickness: 'flex',
       maxBarThickness: 8,
@@ -69,54 +73,68 @@ export default class ValidInvalidSessions extends Component {
             borderWidth: 1
         }
       ]
-    }
-  )
+    };
 
-  const chartOptions = {
-    legend: {
+    let xAxisLabel;
+
+    if (aggregateHours == 1) {
+      xAxisLabel = 'Hours';
+    } else if (aggregateHours == 24) {
+      xAxisLabel = 'Days';
+    } else if (aggregateHours == 168) {
+      xAxisLabel = 'Weeks';
+    }
+
+    const chartOptions = {
+      maintainAspectRatio: false,
+      animation: false,
+      legend: {
         labels: {
           fontColor: '#D8D9DA'
         }
-    },
-    scales: {
-      xAxes: [{
-        ticks: {
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
             fontColor: '#D8D9DA'
           },
           gridLines: {
-          color: '#464648'
-        },
-        scaleLabel: {
+            color: '#464648'
+          },
+          scaleLabel: {
             display: true,
-            labelString: 'Week',
+            labelString: xAxisLabel,
             fontColor: '#D8D9DA'
           },
-        stacked: true
-      }],
-      yAxes: [{
-        ticks: {
+          stacked: true
+        }],
+        yAxes: [{
+          ticks: {
+            suggestedMin: 0,
             fontColor: '#D8D9DA'
           },
           gridLines: {
-          color: '#464648'
-        },
-        scaleLabel: {
+            color: '#464648'
+          },
+          scaleLabel: {
             display: true,
             labelString: 'Sessions',
             fontColor: '#D8D9DA'
           },
-        stacked: true
-      }]
-    },
-    chartArea: {
+          stacked: true
+        }]
+      },
+      chartArea: {
         backgroundColor: '#212124'
+      }
     }
-  }
 
-  return (
-    <div>
-      <Bar data={chartData} options={chartOptions}/>
-    </div>
-  )
+    return (
+      <GraphCard title='Session Overview'>
+        <div style={{position: 'relative', height: '25vh'}}>
+          <Bar data={chartData} options={chartOptions}/>
+        </div>
+      </GraphCard>
+    );
   }
 }

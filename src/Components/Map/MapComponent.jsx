@@ -157,7 +157,7 @@ class MapComponent extends Component {
         var d = R * c; // Distance in km
         return d;
       }
-      
+
       function deg2rad(deg) {
         return deg * (Math.PI/180)
       }
@@ -169,7 +169,7 @@ class MapComponent extends Component {
 
       //Link new stations to new stations also
       let allStations = this.state.data.chargeStations.concat(this.state.newStations);
-      
+
       // Find the closest charging station to generate cars (trips) from
       for (let station of allStations) {
         let distance = getDistanceFromLatLonInKm(info.coordinate[1], info.coordinate[0], station.Latitude, station.Longitude);
@@ -189,7 +189,7 @@ class MapComponent extends Component {
         console.log(station.predictedPercentageUse);
         sumOfPredictedUse += station.predictedPercentageUse;
       }
-      
+
       this.setState({
         newStations: [
           ...this.state.newStations,
@@ -201,7 +201,7 @@ class MapComponent extends Component {
           }
         ]
       });
-      
+
       console.log( 1 - sumOfPredictedUse);
 
       const newTrips = this.state.newTrips;
@@ -316,7 +316,7 @@ class MapComponent extends Component {
                 }
               }
             }
-            
+
             return [82, 125, 85];
           },
           onClick: (info) => {

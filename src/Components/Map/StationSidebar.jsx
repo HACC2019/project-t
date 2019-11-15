@@ -4,19 +4,19 @@ import sidebarStyle from '../../styles/sidebar.css';
 export class StationSidebar extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             hovered: undefined,
             visible: true
         };
-        
+
         this.handleShowHide = this.handleShowHide.bind(this);
     }
 
     handleShowHide() {
         this.setState({visible: !this.state.visible});
     }
-    
+
     render() {
         let visibleStations = [];
         for (let station of this.props.stations.visible) {
@@ -37,7 +37,7 @@ export class StationSidebar extends Component {
             </div>;
             visibleStations.push(element);
         }
-        
+
         let otherStations = [];
         for (let station of this.props.stations.other) {
             let element = <div
@@ -52,15 +52,15 @@ export class StationSidebar extends Component {
             </div>;
             otherStations.push(element);
         }
-        
+
         const style = {position: 'relative', display: 'flex', transition: 'margin-left 250ms'};
         const svgStyle = {position: 'absolute', top: '50%', transform: 'translateY(-50%)', transition: 'transform 250ms'};
-        
+
         if (!this.state.visible) {
             style.marginLeft = '-20vw';
             svgStyle.transform = 'translateY(-50%) rotate(180deg)'; 
         }
-        
+
         return (
             <div style={style}>
                 <div className={sidebarStyle.sidebar}>
@@ -88,7 +88,7 @@ export class StationSidebar extends Component {
                 </div>
             </div>
 
-            
+
         );
     }
 }
