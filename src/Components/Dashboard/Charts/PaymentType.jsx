@@ -65,14 +65,14 @@ export default class PaymentType extends Component {
       labels: labels, // label all axes here
       datasets: [
         { // one stack of the bar
-          label: 'RFID Sessions',
+          label: 'RFID',
           data: rfidData,
           backgroundColor: 'rgba(255, 159, 64, 0.2)',
           borderColor: 'rgba(255, 159, 64, 1)',
           borderWidth: 1
         },
         {
-          label: 'Card Sessions',
+          label: 'Credit Card',
           data: cardData,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
@@ -140,7 +140,7 @@ export default class PaymentType extends Component {
     }
 
     return (
-      <GraphCard title='Session Payment Type'>
+      <GraphCard title='Payment Type'>
         <Bar data={chartData} options={chartOptions}/>
       </GraphCard>
     );
