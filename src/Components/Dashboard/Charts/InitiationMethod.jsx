@@ -133,6 +133,7 @@ export default class PaymentType extends Component {
         }],
         yAxes: [{
           ticks: {
+            precision: 0,
             suggestedMin: 0,
             fontColor: '#D8D9DA'
           },

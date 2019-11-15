@@ -113,6 +113,7 @@ export default class ValidInvalidSessions extends Component {
         }],
         yAxes: [{
           ticks: {
+            precision: 0,
             suggestedMin: 0,
             fontColor: '#D8D9DA'
           },
