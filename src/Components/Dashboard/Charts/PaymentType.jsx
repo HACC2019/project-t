@@ -140,9 +140,7 @@ export default class PaymentType extends Component {
 
     return (
       <GraphCard title='Session Payment Type'>
-        <div style={{position: 'relative', height: '30vh'}}>
-          <Bar data={chartData} options={chartOptions}/>
-        </div>
+        <Bar data={chartData} options={chartOptions}/>
       </GraphCard>
     );
   }

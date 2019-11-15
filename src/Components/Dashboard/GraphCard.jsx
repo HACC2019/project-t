@@ -9,7 +9,9 @@ export default class GraphCard extends Component {
           <Card.Header style={{color: '#D8D9DA'}}>
             {this.props.title}
           </Card.Header>
-          {this.props.children}
+          <div style={{position: 'relative', height: '30vh'}}>
+            {this.props.children}
+          </div>
         </Card.Content>
       </Card>
     );
