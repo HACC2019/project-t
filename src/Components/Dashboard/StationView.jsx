@@ -288,18 +288,18 @@ export default class StationView extends Component {
           </Grid.Row>
           <Grid.Row stretched centered>
             <Grid.Column>
-              <ValidInvalidSessions analytics={this.props.analytics} />
+              <ValidInvalidSessions analytics={this.props.analytics} stationID={this.props.pickedStation} />
             </Grid.Column>
             <Grid.Column>
-              <InitiationMethod analytics={this.props.analytics} />
+              <InitiationMethod analytics={this.props.analytics} stationID={this.props.pickedStation} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <PaymentType analytics={this.props.analytics} />
+              <PaymentType analytics={this.props.analytics} stationID={this.props.pickedStation} />
             </Grid.Column>
             <Grid.Column>
-              <PortType analytics={this.props.analytics} />
+              <PortType analytics={this.props.analytics} stationID={this.props.pickedStation} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
