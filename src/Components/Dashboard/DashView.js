@@ -9,7 +9,7 @@ export default class DashView extends Component {
   render() {
     let alerts = [];
     let faultMap = this.props.analytics.getFaults(null, 9);
-    
+
     for (let [stationID, faults] of faultMap) {
       let currentWeek = this.props.analytics.getWeekFromDate(new Date(this.props.analytics.getTime()));
 
@@ -18,7 +18,7 @@ export default class DashView extends Component {
         alerts.push(<Warning key={stationID} stationID={stationID}/>);
       }
     }
-    
+
     return (
       <div className={style.container}>
         <div className={style.dashView}>
@@ -42,6 +42,6 @@ export default class DashView extends Component {
           </Grid>
         </div>
       </div>
-    )
+    );
   }
 }
