@@ -220,7 +220,7 @@ export default class CumulativeSessions extends Component {
     }
 
     return (
-      <GraphCard title='Cumulative Sessions'>
+      <GraphCard title='Session Overview'>
         <Bar data={chartData} options={chartOptions}/>
       </GraphCard>
     );
