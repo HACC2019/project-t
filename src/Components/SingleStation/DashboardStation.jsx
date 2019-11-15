@@ -72,7 +72,7 @@ class DashboardStation extends Component {
     const showItems = this.getStationDetails();
 
     return (
-      <div className={style.container}>
+      <div>
         <h1 style={{textAlign: 'center', color: '#D8D9DA', fontWeight: 500}}>{stationDetails ? stationDetails.Property : 'Newly Placed Station'}</h1>
         <Button style={{position: 'absolute', top: '1rem', right: '2rem'}} inverted onClick={this.handleClick}>BACK TO SUMMARY</Button>
         <Table>
@@ -80,225 +80,223 @@ class DashboardStation extends Component {
             {showItems}
           </TableBody>
         </Table>
-        <div className={style.dashView}>
-          <Grid columns='equal'>
-            {
-              alerts.length > 0 ?
-                <Grid.Row stretched centered>
-                  <Grid.Column>
-                    {alerts}
-                  </Grid.Column>
-                </Grid.Row>
-              :
-                undefined
-            }
-            <Grid.Row stretched centered>
-              <Grid.Column>
-                <Card fluid style={{
-                  backgroundColor: '#212124',
-                  boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
-                }}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                      Payment Types
-                    </Card.Header>
-                    <Grid>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          RFID payments
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getDataByPayType('RFID', this.props.pickedStation).invalid.length} invalid / {rfidPaymentsTot} total
-                        </Grid.Column>
-                      </Grid.Row>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Credit Card
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getDataByPayType('CREDITCARD', this.props.pickedStation).invalid.length} invalid / {creditPaymentsTot} total
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card fluid style={{
-                  backgroundColor: '#212124',
-                  boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
-                }}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                      Number Of Valid Sessions
-                    </Card.Header>
-                    <Grid>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Valid Sessions
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getRecords(this.props.pickedStation).length} Valid Sessions
-                        </Grid.Column>
-                      </Grid.Row>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Invalid Sessions
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getInvalidRecords(this.props.pickedStation).length} Invalid Sessions
-                        </Grid.Column>
-                      </Grid.Row>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Valid Sessions
-                        </Grid.Column>
-                        <Grid.Column>
-                          {sessionTotals} Total Sessions
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card fluid style={{
-                  backgroundColor: '#212124',
-                  boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
-                }}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                      Number Of Valid Ports
-                    </Card.Header>
-                    <Grid>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Chademo Ports
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation).invalid.length} Invalid Sessions
-                          / {chadPort} Total Sessions
-                        </Grid.Column>
-                      </Grid.Row>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          DCCOMBOTYP1 Ports
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation).invalid.length} Invalid Sessions
-                          / {dCombo} Total Sessions
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row stretched centered>
-              <Grid.Column>
-                <Card fluid style={{
-                  backgroundColor: '#212124',
-                  boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
-                }}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                      Session Initiation
-                    </Card.Header>
-                    <Grid>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Mobile
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length} Invalid
-                          sessions/{mobileTotal}
-                        </Grid.Column>
-                      </Grid.Row>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Device
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length} Invalid
-                        sessions/{deviceTotal}
-                        </Grid.Column>
-                      </Grid.Row>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Web
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length} Invalid
-                          sessions/{webTotal}
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card fluid style={{
-                  backgroundColor: '#212124',
-                  boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
-                }}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                      Valid Session Averages
-                    </Card.Header>
-                    <Grid>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Duration
-                        </Grid.Column>
-                        <Grid.Column>
-                          {this.props.analytics.getAverageDuration(this.props.pickedStation)} ms
-                        </Grid.Column>
-                      </Grid.Row>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          Electricity Usage
-                        </Grid.Column>
-                        <Grid.Column>
-                          {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation) * 1000) / 1000} kWh/session
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card fluid style={{
-                  backgroundColor: '#212124',
-                  boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
-                }}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                      Average Turnaround Time
-                    </Card.Header>
-                    <Grid>
-                      <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
-                        <Grid.Column>
-                          {this.props.analytics.getAverageTurnaround(this.props.pickedStation) > -1 ? `${this.props.analytics.getAverageTurnaround(this.props.pickedStation)} s` :
-                        'Not enough data to calculate'}
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row stretched centered>
-              <Grid.Column>
-                <ValidInvalidSessions analytics={this.props.analytics} />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column>
-                <PaymentType analytics={this.props.analytics} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </div>
+        <Grid columns='equal'>
+          {
+            alerts.length > 0 ?
+              <Grid.Row stretched centered>
+                <Grid.Column>
+                  {alerts}
+                </Grid.Column>
+              </Grid.Row>
+            :
+              undefined
+          }
+          <Grid.Row stretched centered>
+            <Grid.Column>
+              <Card fluid style={{
+                backgroundColor: '#212124',
+                boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
+              }}>
+                <Card.Content>
+                  <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
+                    Payment Types
+                  </Card.Header>
+                  <Grid>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        RFID payments
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getDataByPayType('RFID', this.props.pickedStation).invalid.length} invalid / {rfidPaymentsTot} total
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Credit Card
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getDataByPayType('CREDITCARD', this.props.pickedStation).invalid.length} invalid / {creditPaymentsTot} total
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+            <Grid.Column>
+              <Card fluid style={{
+                backgroundColor: '#212124',
+                boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
+              }}>
+                <Card.Content>
+                  <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
+                    Number Of Valid Sessions
+                  </Card.Header>
+                  <Grid>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Valid Sessions
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getRecords(this.props.pickedStation).length} Valid Sessions
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Invalid Sessions
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getInvalidRecords(this.props.pickedStation).length} Invalid Sessions
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Valid Sessions
+                      </Grid.Column>
+                      <Grid.Column>
+                        {sessionTotals} Total Sessions
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+            <Grid.Column>
+              <Card fluid style={{
+                backgroundColor: '#212124',
+                boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
+              }}>
+                <Card.Content>
+                  <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
+                    Number Of Valid Ports
+                  </Card.Header>
+                  <Grid>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Chademo Ports
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation).invalid.length} Invalid Sessions
+                        / {chadPort} Total Sessions
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        DCCOMBOTYP1 Ports
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation).invalid.length} Invalid Sessions
+                        / {dCombo} Total Sessions
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row stretched centered>
+            <Grid.Column>
+              <Card fluid style={{
+                backgroundColor: '#212124',
+                boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
+              }}>
+                <Card.Content>
+                  <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
+                    Session Initiation
+                  </Card.Header>
+                  <Grid>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Mobile
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length} Invalid
+                        sessions/{mobileTotal}
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Device
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length} Invalid
+                      sessions/{deviceTotal}
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Web
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length} Invalid
+                        sessions/{webTotal}
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+            <Grid.Column>
+              <Card fluid style={{
+                backgroundColor: '#212124',
+                boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
+              }}>
+                <Card.Content>
+                  <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
+                    Valid Session Averages
+                  </Card.Header>
+                  <Grid>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Duration
+                      </Grid.Column>
+                      <Grid.Column>
+                        {this.props.analytics.getAverageDuration(this.props.pickedStation)} ms
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        Electricity Usage
+                      </Grid.Column>
+                      <Grid.Column>
+                        {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation) * 1000) / 1000} kWh/session
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+            <Grid.Column>
+              <Card fluid style={{
+                backgroundColor: '#212124',
+                boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'
+              }}>
+                <Card.Content>
+                  <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
+                    Average Turnaround Time
+                  </Card.Header>
+                  <Grid>
+                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                      <Grid.Column>
+                        {this.props.analytics.getAverageTurnaround(this.props.pickedStation) > -1 ? `${this.props.analytics.getAverageTurnaround(this.props.pickedStation)} s` :
+                      'Not enough data to calculate'}
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row stretched centered>
+            <Grid.Column>
+              <ValidInvalidSessions analytics={this.props.analytics} />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <PaymentType analytics={this.props.analytics} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </div>
     );
   }
