@@ -116,7 +116,7 @@ export class SimulationController extends Component {
         <div style={{margin: 'auto 0', paddingRight: '0.5em', paddingLeft: '0.5em'}}>Predicted Range:</div>
         <Dropdown
           className={style.dark}
-          style={{minWidth: '8em'}}
+          style={{minWidth: '10em'}}
           selection
           defaultValue='current 0 0'
           options={[{key: 'current', text: 'Current', value: 'current 0 0'}, {key: '1 day', text: '1 day (hourly)', value: 'hour 24 1'}, {key: '1 week', text: '1 week (hourly)', value: 'hour 168 1'}, {key: '1 month', text: '1 month (daily)', value: 'month 1 24'}, {key: '6 months', text: '6 months (weekly)', value: 'month 6 168'}, {key: '1 year', text: '1 year (weekly)', value: 'month 12 168'}, {key: '2 years', text: '2 years (weekly)', value: 'month 2 168'}, {key: 'All', text: 'All (weekly)', value: 'month 100 168'}]}

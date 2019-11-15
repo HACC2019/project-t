@@ -13,6 +13,7 @@ export default class CumulativeSessions extends Component {
   render() {
     let adjustedEpoch = new Date('01-01-1970 00:00:00');
     let aggregateHours = this.props.analytics._timeRange.aggregate;
+    let futureAggregateHours = this.props.analytics._futureTimeRange.aggregate;
     let valid = this.props.analytics.aggregateRecords(this.props.analytics.getRecords(this.props.stationID));
     let invalid = this.props.analytics.aggregateRecords(this.props.analytics.getInvalidRecords(this.props.stationID));
 
@@ -21,11 +22,14 @@ export default class CumulativeSessions extends Component {
     let futureLength = 0;
     let labels = [];
     let startIndex = -1;
+    let futureStartIndex = -1;
 
     //Set values of future data here.
     if (this.props.analytics._futureTimeRange.type !== "Current") {
-      futureValid = [90, 90, 90, 90, 90];  //insert forecasting functions here
-      futureInvalid = [50, 50, 50, 50];  //insert forecasting functions here
+      for (let i = 0; i < 24; i++) {
+        futureValid.push(90);
+        futureInvalid.push(50);
+      }
       futureLength = (futureValid.length > futureInvalid.length) ? futureValid.length : futureInvalid.length;
     } else {
       futureInvalid = [];
@@ -60,60 +64,66 @@ export default class CumulativeSessions extends Component {
       }
     }
 
-    valid = valid.splice(startIndex);
-    invalid = invalid.splice(startIndex);
-
     if (this.props.analytics._futureTimeRange.type !== "Current") {
       /* creates x-axis labels for future data
        * not sure if we should go by valid.length or invalid.length
        */
-      futureLength = futureLength +  valid.length;
-      for (let j = valid.length; j < futureLength; j++) {
-        let date = this.props.analytics.getDateFromWeek(j);
-        labels.push(`${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}-${date.getFullYear().toString().substring(2)}`);    
+      labels = [];
+      futureLength = futureLength + valid.length;
+      futureStartIndex = valid.length - 1;
+      console.log("futureLength: "+futureLength);
+      console.log("futureStartIndex: "+futureStartIndex);
+      for (let i = valid.length - 1; i < futureLength; i++) {
+  
+        if (futureStartIndex > -1) {
+          if (futureValid[i] === undefined) {
+            futureValid[i] = 0;
+          }
+          if (futureInvalid[i] === undefined) {
+            futureInvalid[i] = 0;
+          }
+  
+          if (futureAggregateHours == 1) {
+            let date = new Date(1000 * 3600 * i + adjustedEpoch.getTime());
+            labels.push(`${date.getHours() > 12 ? date.getHours() - 12 : date.getHours() == 0 ? 12 : date.getHours()} ${date.getHours() < 12 ? 'AM' : 'PM'}`);
+          } else if (futureAggregateHours == 24) {
+            let date = new Date(1000 * 3600 * 24 * i + adjustedEpoch.getTime());
+            labels.push(`${monthNames[date.getMonth()]} ${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`);
+          } else if (futureAggregateHours == 168) {
+            let date = this.props.analytics.getDateFromWeek(i);
+            labels.push(`${monthNames[date.getMonth()]} ${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`);
+          }
+        }
       }
     }
+    valid = valid.splice(startIndex);
+    invalid = invalid.splice(startIndex);
 
-    if (this.props.analytics._futureTimeRange.type !== "Current") {
-      // Shifts future data to future timeline by adding undefined to beginning of arrays
-      for (let i = 0; i < valid.length; i++) {
-        futureValid.unshift(undefined);
-      }
+    // if (this.props.analytics._futureTimeRange.type !== "Current") {
+    //   // Shifts future data to future timeline by adding undefined to beginning of arrays
+    //   for (let i = 0; i < valid.length; i++) {
+    //     futureValid.unshift(undefined);
+    //   }
 
-      // Shifts future data to future timeline by adding undefined to beginning of arrays
-      for (let i = 0; i < invalid.length; i++) {
-        futureInvalid.unshift(undefined);
-      }
-    }
+    //   // Shifts future data to future timeline by adding undefined to beginning of arrays
+    //   for (let i = 0; i < invalid.length; i++) {
+    //     futureInvalid.unshift(undefined);
+    //   }
+    // }
 
 
     let bars;
-  
     if (this.props.analytics._futureTimeRange.type !== "Current") {
       bars = [
         { // one stack of the bar
-        label: 'Invalid Sessions',
-        data: invalid,
-        backgroundColor: 'rgba(255, 159, 64, 0.2)',
-        borderColor: 'rgba(255, 159, 64, 1)',
-        borderWidth: 1
-        },
-        {
-          label: 'Valid Sessions',
-          data: valid,
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        },
-        { // one stack of the bar
-          label: 'Predicted Invalid Sess.',
+          label: 'Predicted Invalid Sessions',
           data: futureInvalid,
           backgroundColor: 'rgba(255, 137, 64, 0.2)',
           borderColor: 'rgba(255, 137, 64, 1)',
           borderWidth: 1
           },
         { // one stack of the bar
-          label: 'Predicted Valid Sess.',
+          label: 'Predicted Valid Sessions',
           data: futureValid,
           backgroundColor: 'rgba(54, 117, 235, 0.2)',
           borderColor: 'rgba(54, 117, 235, 1)',
