@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
 import Warning from './Warning.jsx';
 import ValidInvalidSessions from './Charts/ValidInvalidSessions.jsx';
+import InitiationMethod from './Charts/InitiationMethod.jsx';
 import SomePieChart from './Charts/SomePieChart';
 import PaymentType from './Charts/PaymentType.jsx'
 import PortType from './Charts/PortType.jsx'
@@ -38,6 +39,9 @@ export default class SummaryView extends Component {
           <Grid.Row stretched centered>
             <Grid.Column>
               <ValidInvalidSessions analytics={this.props.analytics} />
+            </Grid.Column>
+            <Grid.Column>
+              <InitiationMethod analytics={this.props.analytics} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>

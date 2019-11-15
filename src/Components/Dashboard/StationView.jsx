@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Card, Table, TableBody, Button, Grid} from 'semantic-ui-react';
 import ValidInvalidSessions from '../Dashboard/Charts/ValidInvalidSessions.jsx';
+import InitiationMethod from '../Dashboard/Charts/InitiationMethod.jsx';
 import PaymentType from '../Dashboard/Charts/PaymentType.jsx'
 import PortType from '../Dashboard/Charts/PortType.jsx'
 import Warning from "../Dashboard/Warning.jsx";
@@ -288,6 +289,9 @@ export default class StationView extends Component {
           <Grid.Row stretched centered>
             <Grid.Column>
               <ValidInvalidSessions analytics={this.props.analytics} />
+            </Grid.Column>
+            <Grid.Column>
+              <InitiationMethod analytics={this.props.analytics} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
