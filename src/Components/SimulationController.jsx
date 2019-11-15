@@ -96,7 +96,7 @@ export class SimulationController extends Component {
             <Button icon='fast forward' onClick={this.advanceWeek} style={{borderRadius: '0px', background: '#2c2d31', color: '#b9bbbe'}}/>
             }/>
         </Button.Group>
-        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>{weekDayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getFullYear()} {date.getHours() > 12 ? date.getHours() - 12 : date.getHours() == 0 ? 12 : date.getHours()}:{date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}:{date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()} {date.getHours() < 12 || date.getHours() == 24 ? 'AM' : 'PM'} (week {this.props.controller.getWeekNumber()})</div>
+        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>{weekDayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getFullYear()} {date.getHours() > 12 ? date.getHours() - 12 : date.getHours() == 0 ? 12 : date.getHours()}:{date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}:{date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()} {date.getHours() < 12 || date.getHours() == 24 ? 'AM' : 'PM'}</div>
         <div style={{flex: 1}} />
         <div style={{margin: 'auto 0', paddingRight: '0.5em'}}>Data Range:</div>
         <Dropdown
