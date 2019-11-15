@@ -4,7 +4,6 @@ import SimulationController from './Components/SimulationController.jsx';
 import MapComponent from './Components/Map/MapComponent.jsx';
 import StationSidebar from './Components/Map/StationSidebar.jsx';
 import Dashboard from './Components/Dashboard/Dashboard';
-import { processStationRecords } from '../lib/map_tools.js';
 import RecordAnalytics from '../lib/RecordAnalytics';
 import DashboardStation from './Components/SingleStation/DashboardStation.jsx'
 import { Resizable } from 're-resizable';
