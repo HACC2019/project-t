@@ -86,8 +86,11 @@ export default class ValidInvalidSessions extends Component {
     }
 
     const chartOptions = {
+      animation: {
+        duration: 100,
+        easing: 'easeOutQuart'
+      },
       maintainAspectRatio: false,
-      animation: false,
       legend: {
         labels: {
           fontColor: '#D8D9DA'

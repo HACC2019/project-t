@@ -92,8 +92,11 @@ export default class PaymentType extends Component {
     }
 
     const chartOptions = {
+      animation: {
+        duration: 100,
+        easing: 'easeOutQuart'
+      },
       maintainAspectRatio: false,
-      animation: true,
       legend: {
         labels: {
           fontColor: '#D8D9DA'
