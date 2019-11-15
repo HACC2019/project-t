@@ -38,36 +38,10 @@ export default class DashView extends Component {
             }
             <Grid.Row stretched centered>
               <Grid.Column>
-                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}> 
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA'}}>
-                      Station 5
-                    </Card.Header>
-                    <WeeklyStationAverage analytics={this.props.analytics} stationID={5}/>
-                  </Card.Content>
-                </Card>
+                <ValidInvalidSessions analytics={this.props.analytics} />
               </Grid.Column>
-                <Grid.Column>
-                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA'}}>
-                      Valid vs. Invalid Stations
-                    </Card.Header>
-                    <ValidInvalidSessions analytics={this.props.analytics} />
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row stretched centered>
               <Grid.Column>
-                <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
-                  <Card.Content>
-                    <Card.Header style={{color: '#D8D9DA'}}>
-                      Cumulative Amount of Sessions
-                    </Card.Header>
-                    <CumulativeSessions analytics={this.props.analytics}/>
-                  </Card.Content>
-                </Card>
+                <CumulativeSessions analytics={this.props.analytics}/>
               </Grid.Column>
             </Grid.Row>
           </Grid>

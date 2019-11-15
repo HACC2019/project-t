@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
-import GraphCard from '../GraphCard.jsx';
-const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 
-export default class CumulativeSessions extends Component {
+export default class test extends Component {
   constructor(props) {
     super(props);
 
@@ -11,19 +10,17 @@ export default class CumulativeSessions extends Component {
   }
   
   render() {
-    let adjustedEpoch = new Date('01-01-1970 00:00:00');
-    let aggregateHours = this.props.analytics._timeRange.aggregate;
-    let valid = this.props.analytics.aggregateRecords(this.props.analytics.getRecords(this.props.stationID));
-    let invalid = this.props.analytics.aggregateRecords(this.props.analytics.getInvalidRecords(this.props.stationID));
-
+    
+    console.log(this.props.stationID);
+    let valid = getWeeklyTotals(this.props.analytics.getRecords(this.props.stationID));
+    let invalid = getWeeklyTotals(this.props.analytics.getInvalidRecords(this.props.stationID));
     let futureInvalid = [];
     let futureValid = [];
     let futureLength = 0;
     let labels = [];
-    let startIndex = -1;
 
     //Set values of future data here.
-    if (this.props.analytics._futureTimeRange.type !== "Current") {
+    if (this.props.analytics._futureTimeRange.on) {
       futureValid = [90, 90, 90, 90, 90];  //insert forecasting functions here
       futureInvalid = [50, 50, 50, 50];  //insert forecasting functions here
       futureLength = (futureValid.length > futureInvalid.length) ? futureValid.length : futureInvalid.length;
@@ -33,37 +30,21 @@ export default class CumulativeSessions extends Component {
       futureLength = 0;
     }
     
+    let startIndex = -1;
     
     for (let i = 0; i < valid.length; i++) {
-      if (startIndex === -1 && (valid[i] !== undefined || invalid[i] !== undefined)) {
-        startIndex = i;
-      }
-
-      if (startIndex > -1) {
-        if (valid[i] === undefined) {
-          valid[i] = 0;
+      if (valid[i] !== undefined) {
+        if (startIndex === -1) {
+          startIndex = i;
         }
-        if (invalid[i] === undefined) {
-          invalid[i] = 0;
-        }
-
-        if (aggregateHours == 1) {
-          let date = new Date(1000 * 3600 * i + adjustedEpoch.getTime());
-          labels.push(`${date.getHours() > 12 ? date.getHours() - 12 : date.getHours() == 0 ? 12 : date.getHours()} ${date.getHours() < 12 ? 'AM' : 'PM'}`);
-        } else if (aggregateHours == 24) {
-          let date = new Date(1000 * 3600 * 24 * i + adjustedEpoch.getTime());
-          labels.push(`${monthNames[date.getMonth()]} ${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`);
-        } else if (aggregateHours == 168) {
+        if (startIndex !== -1) {
           let date = this.props.analytics.getDateFromWeek(i);
-          labels.push(`${monthNames[date.getMonth()]} ${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`);
+          labels.push(`${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}-${date.getFullYear().toString().substring(2)}`);
         }
       }
     }
 
-    valid = valid.splice(startIndex);
-    invalid = invalid.splice(startIndex);
-
-    if (this.props.analytics._futureTimeRange.type !== "Current") {
+    if (this.props.analytics._futureTimeRange.on) {
       /* creates x-axis labels for future data
        * not sure if we should go by valid.length or invalid.length
        */
@@ -74,7 +55,18 @@ export default class CumulativeSessions extends Component {
       }
     }
 
-    if (this.props.analytics._futureTimeRange.type !== "Current") {
+    valid = valid.splice(startIndex);
+
+    for (let i = 0; i < invalid.length; i++) {
+      if (invalid[i] !== undefined) {
+        if (startIndex === -1) {
+          startIndex = i;
+        }
+      }
+    }
+    invalid = invalid.splice(startIndex);
+
+    if (this.props.analytics._futureTimeRange.on) {
       // Shifts future data to future timeline by adding undefined to beginning of arrays
       for (let i = 0; i < valid.length; i++) {
         futureValid.unshift(undefined);
@@ -89,7 +81,7 @@ export default class CumulativeSessions extends Component {
 
     let bars;
   
-    if (this.props.analytics._futureTimeRange.type !== "Current") {
+    if (this.props.analytics._futureTimeRange.on) {
       bars = [
         { // one stack of the bar
         label: 'Invalid Sessions',
@@ -152,66 +144,51 @@ export default class CumulativeSessions extends Component {
     }
   )
 
-  let xAxisLabel;
-
-  if (aggregateHours == 1) {
-    xAxisLabel = 'Hours';
-  } else if (aggregateHours == 24) {
-    xAxisLabel = 'Days';
-  } else if (aggregateHours == 168) {
-    xAxisLabel = 'Weeks';
-  }
-
   const chartOptions = {
-    maintainAspectRatio: false,
-    animation: false,
     legend: {
-      labels: {
-        fontColor: '#D8D9DA'
-      }
+        labels: {
+          fontColor: '#D8D9DA'
+        }
     },
     scales: {
       xAxes: [{
         ticks: {
-          fontColor: '#D8D9DA'
-        },
-        gridLines: {
+            fontColor: '#D8D9DA'
+          },
+          gridLines: {
           color: '#464648'
         },
         scaleLabel: {
-          display: true,
-          labelString: xAxisLabel,
-          fontColor: '#D8D9DA'
-        },
+            display: true,
+            labelString: 'Week',
+            fontColor: '#D8D9DA'
+          },
         stacked: true
       }],
       yAxes: [{
         ticks: {
-          suggestedMin: 0,
-          fontColor: '#D8D9DA'
-        },
-        gridLines: {
+            fontColor: '#D8D9DA'
+          },
+          gridLines: {
           color: '#464648'
         },
         scaleLabel: {
-          display: true,
-          labelString: 'Sessions',
-          fontColor: '#D8D9DA'
-        },
+            display: true,
+            labelString: 'Sessions',
+            fontColor: '#D8D9DA'
+          },
         stacked: true
       }]
     },
     chartArea: {
-      backgroundColor: '#212124'
+        backgroundColor: '#212124'
     }
   }
 
-    return (
-      <GraphCard title='Cumulative Sessions'>
-        <div style={{position: 'relative', height: '35vh'}}>
-          <Bar data={chartData} options={chartOptions}/>
-        </div>
-    </GraphCard>
-    )
+  return (
+    <div>
+      <Bar data={chartData} options={chartOptions}/>
+    </div>
+  )
   }
 }

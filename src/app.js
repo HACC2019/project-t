@@ -86,13 +86,13 @@ class App extends Component {
                 <Dashboard analytics={this.analytics}/>
               : <DashboardStation pickedStation={this.state.stationClicked} home={this.handleGoBack} analytics={this.analytics}/>}
             </Resizable>
-            <MapComponent
+            {/* <MapComponent
               selectedStation={this.state.selectedStation}
               onMapChange={this.handleMapChange}
               faultMap={this.state.faultMap}
               stationClicked={this.handleStationClick}
               analytics={this.analytics}
-            />
+            /> */}
           </div>
         </div>
       </div>
