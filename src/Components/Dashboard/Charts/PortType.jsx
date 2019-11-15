@@ -84,11 +84,11 @@ export default class PortType extends Component {
     let xAxisLabel;
 
     if (aggregateHours == 1) {
-      xAxisLabel = 'Hours';
+      xAxisLabel = 'Hour';
     } else if (aggregateHours == 24) {
-      xAxisLabel = 'Days';
+      xAxisLabel = 'Day';
     } else if (aggregateHours == 168) {
-      xAxisLabel = 'Weeks';
+      xAxisLabel = 'Week';
     }
 
     const chartOptions = {
