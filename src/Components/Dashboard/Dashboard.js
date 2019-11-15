@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import DashView from './DashView';
+import SummaryView from './SummaryView';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class Dashboard extends Component {
 
   render() {
     return (
-        <DashView analytics={this.props.analytics} />
+        <SummaryView analytics={this.props.analytics} />
     );
   }
 }

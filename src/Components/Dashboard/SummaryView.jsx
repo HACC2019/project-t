@@ -6,7 +6,7 @@ import SomePieChart from './Charts/SomePieChart';
 import PaymentType from './Charts/PaymentType.jsx'
 import style from '../../styles/dashboard.scss';
 
-export default class DashView extends Component {
+export default class SummaryView extends Component {
   render() {
     let alerts = [];
     let faultMap = this.props.analytics.getFaults(null, 9);

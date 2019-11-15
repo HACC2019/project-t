@@ -4,7 +4,7 @@ import ValidInvalidSessions from '../Dashboard/Charts/ValidInvalidSessions.jsx';
 import PaymentType from '../Dashboard/Charts/PaymentType.jsx'
 import Warning from "../Dashboard/Warning.jsx";
 
-class DashboardStation extends Component {
+export default class StationView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -299,5 +299,3 @@ class DashboardStation extends Component {
     );
   }
 }
-
-export default DashboardStation;
