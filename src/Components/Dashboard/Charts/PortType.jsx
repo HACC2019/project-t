@@ -4,7 +4,7 @@ import GraphCard from '../GraphCard.jsx';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-export default class ValidInvalidSessions extends Component {
+export default class PortType extends Component {
   constructor(props) {
     super(props);
 
@@ -16,25 +16,31 @@ export default class ValidInvalidSessions extends Component {
   }
 
   render() {
+
     let adjustedEpoch = new Date('01-01-1970 00:00:00');
     let aggregateHours = this.props.analytics._timeRange.aggregate;
-    let valid = this.props.analytics.aggregateRecords(this.props.analytics.getRecords(this.props.stationID));
-    let invalid = this.props.analytics.aggregateRecords(this.props.analytics.getInvalidRecords(this.props.stationID));
+    let chademoData = this.props.analytics.getDataByPortType('CHADEMO', this.props.stationID);
+    chademoData = chademoData.valid.concat(chademoData.invalid);
+    chademoData = this.props.analytics.aggregateRecords(chademoData);
+    let dcData = this.props.analytics.getDataByPortType('DCCOMBOTYP1', this.props.stationID);
+    dcData = dcData.valid.concat(dcData.invalid);
+    dcData = this.props.analytics.aggregateRecords(dcData);
 
     let labels = [];
     let startIndex = -1;
 
-    for (let i = 0; i < valid.length; i++) {
-      if (startIndex === -1 && (valid[i] !== undefined || invalid[i] !== undefined)) {
+    // RFID
+    for (let i = 0; i < chademoData.length; i++) {
+      if (startIndex === -1 && (chademoData[i] !== undefined || dcData[i] !== undefined)) {
         startIndex = i;
       }
 
       if (startIndex > -1) {
-        if (valid[i] === undefined) {
-          valid[i] = 0;
+        if (chademoData[i] === undefined) {
+          chademoData[i] = 0;
         }
-        if (invalid[i] === undefined) {
-          invalid[i] = 0;
+        if (dcData[i] === undefined) {
+          dcData[i] = 0;
         }
 
         if (aggregateHours == 1) {
@@ -50,8 +56,8 @@ export default class ValidInvalidSessions extends Component {
       }
     }
 
-    valid = valid.splice(startIndex);
-    invalid = invalid.splice(startIndex);
+    chademoData = chademoData.splice(startIndex);
+    dcData = dcData.splice(startIndex);
 
     const chartData = {
       barPercentage: 0.3,
@@ -63,15 +69,15 @@ export default class ValidInvalidSessions extends Component {
       labels: labels, // label all axes here
       datasets: [
         { // one stack of the bar
-          label: 'Invalid Sessions',
-          data: invalid,
+          label: 'CHADEMO',
+          data: chademoData,
           backgroundColor: 'rgba(255, 159, 64, 0.2)',
           borderColor: 'rgba(255, 159, 64, 1)',
           borderWidth: 1
         },
         {
-          label: 'Valid Sessions',
-          data: valid,
+          label: 'DCCOMBOTYP1',
+          data: dcData,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
@@ -138,7 +144,7 @@ export default class ValidInvalidSessions extends Component {
     }
 
     return (
-      <GraphCard title='Session Overview'>
+      <GraphCard title='Charging Port Type'>
         <Bar data={chartData} options={chartOptions}/>
       </GraphCard>
     );

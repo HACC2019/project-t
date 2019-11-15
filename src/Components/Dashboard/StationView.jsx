@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {Card, Table, TableBody, Button, Grid} from 'semantic-ui-react';
 import ValidInvalidSessions from '../Dashboard/Charts/ValidInvalidSessions.jsx';
+import InitiationMethod from '../Dashboard/Charts/InitiationMethod.jsx';
 import PaymentType from '../Dashboard/Charts/PaymentType.jsx'
+import PortType from '../Dashboard/Charts/PortType.jsx'
 import Warning from "../Dashboard/Warning.jsx";
 
 export default class StationView extends Component {
@@ -34,6 +36,27 @@ export default class StationView extends Component {
   handleClick() {
     this.props.home(true);
   }
+
+  getTime(timestamp) {
+    let hours = Math.floor(timestamp / 3600);
+    timestamp -= hours * 3600;
+    let minutes = Math.floor(timestamp / 60);
+    timestamp -= minutes * 60;
+    let seconds = Math.round(timestamp);
+    let time = '';
+
+    if (hours > 0) {
+      time += `${hours} hour${hours > 1 ? 's' : ''}`;
+    }
+    if (minutes > 0) {
+      time += `${time.length > 1 ? ', ' : ''}${minutes} minute${minutes > 1 ? 's' : ''}`;
+    }
+    if (seconds > 0) {
+      time += `${time.length > 1 ? ', ' : ''}${seconds} second${seconds > 1 ? 's' : ''}`;
+    }
+
+    return time;
+}
 
   render() {
     let stationDetails = this.props.analytics.getStationDetails(this.props.pickedStation);
@@ -104,7 +127,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         RFID payments
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getDataByPayType('RFID', this.props.pickedStation).invalid.length} invalid / {rfidPaymentsTot} total
                       </Grid.Column>
                     </Grid.Row>
@@ -112,7 +135,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Credit Card
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getDataByPayType('CREDITCARD', this.props.pickedStation).invalid.length} invalid / {creditPaymentsTot} total
                       </Grid.Column>
                     </Grid.Row>
@@ -127,31 +150,31 @@ export default class StationView extends Component {
               }}>
                 <Card.Content>
                   <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                    Number Of Valid Sessions
+                    Session Overview
                   </Card.Header>
                   <Grid>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
                         Valid Sessions
                       </Grid.Column>
-                      <Grid.Column>
-                        {this.props.analytics.getRecords(this.props.pickedStation).length} Valid Sessions
+                      <Grid.Column textAlign='right'>
+                        {this.props.analytics.getRecords(this.props.pickedStation).length} valid
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
                         Invalid Sessions
                       </Grid.Column>
-                      <Grid.Column>
-                        {this.props.analytics.getInvalidRecords(this.props.pickedStation).length} Invalid Sessions
+                      <Grid.Column textAlign='right'>
+                        {this.props.analytics.getInvalidRecords(this.props.pickedStation).length} invalid
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
-                        Valid Sessions
+                        Total Sessions
                       </Grid.Column>
-                      <Grid.Column>
-                        {sessionTotals} Total Sessions
+                      <Grid.Column textAlign='right'>
+                        {sessionTotals} total
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -165,25 +188,25 @@ export default class StationView extends Component {
               }}>
                 <Card.Content>
                   <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                    Number Of Valid Ports
+                    Port Type
                   </Card.Header>
                   <Grid>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
-                        Chademo Ports
+                        Chademo
                       </Grid.Column>
-                      <Grid.Column>
-                        {this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation).invalid.length} Invalid Sessions
-                        / {chadPort} Total Sessions
+                      <Grid.Column textAlign='right'>
+                        {this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation).invalid.length} invalid
+                        / {chadPort} total
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
-                        DCCOMBOTYP1 Ports
+                        DCCOMBOTYP1
                       </Grid.Column>
-                      <Grid.Column>
-                        {this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation).invalid.length} Invalid Sessions
-                        / {dCombo} Total Sessions
+                      <Grid.Column textAlign='right'>
+                        {this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation).invalid.length} invalid
+                        / {dCombo} total
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -206,27 +229,27 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Mobile
                       </Grid.Column>
-                      <Grid.Column>
-                        {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length} Invalid
-                        sessions/{mobileTotal}
+                      <Grid.Column textAlign='right'>
+                        {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length} invalid
+                        / {mobileTotal} total
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
                         Device
                       </Grid.Column>
-                      <Grid.Column>
-                        {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length} Invalid
-                      sessions/{deviceTotal}
+                      <Grid.Column textAlign='right'>
+                        {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length} invalid
+                      / {deviceTotal} total
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
                         Web
                       </Grid.Column>
-                      <Grid.Column>
-                        {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length} Invalid
-                        sessions/{webTotal}
+                      <Grid.Column textAlign='right'>
+                        {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length} invalid
+                        / {webTotal} total
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -240,23 +263,23 @@ export default class StationView extends Component {
               }}>
                 <Card.Content>
                   <Card.Header style={{color: '#D8D9DA', paddingBottom: '1em'}}>
-                    Valid Session Averages
+                    Averages Per Valid Session
                   </Card.Header>
                   <Grid>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
                         Duration
                       </Grid.Column>
-                      <Grid.Column>
-                        {this.props.analytics.getAverageDuration(this.props.pickedStation)} ms
+                      <Grid.Column textAlign='right'>
+                        {this.getTime(this.props.analytics.getAverageDuration(this.props.pickedStation))}
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
                       <Grid.Column>
                         Electricity Usage
                       </Grid.Column>
-                      <Grid.Column>
-                        {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation) * 1000) / 1000} kWh/session
+                      <Grid.Column textAlign='right'>
+                        {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation) * 1000) / 1000} kWh
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -273,9 +296,9 @@ export default class StationView extends Component {
                     Average Turnaround Time
                   </Card.Header>
                   <Grid>
-                    <Grid.Row stretched columns={2} style={{color: '#D8D9DA'}}>
+                    <Grid.Row stretched style={{color: '#D8D9DA'}}>
                       <Grid.Column>
-                        {this.props.analytics.getAverageTurnaround(this.props.pickedStation) > -1 ? `${this.props.analytics.getAverageTurnaround(this.props.pickedStation)} s` :
+                        {this.props.analytics.getAverageTurnaround(this.props.pickedStation) > -1 ? this.getTime(this.props.analytics.getAverageTurnaround(this.props.pickedStation)) :
                       'Not enough data to calculate'}
                       </Grid.Column>
                     </Grid.Row>
@@ -286,12 +309,18 @@ export default class StationView extends Component {
           </Grid.Row>
           <Grid.Row stretched centered>
             <Grid.Column>
-              <ValidInvalidSessions analytics={this.props.analytics} />
+              <ValidInvalidSessions analytics={this.props.analytics} stationID={this.props.pickedStation} />
+            </Grid.Column>
+            <Grid.Column>
+              <InitiationMethod analytics={this.props.analytics} stationID={this.props.pickedStation} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <PaymentType analytics={this.props.analytics} />
+              <PaymentType analytics={this.props.analytics} stationID={this.props.pickedStation} />
+            </Grid.Column>
+            <Grid.Column>
+              <PortType analytics={this.props.analytics} stationID={this.props.pickedStation} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

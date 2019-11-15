@@ -4,7 +4,7 @@ import GraphCard from '../GraphCard.jsx';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-export default class ValidInvalidSessions extends Component {
+export default class PaymentType extends Component {
   constructor(props) {
     super(props);
 
@@ -16,25 +16,37 @@ export default class ValidInvalidSessions extends Component {
   }
 
   render() {
+
     let adjustedEpoch = new Date('01-01-1970 00:00:00');
     let aggregateHours = this.props.analytics._timeRange.aggregate;
-    let valid = this.props.analytics.aggregateRecords(this.props.analytics.getRecords(this.props.stationID));
-    let invalid = this.props.analytics.aggregateRecords(this.props.analytics.getInvalidRecords(this.props.stationID));
+    let deviceData = this.props.analytics.getDataBySessionStart('DEVICE', this.props.stationID);
+    deviceData = deviceData.valid.concat(deviceData.invalid);
+    deviceData = this.props.analytics.aggregateRecords(deviceData);
+    let mobileData = this.props.analytics.getDataBySessionStart('MOBILE', this.props.stationID);
+    mobileData = mobileData.valid.concat(mobileData.invalid);
+    mobileData = this.props.analytics.aggregateRecords(mobileData);
+    let webData = this.props.analytics.getDataBySessionStart('WEB', this.props.stationID);
+    webData = webData.valid.concat(webData.invalid);
+    webData = this.props.analytics.aggregateRecords(webData);
 
     let labels = [];
     let startIndex = -1;
 
-    for (let i = 0; i < valid.length; i++) {
-      if (startIndex === -1 && (valid[i] !== undefined || invalid[i] !== undefined)) {
+    // RFID
+    for (let i = 0; i < deviceData.length; i++) {
+      if (startIndex === -1 && (deviceData[i] !== undefined || mobileData[i] !== undefined || webData[i] !== undefined)) {
         startIndex = i;
       }
 
       if (startIndex > -1) {
-        if (valid[i] === undefined) {
-          valid[i] = 0;
+        if (deviceData[i] === undefined) {
+          deviceData[i] = 0;
         }
-        if (invalid[i] === undefined) {
-          invalid[i] = 0;
+        if (mobileData[i] === undefined) {
+          mobileData[i] = 0;
+        }
+        if (webData[i] === undefined) {
+          mobileData[i] = 0;
         }
 
         if (aggregateHours == 1) {
@@ -50,8 +62,9 @@ export default class ValidInvalidSessions extends Component {
       }
     }
 
-    valid = valid.splice(startIndex);
-    invalid = invalid.splice(startIndex);
+    deviceData = deviceData.splice(startIndex);
+    mobileData = mobileData.splice(startIndex);
+    webData = webData.splice(startIndex);
 
     const chartData = {
       barPercentage: 0.3,
@@ -63,17 +76,24 @@ export default class ValidInvalidSessions extends Component {
       labels: labels, // label all axes here
       datasets: [
         { // one stack of the bar
-          label: 'Invalid Sessions',
-          data: invalid,
+          label: 'Station Screen',
+          data: deviceData,
           backgroundColor: 'rgba(255, 159, 64, 0.2)',
           borderColor: 'rgba(255, 159, 64, 1)',
           borderWidth: 1
         },
         {
-          label: 'Valid Sessions',
-          data: valid,
+          label: 'Mobile Device',
+          data: mobileData,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Web',
+          data: webData,
+          backgroundColor: 'rgba(54, 235, 162, 0.2)',
+          borderColor: 'rgba(54, 235, 162, 1)',
           borderWidth: 1
         }
       ]
@@ -138,7 +158,7 @@ export default class ValidInvalidSessions extends Component {
     }
 
     return (
-      <GraphCard title='Session Overview'>
+      <GraphCard title='Initiation Method'>
         <Bar data={chartData} options={chartOptions}/>
       </GraphCard>
     );

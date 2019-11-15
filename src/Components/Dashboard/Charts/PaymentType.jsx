@@ -11,6 +11,10 @@ export default class PaymentType extends Component {
     this.props.analytics.addListener(this, this.forceUpdate);
   }
 
+  componentWillUnmount() {
+    this.props.analytics.removeListener(this);
+  }
+
   render() {
 
     let adjustedEpoch = new Date('01-01-1970 00:00:00');
@@ -65,14 +69,14 @@ export default class PaymentType extends Component {
       labels: labels, // label all axes here
       datasets: [
         { // one stack of the bar
-          label: 'RFID Sessions',
+          label: 'RFID',
           data: rfidData,
           backgroundColor: 'rgba(255, 159, 64, 0.2)',
           borderColor: 'rgba(255, 159, 64, 1)',
           borderWidth: 1
         },
         {
-          label: 'Card Sessions',
+          label: 'Credit Card',
           data: cardData,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
@@ -84,11 +88,11 @@ export default class PaymentType extends Component {
     let xAxisLabel;
 
     if (aggregateHours == 1) {
-      xAxisLabel = 'Hours';
+      xAxisLabel = 'Hour';
     } else if (aggregateHours == 24) {
-      xAxisLabel = 'Days';
+      xAxisLabel = 'Day';
     } else if (aggregateHours == 168) {
-      xAxisLabel = 'Weeks';
+      xAxisLabel = 'Week';
     }
 
     const chartOptions = {
@@ -119,6 +123,7 @@ export default class PaymentType extends Component {
         }],
         yAxes: [{
           ticks: {
+            precision: 0,
             suggestedMin: 0,
             fontColor: '#D8D9DA'
           },
@@ -139,7 +144,7 @@ export default class PaymentType extends Component {
     }
 
     return (
-      <GraphCard title='Session Payment Type'>
+      <GraphCard title='Payment Type'>
         <Bar data={chartData} options={chartOptions}/>
       </GraphCard>
     );
