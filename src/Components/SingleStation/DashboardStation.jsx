@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Card, Table, TableBody, Button, Grid} from 'semantic-ui-react';
-import style from './singlestyle.scss';
+import ValidInvalidSessions from '../Dashboard/Charts/ValidInvalidSessions.jsx';
 import Warning from "../Dashboard/Warning.jsx";
+import style from './singlestyle.scss';
 
 
 class DashboardStation extends Component {
@@ -284,6 +285,18 @@ class DashboardStation extends Component {
                                     </Card.Content>
                                 </Card>
                             </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row stretched centered>
+                          <Grid.Column>
+                            <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
+                              <Card.Content>
+                                <Card.Header style={{color: '#D8D9DA'}}>
+                                  Total Charging Sessions
+                                </Card.Header>
+                                <ValidInvalidSessions stationID={this.props.pickedStation} analytics={this.props.analytics} />
+                              </Card.Content>
+                            </Card>
+                          </Grid.Column>
                         </Grid.Row>
                     </Grid>
                 </div>
