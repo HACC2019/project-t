@@ -127,7 +127,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         RFID payments
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getDataByPayType('RFID', this.props.pickedStation).invalid.length} invalid / {rfidPaymentsTot} total
                       </Grid.Column>
                     </Grid.Row>
@@ -135,7 +135,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Credit Card
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getDataByPayType('CREDITCARD', this.props.pickedStation).invalid.length} invalid / {creditPaymentsTot} total
                       </Grid.Column>
                     </Grid.Row>
@@ -157,7 +157,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Valid Sessions
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getRecords(this.props.pickedStation).length} valid
                       </Grid.Column>
                     </Grid.Row>
@@ -165,7 +165,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Invalid Sessions
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getInvalidRecords(this.props.pickedStation).length} invalid
                       </Grid.Column>
                     </Grid.Row>
@@ -173,7 +173,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Total Sessions
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {sessionTotals} total
                       </Grid.Column>
                     </Grid.Row>
@@ -195,7 +195,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Chademo
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getDataByPortType("CHADEMO", this.props.pickedStation).invalid.length} invalid
                         / {chadPort} total
                       </Grid.Column>
@@ -204,7 +204,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         DCCOMBOTYP1
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getDataByPortType("DCCOMBOTYP1", this.props.pickedStation).invalid.length} invalid
                         / {dCombo} total
                       </Grid.Column>
@@ -229,7 +229,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Mobile
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getDataBySessionStart('MOBILE', this.props.pickedStation).invalid.length} invalid
                         / {mobileTotal} total
                       </Grid.Column>
@@ -238,7 +238,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Device
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getDataBySessionStart('DEVICE', this.props.pickedStation).invalid.length} invalid
                       / {deviceTotal} total
                       </Grid.Column>
@@ -247,7 +247,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Web
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.props.analytics.getDataBySessionStart('WEB', this.props.pickedStation).invalid.length} invalid
                         / {webTotal} total
                       </Grid.Column>
@@ -270,7 +270,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Duration
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {this.getTime(this.props.analytics.getAverageDuration(this.props.pickedStation))}
                       </Grid.Column>
                     </Grid.Row>
@@ -278,7 +278,7 @@ export default class StationView extends Component {
                       <Grid.Column>
                         Electricity Usage
                       </Grid.Column>
-                      <Grid.Column>
+                      <Grid.Column textAlign='right'>
                         {Math.round(this.props.analytics.getAveragePowerUsage(this.props.pickedStation) * 1000) / 1000} kWh
                       </Grid.Column>
                     </Grid.Row>
