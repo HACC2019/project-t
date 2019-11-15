@@ -40,7 +40,7 @@ export default class DashView extends Component {
                 <Card fluid style={{backgroundColor: '#212124', boxShadow: '0 1px 3px 0 #141414, 0 0 0 1px #141414'}}>
                   <Card.Content>
                     <Card.Header style={{color: '#D8D9DA'}}>
-                      Valid vs. Invalid Stations
+                      Session Overview
                     </Card.Header>
                     <ValidInvalidSessions analytics={this.props.analytics} />
                   </Card.Content>
