@@ -10,21 +10,21 @@ export default class ValidInvalidSessions extends Component {
 
     this.props.analytics.addListener(this, this.forceUpdate);
   }
-  
+
   render() {
     let adjustedEpoch = new Date('01-01-1970 00:00:00');
     let aggregateHours = this.props.analytics._timeRange.aggregate;
     let valid = this.props.analytics.aggregateRecords(this.props.analytics.getRecords(this.props.stationID));
     let invalid = this.props.analytics.aggregateRecords(this.props.analytics.getInvalidRecords(this.props.stationID));
-  
+
     let labels = [];
     let startIndex = -1;
-    
+
     for (let i = 0; i < valid.length; i++) {
       if (startIndex === -1 && (valid[i] !== undefined || invalid[i] !== undefined)) {
         startIndex = i;
       }
-      
+
       if (startIndex > -1) {
         if (valid[i] === undefined) {
           valid[i] = 0;
@@ -32,7 +32,7 @@ export default class ValidInvalidSessions extends Component {
         if (invalid[i] === undefined) {
           invalid[i] = 0;
         }
-        
+
         if (aggregateHours == 1) {
           let date = new Date(1000 * 3600 * i + adjustedEpoch.getTime());
           labels.push(`${date.getHours() > 12 ? date.getHours() - 12 : date.getHours() == 0 ? 12 : date.getHours()} ${date.getHours() < 12 ? 'AM' : 'PM'}`);
@@ -45,12 +45,11 @@ export default class ValidInvalidSessions extends Component {
         }
       }
     }
-    
+
     valid = valid.splice(startIndex);
     invalid = invalid.splice(startIndex);
-  
-  const chartData = () => (
-    {
+
+    const chartData = {
       barPercentage: 0.3,
       barThickness: 'flex',
       maxBarThickness: 8,
@@ -74,69 +73,68 @@ export default class ValidInvalidSessions extends Component {
             borderWidth: 1
         }
       ]
-    }
-  )
+    };
 
-  let xAxisLabel;
-  
-  if (aggregateHours == 1) {
-    xAxisLabel = 'Hours';
-  } else if (aggregateHours == 24) {
-    xAxisLabel = 'Days';
-  } else if (aggregateHours == 168) {
-    xAxisLabel = 'Weeks';
-  }
-  
-  const chartOptions = {
-    maintainAspectRatio: false,
-    animation: false,
-    legend: {
+    let xAxisLabel;
+
+    if (aggregateHours == 1) {
+      xAxisLabel = 'Hours';
+    } else if (aggregateHours == 24) {
+      xAxisLabel = 'Days';
+    } else if (aggregateHours == 168) {
+      xAxisLabel = 'Weeks';
+    }
+
+    const chartOptions = {
+      maintainAspectRatio: false,
+      animation: false,
+      legend: {
         labels: {
           fontColor: '#D8D9DA'
         }
-    },
-    scales: {
-      xAxes: [{
-        ticks: {
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
             fontColor: '#D8D9DA'
           },
           gridLines: {
-          color: '#464648'
-        },
-        scaleLabel: {
+            color: '#464648'
+          },
+          scaleLabel: {
             display: true,
             labelString: xAxisLabel,
             fontColor: '#D8D9DA'
           },
-        stacked: true
-      }],
-      yAxes: [{
-        ticks: {
+          stacked: true
+        }],
+        yAxes: [{
+          ticks: {
             suggestedMin: 0,
             fontColor: '#D8D9DA'
           },
           gridLines: {
-          color: '#464648'
-        },
-        scaleLabel: {
+            color: '#464648'
+          },
+          scaleLabel: {
             display: true,
             labelString: 'Sessions',
             fontColor: '#D8D9DA'
           },
-        stacked: true
-      }]
-    },
-    chartArea: {
+          stacked: true
+        }]
+      },
+      chartArea: {
         backgroundColor: '#212124'
+      }
     }
-  }
 
-  return (
-    <GraphCard title='Session Overview'>
-      <div style={{position: 'relative', height: '25vh'}}>
-        <Bar data={chartData} options={chartOptions}/>
-      </div>
-    </GraphCard>
-  )
+    return (
+      <GraphCard title='Session Overview'>
+        <div style={{position: 'relative', height: '25vh'}}>
+          <Bar data={chartData} options={chartOptions}/>
+        </div>
+      </GraphCard>
+    );
   }
 }

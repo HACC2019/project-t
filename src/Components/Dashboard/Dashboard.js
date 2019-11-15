@@ -12,7 +12,7 @@ class Dashboard extends Component {
   render() {
     return (
         <DashView analytics={this.props.analytics} />
-    )
+    );
   }
 }
 

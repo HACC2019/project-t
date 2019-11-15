@@ -39,23 +39,23 @@ export class SimulationController extends Component {
   }
 
   toggleSimulation() {
-      this.setState({running: !this.state.running}, () => {
-          if (this.state.running) {
-              this.runSimulation();
-          } else {
-              clearTimeout(this._timeout);
-          }
-      });
+    this.setState({running: !this.state.running}, () => {
+      if (this.state.running) {
+        this.runSimulation();
+      } else {
+        clearTimeout(this._timeout);
+      }
+    });
   }
 
   runSimulation() {
-      this.props.controller.advanceHour(6);
-      this._timeout = setTimeout(this.runSimulation, 25);
+    this.props.controller.advanceHour(6);
+    this._timeout = setTimeout(this.runSimulation, 25);
   }
-  
+
   timeRangeChanged(event, data) {
     console.log(event, data);
-    
+
     this.props.analytics.setTimeRange(...data.value.split(' '));
   }
 
@@ -64,7 +64,7 @@ export class SimulationController extends Component {
 
     return (
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'row', height: '3rem', background: '#111116', fontSize: '1.1em', color: '#b9bbbe'}}>
-       <Button.Group>
+        <Button.Group>
           <Popup 
             inverted
             content='Reverse 1 week' 
