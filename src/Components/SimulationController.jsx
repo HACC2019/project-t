@@ -96,15 +96,15 @@ export class SimulationController extends Component {
             <Button icon='fast forward' onClick={this.advanceWeek} style={{borderRadius: '0px', background: '#2c2d31', color: '#b9bbbe'}}/>
             }/>
         </Button.Group>
-        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>{weekDayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getFullYear()} {date.getHours() > 12 ? date.getHours() - 12 : date.getHours()}:{date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}:{date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()} {date.getHours() < 12 || date.getHours() == 24 ? 'AM' : 'PM'} (week {this.props.controller.getWeekNumber()})</div>
+        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>{weekDayNames[date.getDay()]}, {monthNames[date.getMonth()]} {date.getDate()}, {date.getFullYear()} {date.getHours() > 12 ? date.getHours() - 12 : date.getHours() == 0 ? 12 : date.getHours()}:{date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}:{date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()} {date.getHours() < 12 || date.getHours() == 24 ? 'AM' : 'PM'} (week {this.props.controller.getWeekNumber()})</div>
         <div style={{flex: 1}} />
         <div style={{margin: 'auto 0', paddingRight: '0.5em'}}>Data Range:</div>
         <Dropdown
           className={style.dark}
-          style={{minWidth: '8em'}}
+          style={{minWidth: '10em'}}
           selection
-          defaultValue='month 1'
-          options={[{key: '1 day', text: '1 day', value: 'hour 24'}, {key: '1 week', text: '1 week', value: 'hour 168'}, {key: '1 month', text: '1 month', value: 'month 1'}, {key: '6 months', text: '6 months', value: 'month 6'}, {key: '1 year', text: '1 year', value: 'month 24'}, {key: 'All', text: 'All', value: 'month 999999'}]}
+          defaultValue='hour 24 1'
+          options={[{key: '1 day', text: '1 day (hourly)', value: 'hour 24 1'}, {key: '1 week', text: '1 week (hourly)', value: 'hour 168 1'}, {key: '1 month', text: '1 month (daily)', value: 'month 1 24'}, {key: '6 months', text: '6 months (weekly)', value: 'month 6 168'}, {key: '1 year', text: '1 year (weekly)', value: 'month 12 168'}, {key: '2 years', text: '2 years (weekly)', value: 'month 2 168'}, {key: 'All', text: 'All (weekly)', value: 'month 100 168'}]}
           onChange={this.timeRangeChanged}
         />
       </div>
