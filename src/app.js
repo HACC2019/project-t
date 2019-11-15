@@ -50,7 +50,7 @@ class App extends Component {
   }
 
   onTimeChange(records) {
-    this.setState({faultMap: this.analytics.getFaults()});
+    this.setState({faultMap: this.analytics.getFaults(null, 9)});
   }
 
   handleStationClick(el) {
