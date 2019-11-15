@@ -1,0 +1,17 @@
+:local(.container) { // usable dash area
+  position: relative;
+  display: block;
+  padding: 1rem 2rem;
+  height: 100%; 
+  overflow: auto;
+}
+
+:local(.box) {
+  padding: 0px;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+  position: relative;
+  background-color: #161719;
+  margin: 0px;
+  z-index: 1;
+}

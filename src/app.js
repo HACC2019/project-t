@@ -3,11 +3,11 @@ import TimeSimulation from '../lib/TimeSimulation.js';
 import SimulationController from './Components/SimulationController.jsx';
 import MapComponent from './Components/Map/MapComponent.jsx';
 import StationSidebar from './Components/Map/StationSidebar.jsx';
-import Dashboard from './Components/Dashboard/Dashboard';
-import RecordAnalytics from '../lib/RecordAnalytics';
-import DashboardStation from './Components/SingleStation/DashboardStation.jsx'
+import SummaryView from './Components/Dashboard/SummaryView.jsx';
+import StationView from './Components/Dashboard/StationView.jsx';
 import { Resizable } from 're-resizable';
-import style from "./Components/Dashboard/dashboard.scss";
+import RecordAnalytics from '../lib/RecordAnalytics';
+import style from "./styles/dashboard.scss";
 import resize from './resizable.css';
 
 class App extends Component {
@@ -76,17 +76,21 @@ class App extends Component {
             onStationLeave={this.handleStationLeave}
             onStationClick={this.handleSidebarClick}
           />
-          <div style={{ display: 'inline-flex', flexDirection: 'column', width: '100%'}}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
             <Resizable className={style.box}
               defaultSize={{height: 388}}
               minHeight={'20%'}
               enable={{bottom: true}}
             >
-              {(this.state.home) ?
-                <Dashboard analytics={this.analytics}/>
-              : <DashboardStation pickedStation={this.state.stationClicked} home={this.handleGoBack} analytics={this.analytics}/>}
+              <div className={style.container}>
+                <div className={style.dashView}>
+                  {(this.state.home) ?
+                    <SummaryView analytics={this.analytics}/>
+                  : <StationView pickedStation={this.state.stationClicked} home={this.handleGoBack} analytics={this.analytics}/>}
+                </div>
+              </div>
             </Resizable>
-            {/* <MapComponent
+            <MapComponent
               selectedStation={this.state.selectedStation}
               onMapChange={this.handleMapChange}
               faultMap={this.state.faultMap}

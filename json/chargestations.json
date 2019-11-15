@@ -28,25 +28,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_dole_01.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_dole_02.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_dole_03.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -158.0377,
-            21.5248
-         ],
-         [
-            -158.0377,
-            21.5268
-         ],
-         [
-            -158.0397,
-            21.5268
-         ],
-         [
-            -158.0397,
-            21.5248
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":16,
@@ -77,25 +59,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_haleiwa_01.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -158.1024,
-            21.5882
-         ],
-         [
-            -158.1024,
-            21.590200000000003
-         ],
-         [
-            -158.1044,
-            21.590200000000003
-         ],
-         [
-            -158.1044,
-            21.5882
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":2,
@@ -126,25 +90,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_hilo_01.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_hilo_02.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -155.0758,
-            19.709799999999998
-         ],
-         [
-            -155.0758,
-            19.7118
-         ],
-         [
-            -155.0778,
-            19.7118
-         ],
-         [
-            -155.0778,
-            19.709799999999998
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":3,
@@ -175,25 +121,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_kona_01.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_kona_02.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_kona_03.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -155.9999,
-            19.644499999999997
-         ],
-         [
-            -155.9999,
-            19.6465
-         ],
-         [
-            -156.0019,
-            19.6465
-         ],
-         [
-            -156.0019,
-            19.644499999999997
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":4,
@@ -224,25 +152,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_hawaii_kai.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -157.70954,
-            21.2932
-         ],
-         [
-            -157.70954,
-            21.2952
-         ],
-         [
-            -157.71154,
-            21.2952
-         ],
-         [
-            -157.71154,
-            21.2932
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":5,
@@ -273,25 +183,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_ward_4909.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_ward_4293.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_ward_4296.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_ward_4299.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -157.85089,
-            21.299719999999997
-         ],
-         [
-            -157.85089,
-            21.30172
-         ],
-         [
-            -157.85289,
-            21.30172
-         ],
-         [
-            -157.85289,
-            21.299719999999997
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":6,
@@ -322,25 +214,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_iwilei_01.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -157.8684431,
-            21.316933199999998
-         ],
-         [
-            -157.8684431,
-            21.3189332
-         ],
-         [
-            -157.87044310000002,
-            21.3189332
-         ],
-         [
-            -157.87044310000002,
-            21.316933199999998
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":7,
@@ -371,25 +245,7 @@
       "Servicing":false,
       "Service_Notes":"This charge station is currently out of service. We apologize for the inconvenience.",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_kapolei_01.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -158.0906,
-            21.328
-         ],
-         [
-            -158.0906,
-            21.330000000000002
-         ],
-         [
-            -158.0926,
-            21.330000000000002
-         ],
-         [
-            -158.0926,
-            21.328
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":14,
@@ -420,25 +276,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/images/products_and_services/electric_vehicles/chargers/charging_station_kaunakakai_01.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -157.020496,
-            21.089523999999997
-         ],
-         [
-            -157.020496,
-            21.091524
-         ],
-         [
-            -157.02249600000002,
-            21.091524
-         ],
-         [
-            -157.02249600000002,
-            21.089523999999997
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":8,
@@ -469,25 +307,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_koolau_01.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_koolau_02.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_koolau_03.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -157.82479999999998,
-            21.435
-         ],
-         [
-            -157.82479999999998,
-            21.437
-         ],
-         [
-            -157.8268,
-            21.437
-         ],
-         [
-            -157.8268,
-            21.435
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":9,
@@ -518,25 +338,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_maui.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -156.47113,
-            20.88363
-         ],
-         [
-            -156.47113,
-            20.885630000000003
-         ],
-         [
-            -156.47313,
-            20.885630000000003
-         ],
-         [
-            -156.47313,
-            20.88363
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":15,
@@ -567,25 +369,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_punaluu_02.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_punaluu_01.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -155.5849877,
-            19.0603047
-         ],
-         [
-            -155.5849877,
-            19.062304700000002
-         ],
-         [
-            -155.5869877,
-            19.062304700000002
-         ],
-         [
-            -155.5869877,
-            19.0603047
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":10,
@@ -616,25 +400,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_maunalani_01.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -155.857,
-            19.939999999999998
-         ],
-         [
-            -155.857,
-            19.942
-         ],
-         [
-            -155.859,
-            19.942
-         ],
-         [
-            -155.859,
-            19.939999999999998
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":13,
@@ -665,25 +431,7 @@
       "Servicing":true,
       "Service_Notes":"",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_waimalu_01.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_waimalu_02.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_waimalu_03.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -157.95368399999998,
-            21.38785
-         ],
-         [
-            -157.95368399999998,
-            21.389850000000003
-         ],
-         [
-            -157.955684,
-            21.389850000000003
-         ],
-         [
-            -157.955684,
-            21.38785
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":11,
@@ -714,25 +462,7 @@
       "Servicing":true,
       "Service_Notes":"NOTE: The CCS connector is working, but the Chademo connector is still out of service.",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_waianae_4603.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_waianae_4605.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_waianae_4621.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_waianae_4648.jpg\",\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_waianae_4653.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -158.1829,
-            21.4346
-         ],
-         [
-            -158.1829,
-            21.436600000000002
-         ],
-         [
-            -158.1849,
-            21.436600000000002
-         ],
-         [
-            -158.1849,
-            21.4346
-         ]
-      ]
+      "State":"HI"
    },
    {
       "ID":12,
@@ -763,24 +493,6 @@
       "Servicing":false,
       "Service_Notes":"This charge station is currently out of service. We apologize for the inconvenience.",
       "Image_Url":"[\"https://www.hawaiianelectric.com/Images/products_and_services/electric_vehicles/chargers/charging_station_waimea_01.jpg\"]",
-      "State":"HI",
-      "contour":[
-         [
-            -155.6668,
-            20.0205
-         ],
-         [
-            -155.6668,
-            20.0225
-         ],
-         [
-            -155.6688,
-            20.0225
-         ],
-         [
-            -155.6688,
-            20.0205
-         ]
-      ]
+      "State":"HI"
    }
 ]

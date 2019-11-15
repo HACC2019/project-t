@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Message } from 'semantic-ui-react'
-import CHARGE_STATIONS from '../../../json/chargeStations'
+import CHARGE_STATIONS from '../../../json/chargestations'
 
 class Warning extends Component {
   constructor(props) {

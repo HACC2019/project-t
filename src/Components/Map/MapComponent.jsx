@@ -4,7 +4,7 @@ import DeckGL from "@deck.gl/react";
 import { PolygonLayer, TextLayer } from "@deck.gl/layers";
 import { TripsLayer } from "@deck.gl/geo-layers";
 import GL from "@luma.gl/constants";
-import CHARGE_STATIONS from "../../../json/chargeStations";
+import CHARGE_STATIONS from "../../../json/chargestations";
 import BUILDINGS from "../../../json/buildings";
 import mapConfig from "./mapConfig";
 import mapStyles from '../../styles/map.css';

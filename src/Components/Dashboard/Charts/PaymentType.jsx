@@ -4,7 +4,7 @@ import GraphCard from '../GraphCard.jsx';
 import {getWeeklyTotals} from '../../../../lib/map_tools.js';
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-export default class ValidInvalidSessions extends Component {
+export default class PaymentType extends Component {
   constructor(props) {
     super(props);
 
@@ -12,25 +12,31 @@ export default class ValidInvalidSessions extends Component {
   }
 
   render() {
+
     let adjustedEpoch = new Date('01-01-1970 00:00:00');
     let aggregateHours = this.props.analytics._timeRange.aggregate;
-    let valid = this.props.analytics.aggregateRecords(this.props.analytics.getRecords(this.props.stationID));
-    let invalid = this.props.analytics.aggregateRecords(this.props.analytics.getInvalidRecords(this.props.stationID));
+    let rfidData = this.props.analytics.getDataByPayType('RFID', this.props.stationID);
+    rfidData = rfidData.valid.concat(rfidData.invalid);
+    rfidData = this.props.analytics.aggregateRecords(rfidData);
+    let cardData = this.props.analytics.getDataByPayType('CREDITCARD', this.props.stationID);
+    cardData = cardData.valid.concat(cardData.invalid);
+    cardData = this.props.analytics.aggregateRecords(cardData);
 
     let labels = [];
     let startIndex = -1;
 
-    for (let i = 0; i < valid.length; i++) {
-      if (startIndex === -1 && (valid[i] !== undefined || invalid[i] !== undefined)) {
+    // RFID
+    for (let i = 0; i < rfidData.length; i++) {
+      if (startIndex === -1 && (rfidData[i] !== undefined || cardData[i] !== undefined)) {
         startIndex = i;
       }
 
       if (startIndex > -1) {
-        if (valid[i] === undefined) {
-          valid[i] = 0;
+        if (rfidData[i] === undefined) {
+          rfidData[i] = 0;
         }
-        if (invalid[i] === undefined) {
-          invalid[i] = 0;
+        if (cardData[i] === undefined) {
+          cardData[i] = 0;
         }
 
         if (aggregateHours == 1) {
@@ -46,8 +52,8 @@ export default class ValidInvalidSessions extends Component {
       }
     }
 
-    valid = valid.splice(startIndex);
-    invalid = invalid.splice(startIndex);
+    rfidData = rfidData.splice(startIndex);
+    cardData = cardData.splice(startIndex);
 
     const chartData = {
       barPercentage: 0.3,
@@ -59,15 +65,15 @@ export default class ValidInvalidSessions extends Component {
       labels: labels, // label all axes here
       datasets: [
         { // one stack of the bar
-          label: 'Invalid Sessions',
-          data: invalid,
+          label: 'RFID Sessions',
+          data: rfidData,
           backgroundColor: 'rgba(255, 159, 64, 0.2)',
           borderColor: 'rgba(255, 159, 64, 1)',
           borderWidth: 1
         },
         {
-          label: 'Valid Sessions',
-          data: valid,
+          label: 'Card Sessions',
+          data: cardData,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
@@ -133,7 +139,7 @@ export default class ValidInvalidSessions extends Component {
     }
 
     return (
-      <GraphCard title='Session Overview'>
+      <GraphCard title='Session Payment Type'>
         <Bar data={chartData} options={chartOptions}/>
       </GraphCard>
     );

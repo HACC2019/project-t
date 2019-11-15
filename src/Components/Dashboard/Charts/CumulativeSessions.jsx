@@ -139,79 +139,80 @@ export default class CumulativeSessions extends Component {
       ];
     }
 
-  const chartData = () => (
-    {
-      barPercentage: 0.3,
-      barThickness: 'flex',
-      maxBarThickness: 8,
-      minBarLength: 2,
-      borderColor: '#464648',
+    const chartData = () => (
+      {
+        barPercentage: 0.3,
+        barThickness: 'flex',
+        maxBarThickness: 8,
+        minBarLength: 2,
+        borderColor: '#464648',
 
-      labels: labels, // label all axes here
-      datasets: bars
-    }
-  )
-
-  let xAxisLabel;
-
-  if (aggregateHours == 1) {
-    xAxisLabel = 'Hours';
-  } else if (aggregateHours == 24) {
-    xAxisLabel = 'Days';
-  } else if (aggregateHours == 168) {
-    xAxisLabel = 'Weeks';
-  }
-
-  const chartOptions = {
-    maintainAspectRatio: false,
-    animation: false,
-    legend: {
-      labels: {
-        fontColor: '#D8D9DA'
+        labels: labels, // label all axes here
+        datasets: bars
       }
-    },
-    scales: {
-      xAxes: [{
-        ticks: {
-          fontColor: '#D8D9DA'
-        },
-        gridLines: {
-          color: '#464648'
-        },
-        scaleLabel: {
-          display: true,
-          labelString: xAxisLabel,
-          fontColor: '#D8D9DA'
-        },
-        stacked: true
-      }],
-      yAxes: [{
-        ticks: {
-          suggestedMin: 0,
-          fontColor: '#D8D9DA'
-        },
-        gridLines: {
-          color: '#464648'
-        },
-        scaleLabel: {
-          display: true,
-          labelString: 'Sessions',
-          fontColor: '#D8D9DA'
-        },
-        stacked: true
-      }]
-    },
-    chartArea: {
-      backgroundColor: '#212124'
+    );
+
+    let xAxisLabel;
+
+    if (aggregateHours == 1) {
+      xAxisLabel = 'Hours';
+    } else if (aggregateHours == 24) {
+      xAxisLabel = 'Days';
+    } else if (aggregateHours == 168) {
+      xAxisLabel = 'Weeks';
     }
-  }
+
+    const chartOptions = {
+      animation: {
+        duration: 100,
+        easing: 'easeOutQuart'
+      },
+      maintainAspectRatio: false,
+      legend: {
+        labels: {
+          fontColor: '#D8D9DA'
+        }
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            fontColor: '#D8D9DA'
+          },
+          gridLines: {
+            color: '#464648'
+          },
+          scaleLabel: {
+            display: true,
+            labelString: xAxisLabel,
+            fontColor: '#D8D9DA'
+          },
+          stacked: true
+        }],
+        yAxes: [{
+          ticks: {
+            suggestedMin: 0,
+            fontColor: '#D8D9DA'
+          },
+          gridLines: {
+            color: '#464648'
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Sessions',
+            fontColor: '#D8D9DA'
+          },
+          stacked: true
+        }]
+      },
+      chartArea: {
+        backgroundColor: '#212124'
+      }
+    }
 
     return (
       <GraphCard title='Cumulative Sessions'>
-        <div style={{position: 'relative', height: '35vh'}}>
-          <Bar data={chartData} options={chartOptions}/>
-        </div>
-    </GraphCard>
-    )
+        <Bar data={chartData} options={chartOptions}/>
+      </GraphCard>
+    );
   }
 }
