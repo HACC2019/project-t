@@ -8,7 +8,7 @@
     "build": "webpack -p --config ./webpack.production.config.js"
   },
   "dependencies": {
-    "chart.js": "^2.9.2",
+    "chart.js": "^2.9.4",
     "deck.gl": "^7.3.0",
     "dotenv-webpack": "^1.7.0",
     "re-resizable": "^6.1.0",
